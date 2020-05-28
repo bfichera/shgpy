@@ -1,7 +1,6 @@
 import numpy as np
-import scipy.integrate
 import sympy as sp
-from shgutils.shg_symbols import *
+from shgpy.shg_symbols import *
 from sympy.solvers import solve
 import itertools
 from warnings import warn
@@ -211,7 +210,7 @@ def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=1
             ans = rotation_matrix3(axis, -mag_theta)
             check = [np.dot(ans, v_initial)[i] - v_final[i] < accuracy for i in range(3)]
             if False in check:
-                warn('Rotation matrix from two vectors failed.')
+                warn('Rotation matrix from two vectors failed precision check.')
 
     for i in range(len(ans)):
         for j in range(len(ans[0])):
