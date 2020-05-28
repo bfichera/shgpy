@@ -4,6 +4,57 @@ from .shg_symbols import *
 from sympy.solvers import solve
 import itertools
 from warnings import warn
+from copy import deepcopy
+
+class Data:
+
+    def convert_data_dict_to_radians(self):
+        self.data_dict[k] = {k:np.array([np.deg2rad(v[0]), np.copy(v[1])]) for k,v in self.data_dict}
+
+    def scale_data(self, scale_factor):
+        self.data_dict[k] = {k:np.array([v[0], scale_factor*v[1]]) for k,v in self.data_dict}
+        self.scale *= scale_factor
+
+    def normalize_data(self, desired_maximum=1):
+        maximum_value = -np.inf
+        for k,v in self.data_dict.items():
+            if max(v) > maximum_value:
+                maximum_value = max(v)
+        scale_data(desired_maximum / maximum_value)
+
+    def __init__(self, items, input_angle_units='radians'):
+        input_angle_units = input_angle_units.lower()
+        if input_angle_units not in ['radians', 'degrees']:
+            raise ValueError('input_angle_units input to Data object must be one of \'radians\' or \'degrees\'.')
+        self.input_angle_units = input_angle_units
+        self.scale = 1
+        self.data_dict = {k:v for k,v in items}
+        if input_angle_units == 'degrees':
+            convert_data_dict_to_radians()
+
+    def get_data_dict_degrees(self):
+        return {k:np.array([np.rad2deg(v[0]), np.copy(v[1])]) for k,v in self.data_dict}
+
+    def get_keys(self):
+        return list(self.data_dict.keys())
+
+    def get_values(self, requested_angle_units='radians'):
+        if requested_angle_units.lower() == 'radians':
+            return list(self.data_dict.values())
+        elif requested_angle_units.lower() == 'degrees':
+            return list(get_data_dict_degrees().keys())
+
+    def get_items(self, requested_angle_units='radians'):
+        if requested_angle_units.lower() == 'radians':
+            return list(self.data_dict.items())
+        elif requested_angle_units.lower() == 'degrees':
+            return list(get_data_dict_degrees().items())
+
+    def get_input_angle_units(self):
+        return self.input_angle_units
+
+    def get_scape_factor(self):
+        return self.scale_factor
 
 def particularize(tensor, exclude=[]):
 
