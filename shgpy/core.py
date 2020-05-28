@@ -8,32 +8,42 @@ from copy import deepcopy
 
 class Data:
 
+    def __init__(self, items, input_angle_units='radians'):
+        input_angle_units = input_angle_units.lower()
+        self.check_angle_units(input_angle_units)
+        self.input_angle_units = input_angle_units
+        self.scale = 1
+        self.data_dict = {k:v for k,v in items}
+        if input_angle_units == 'degrees':
+            self.convert_data_dict_to_radians()
+
+    def check_angle_units(self, angle_units):
+        if angle_units not in ['radians', 'degrees']:
+            raise ValueError('angle_units input must be one of \'radians\' or \'degrees\'.')
+
     def convert_data_dict_to_radians(self):
-        self.data_dict[k] = {k:np.array([np.deg2rad(v[0]), np.copy(v[1])]) for k,v in self.data_dict}
+        self.data_dict = {k:np.array([np.deg2rad(v[0]), np.copy(v[1])]) for k,v in self.data_dict.items()}
 
     def scale_data(self, scale_factor):
-        self.data_dict[k] = {k:np.array([v[0], scale_factor*v[1]]) for k,v in self.data_dict}
+        self.data_dict = {k:np.array([v[0], scale_factor*v[1]]) for k,v in self.data_dict.items()}
         self.scale *= scale_factor
 
     def normalize_data(self, desired_maximum=1):
         maximum_value = -np.inf
         for k,v in self.data_dict.items():
-            if max(v) > maximum_value:
-                maximum_value = max(v)
-        scale_data(desired_maximum / maximum_value)
+            if max(v[1]) > maximum_value:
+                maximum_value = max(v[1])
+        self.scale_data(desired_maximum / maximum_value)
 
-    def __init__(self, items, input_angle_units='radians'):
-        input_angle_units = input_angle_units.lower()
-        if input_angle_units not in ['radians', 'degrees']:
-            raise ValueError('input_angle_units input to Data object must be one of \'radians\' or \'degrees\'.')
-        self.input_angle_units = input_angle_units
-        self.scale = 1
-        self.data_dict = {k:v for k,v in items}
-        if input_angle_units == 'degrees':
-            convert_data_dict_to_radians()
+    def rotate_data(self, angle, angle_units='radians'):
+        angle_units = angle_units.lower()
+        check_angle_units(angle_units)
+        if angle_units == 'degrees':
+            angle = np.deg2rad(angle)
+        self.data_dict = {k:np.array([v[0]+angle, v[1]]) for k,v in self.data_dict.items()}
 
     def get_data_dict_degrees(self):
-        return {k:np.array([np.rad2deg(v[0]), np.copy(v[1])]) for k,v in self.data_dict}
+        return {k:np.array([np.rad2deg(v[0]), np.copy(v[1])]) for k,v in self.data_dict.items()}
 
     def get_keys(self):
         return list(self.data_dict.keys())
@@ -42,19 +52,19 @@ class Data:
         if requested_angle_units.lower() == 'radians':
             return list(self.data_dict.values())
         elif requested_angle_units.lower() == 'degrees':
-            return list(get_data_dict_degrees().keys())
+            return list(self.get_data_dict_degrees().values())
 
     def get_items(self, requested_angle_units='radians'):
         if requested_angle_units.lower() == 'radians':
             return list(self.data_dict.items())
         elif requested_angle_units.lower() == 'degrees':
-            return list(get_data_dict_degrees().items())
+            return list(self.get_data_dict_degrees().items())
 
     def get_input_angle_units(self):
         return self.input_angle_units
 
-    def get_scape_factor(self):
-        return self.scale_factor
+    def get_scale(self):
+        return self.scale
 
 def particularize(tensor, exclude=[]):
 
