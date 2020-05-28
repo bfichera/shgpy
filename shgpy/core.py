@@ -1,6 +1,6 @@
 import numpy as np
 import sympy as sp
-from shgpy.shg_symbols import *
+from .shg_symbols import *
 from sympy.solvers import solve
 import itertools
 from warnings import warn
@@ -103,25 +103,6 @@ def oprint(verbose, *items, filename=None, mode='a'):
         f = open(filename, 'a')
         print(*items, file=f)
         f.close()
-
-def menu(opt, prompt = '', default=0):
-    for i in range(len(opt)):
-        print('[{}] {}'.format(i+1, opt[i]))
-    check = False
-    while not check:
-        choice = input(prompt)
-        if choice != '':
-            try:
-                choice = int(choice)
-                check = (choice <= len(opt) and choice > 0)
-                if not check:
-                    print('Please enter a valid integer.\n')
-            except ValueError:
-                print('Please enter a valid integer.\n')
-        else:
-            check = True
-    if choice == '': return default
-    else: return choice-1
 
 def rotation_matrix3(n, t):
     n_mag = norm(n)

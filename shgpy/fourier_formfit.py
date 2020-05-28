@@ -1,9 +1,9 @@
 import sympy as sp
 import numpy as np
-import shgpy.utilities as util
-from shgpy.shg_symbols import *
-import shgpy.tensorutils as tx
-import shgpy.fourierutils as fx
+from . import core as util
+from .shg_symbols import *
+from . import tensorutils as tx
+from . import fourierutils as fx
 from scipy.optimize import leastsq
 from scipy.optimize import basinhopping
 import time

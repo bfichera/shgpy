@@ -1,6 +1,6 @@
 import sympy as sp
 import numpy as np
-from shg_symbols import *
+from .shg_symbols import *
 
 dipole = {}
 dipole['S_2'] = np.array([[[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=object)

@@ -1,11 +1,11 @@
 import numpy as np
 import sympy as sp
-from shgpy.shg_symbols import *
+from .shg_symbols import *
 from scipy.optimize import leastsq
-import shgpy.utilities as util
+from . import core as util
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
-import shgpy.tensorutils as tx
+from . import tensorutils as tx
 
 def n2i(n, M=16):
     return n+M
