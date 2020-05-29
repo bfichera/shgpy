@@ -3,6 +3,7 @@ import sympy as sp
 from sympy.solvers import solve
 import itertools
 from warnings import warn
+from .core import DataContainer, fDataContainer
 
 
 def particularize(tensor, exclude=[]):
@@ -240,28 +241,19 @@ def read_csv_file(filename, delimiter=',', num_skip_lines=0):
     return ans
 
 
-def dark_subtract(signal, dark):
-    signal_x, signal_y = signal
-    dark_x, dark_y = dark
-    ans = None
-    test_len = True
-    if len(signal_y) != len(dark_y):
-        raise ValueError('Arrays are not the same length.')
-    if test_len:
-        ans_x = signal_x
-        ans_y = [signal_y[i] - dark_y[i] for i in range(len(signal_y))]
-        ans = [ans_x, ans_y]
-    return ans
-
-
-def dark_subtract_dicts(data_dict, d_datadict):
-    ans = {}
-    for pc in data_dict.keys():
-        ans[pc] = []
-        ans[pc].append(data_dict[pc][0])
-        ans[pc].append([data_dict[pc][1][i] - d_datadict[pc][1][i] for i in range(len(data_dict[pc][1]))])
-    return ans
-
+def dat_subtract(dat1, dat2):
+    if set(dat1.get_keys()) != set(dat2.get_keys()):
+        raise ValueError('DataContainers have different keys.')
+    if dat1.get_values()[0].shape != dat2.get_values()[0].shape:
+        raise ValueError('DataContainers\' xydatas have different shapes.')
+    new_dict = {}
+    for k in dat1.get_keys():
+        new_xdata, ydata1 = dat1.get_xydata(k, 'radians')
+        _, ydata2 = dat2.get_xydata(k, 'radians')
+        new_ydata = ydata2-ydata1
+        new_dict[k] = np.array([new_xdata, new_ydata])
+    return DataContainer(new_dict[k], 'radians')
+       
 
 def load_data_and_dark_subtract(data_filenames, dark_filename):
     dark_data = read_csv_file(dark_filename)

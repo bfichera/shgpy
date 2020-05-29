@@ -8,19 +8,19 @@ class TestData(unittest.TestCase):
 
     def test_creation(self):
         items = (('PS', np.ones((2,2))),)
-        hi = shgpy.Data(items, 'radians')
-        self.assertIsInstance(hi, shgpy.Data)
+        hi = shgpy.DataContainer(items, 'radians')
+        self.assertIsInstance(hi, shgpy.DataContainer)
 
     def test_dict_funcs(self):
         items = (('PS', np.ones((2,2))),)
-        hi = shgpy.Data(items, 'radians')
+        hi = shgpy.DataContainer(items, 'radians')
         self.assertEqual(hi.get_keys(), [i[0] for i in items])
         self.assertEqual(hi.get_items('radians'), list(items))
         self.assertEqual(hi.get_values('radians'), [i[1] for i in items])
 
     def test_manipulation(self):
         items = (('PS', np.ones((2,2))),)
-        hi = shgpy.Data(items, 'radians')
+        hi = shgpy.DataContainer(items, 'radians')
         hi.scale_data(100)
         self.assertEqual(hi.get_scale(), 100)
         hi.phase_shift_data(10, angle_units='degreeS')
@@ -28,7 +28,7 @@ class TestData(unittest.TestCase):
 
     def test_maxval(self):
         items = (('PP', np.zeros(shape=(3,3))), ('PS', np.ones(shape=(4,4))))
-        hi = shgpy.Data(items, 'degrees')
+        hi = shgpy.DataContainer(items, 'degrees')
         pc, maxval = hi.get_maxval()
         self.assertEqual((pc, maxval), ('PS', 1))
 
@@ -38,13 +38,13 @@ class TestfData(unittest.TestCase):
     def test_creation(self):
         M = 16
         items = (('PP', np.zeros(2*M+1, dtype=complex)), ('PS', np.ones(2*M+1, dtype=complex)*4))
-        hi = shgpy.fData(items, M=M)
-        self.assertIsInstance(hi, shgpy.fData)
+        hi = shgpy.fDataContainer(items, M=M)
+        self.assertIsInstance(hi, shgpy.fDataContainer)
 
     def test_dict_funcs(self):
         M = 16
         items = (('PP', np.zeros(2*M+1, dtype=complex)), ('PS', np.ones(2*M+1, dtype=complex)*4))
-        hi = shgpy.fData(items, M=M)
+        hi = shgpy.fDataContainer(items, M=M)
         self.assertEqual(hi.get_keys(), list(dict(items).keys()))
         self.assertEqual(hi.get_items(), list(dict(items).items()))
         self.assertEqual(hi.get_values(), list(dict(items).values()))
@@ -52,7 +52,7 @@ class TestfData(unittest.TestCase):
     def test_manipulation(self):
         M = 16
         items = (('PP', np.zeros(2*M+1, dtype=complex)), ('PS', np.ones(2*M+1, dtype=complex)*4))
-        hi = shgpy.fData(items, M=M)
+        hi = shgpy.fDataContainer(items, M=M)
         hi.scale_fdata(14)
         self.assertEqual(hi.get_scale(), 14)
         hi.normalize_fdata(1)

@@ -3,7 +3,7 @@ import numpy as np
 from .. import fourierutils as fx
 
 
-class Data:
+class DataContainer:
 
     def __init__(self, iterable, input_angle_units):
         self._input_angle_units = input_angle_units.lower()
@@ -106,7 +106,7 @@ class Data:
         return self._input_angle_units
 
 
-class fData:
+class fDataContainer:
 
     def __init__(self, iterable, M=16):
         self._M = M
@@ -181,12 +181,6 @@ class fData:
                 ans[fx.n2i(m, self._M)] = fexpr[fx.n2i(m, self._M)] * (np.cos(m * angle)+1j*np.sin(m * angle))
             self._fdata_dict[k] = ans
         self._phase_shift += angle
-
-
-class fForm:
-
-    def __init__(self, iterable):
-        self._fform_dict = dict(iterable)
 
 
 

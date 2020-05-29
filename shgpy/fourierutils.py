@@ -38,7 +38,7 @@ def data_dft(dat, interp_kind='cubic', M=16):
             interp_ydata = interp_func(interp_xdata)
             dx = interp_xdata[1] - interp_xdata[0]
             ans[k][n2i(m, M)] = sum([1/2/np.pi*dx*interp_ydata[i]*np.exp(-1j*m*interp_xdata[i]) for i in range(len(interp_xdata))])
-    return shgpy.fData(ans.items(), M=M)
+    return shgpy.fDataContainer(ans.items(), M=M)
 
 
 def apply_phase_shift(fexpr, psi, M=16):
@@ -60,28 +60,32 @@ def substitute_into_array(expr_array, *subs_tuples):
     return ans.reshape(expr_array.shape)
 
 
-def load_data_and_fourier_transform(prefix, numbers, suffix, M=16, min_subtract=False, scale=1, d_prefix=None, d_numbers=None, d_suffix=None):
-    filenames = [prefix+number+suffix for number in numbers]
-    data_dict = plotutils.load_data(filenames)
-    if d_prefix is not None and d_numbers is not None and d_suffix is not None:
-        d_filenames = [d_prefix+d_number+d_suffix for d_number in d_numbers]
-        d_datadict = plotutils.load_data(d_filenames)
-        data_dict = util.dark_subtract_dicts(data_dict, d_datadict)
-    for k in data_dict.keys():
-        for i in range(len(data_dict[k][1])):
-            data_dict[k][1][i] = data_dict[k][1][i]*scale
-    xdata = np.linspace(0, 2*np.pi, len(data_dict['PP'][0]), endpoint=False)
-    for k in data_dict.keys():
-        data_dict[k][0] = xdata
-        min_data_k = min(data_dict[k][1])
-        if min_subtract is True:
-            data_dict[k][1] = [data_dict[k][1][i] - min_data_k for i in range(len(data_dict[k][1]))]
-    fdata_dict = data_dft(data_dict, M=M)
+# def load_data_and_fourier_transform(prefix, numbers, suffix, M=16, min_subtract=False, scale=1, d_prefix=None, d_numbers=None, d_suffix=None):
+#     filenames = [prefix+number+suffix for number in numbers]
+#     data_dict = plotutils.load_data(filenames)
+#     if d_prefix is not None and d_numbers is not None and d_suffix is not None:
+#         d_filenames = [d_prefix+d_number+d_suffix for d_number in d_numbers]
+#         d_datadict = plotutils.load_data(d_filenames)
+#         data_dict = util.dark_subtract_dicts(data_dict, d_datadict)
+#     for k in data_dict.keys():
+#         for i in range(len(data_dict[k][1])):
+#             data_dict[k][1][i] = data_dict[k][1][i]*scale
+#     xdata = np.linspace(0, 2*np.pi, len(data_dict['PP'][0]), endpoint=False)
+#     for k in data_dict.keys():
+#         data_dict[k][0] = xdata
+#         min_data_k = min(data_dict[k][1])
+#         if min_subtract is True:
+#             data_dict[k][1] = [data_dict[k][1][i] - min_data_k for i in range(len(data_dict[k][1]))]
+#     fdata_dict = data_dft(data_dict, M=M)
+# 
+#     for k in data_dict.keys():
+#         data_dict[k][0] = xdata
+# 
+#     return data_dict, fdata_dict
 
-    for k in data_dict.keys():
-        data_dict[k][0] = xdata
 
-    return data_dict, fdata_dict
+def load_data_and_fourier_transform(filenames_dict, dark_subtract_filenames_dict, M=16, min_subtract=False, scale=1):
+    
 
 
 def extract_free_symbols_from_fform_dict(fform_dict, M=16):
@@ -102,3 +106,8 @@ def fform_dict_subs(fform_dict, subs_array, M=16):
         for m in np.arange(-M, M+1):
             subs_fform_dict[k][n2i(m)] = sp.sympify(fform_dict[k][n2i(m)]).subs(subs_array)
     return subs_fform_dict
+
+
+
+
+
