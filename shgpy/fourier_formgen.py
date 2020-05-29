@@ -22,6 +22,18 @@ def _fexpr_n(expr_arr, n, precision=7):
     return h
 
 
+def _convolve_ftensors(nR1, nR2, M=16, dtype=object):
+    test_prod = tx.tensor_product(nR1[0], nR2[0])
+    ans = np.zeros(dtype=dtype, shape=(2*M+1,)+test_prod.shape)
+    for n in np.arange(-M, M+1):
+        for m in np.arange(-M, M+1):
+            try:
+                ans[n2i(n, M)] += tx.tensor_product(nR1[n2i(m, M)], nR2[n2i(n-m, M)])
+            except IndexError:
+                pass
+    return ans
+
+
 def load_pickle(filename):
     return np.load(filename, allow_pickle=True)
 
@@ -74,9 +86,9 @@ def generate_uncontracted_fourier_transforms(aoi, verbose=True, filename_prefix=
     rF[fx.n2i(0, M)] = F
     rFc = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)
     rFc[fx.n2i(0, M)] = sp.conjugate(F)
-    r1_x = fx.convolve_tensor_lists(rproj_x, rR)
-    r1_y = fx.convolve_tensor_lists(rproj_y, rR)
-    r1_z = fx.convolve_tensor_lists(rproj_z, rR)
+    r1_x = _convolve_ftensors(rproj_x, rR)
+    r1_y = _convolve_ftensors(rproj_y, rR)
+    r1_z = _convolve_ftensors(rproj_z, rR)
     rk_out = np.zeros(shape=(2*M+1,)+k_out.shape, dtype=object)
     rk_out[fx.n2i(0, M)] = k_out
     rk_in = np.zeros(shape=(2*M+1,)+k_in.shape, dtype=object)
@@ -107,30 +119,30 @@ def generate_uncontracted_fourier_transforms(aoi, verbose=True, filename_prefix=
     for r1 in [r1_p, r1_s]:
         h1 = np.array([tx.tensor_contract(r1[fx.n2i(m, M)], [[1, 2]]) for m in np.arange(-M, M+1)])
         util.oprint(verbose, 'h1 done!')
-        r2 = fx.convolve_tensor_lists(h1, h1)
+        r2 = _convolve_ftensors(h1, h1)
         h2 = np.array([tx.tensor_contract(r2[fx.n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
         util.oprint(verbose, 'h2 done!')
-        r3 = fx.convolve_tensor_lists(rR, rF)
+        r3 = _convolve_ftensors(rR, rF)
         h3 = np.array([tx.tensor_contract(r3[fx.n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
         util.oprint(verbose, 'h3 done!')
-        h4 = fx.convolve_tensor_lists(h2, h3)
+        h4 = _convolve_ftensors(h2, h3)
         util.oprint(verbose, 'h4 done!')
-        h5 = fx.convolve_tensor_lists(h4, h3)
+        h5 = _convolve_ftensors(h4, h3)
         util.oprint(verbose, 'h5 done!')
-        h6 = fx.convolve_tensor_lists(h5, h3)
+        h6 = _convolve_ftensors(h5, h3)
         util.oprint(verbose, 'h6 done!')
-        h7 = fx.convolve_tensor_lists(h6, h3)
+        h7 = _convolve_ftensors(h6, h3)
         util.oprint(verbose, 'h7 done!')
         h7_arr_term1.append(h7)
         if include_quadrupole is True:
-            r4 = fx.convolve_tensor_lists(rR, -1j*rk_in)
+            r4 = _convolve_ftensors(rR, -1j*rk_in)
             h8 = np.array([tx.tensor_contract(r4[fx.n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
             util.oprint(verbose, 'h8 done!')
-            h9 = fx.convolve_tensor_lists(h7, h8)
+            h9 = _convolve_ftensors(h7, h8)
             util.oprint(verbose, 'h9 done!')
             h7_arr_term2.append(h9)
             h7_arr_term3.append(-1*h9)
-            h10 = fx.convolve_tensor_lists(h9, -1*h8)
+            h10 = _convolve_ftensors(h9, -1*h8)
             util.oprint(verbose, 'h10 done!')
             h7_arr_term4.append(h10)
         
@@ -222,9 +234,9 @@ def generate_uncontracted_fourier_transforms_symb(verbose=True, filename_prefix=
     rF[fx.n2i(0, M)] = F
     rFc = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)
     rFc[fx.n2i(0, M)] = sp.conjugate(F)
-    r1_x = fx.convolve_tensor_lists(rproj_x, rR)
-    r1_y = fx.convolve_tensor_lists(rproj_y, rR)
-    r1_z = fx.convolve_tensor_lists(rproj_z, rR)
+    r1_x = _convolve_ftensors(rproj_x, rR)
+    r1_y = _convolve_ftensors(rproj_y, rR)
+    r1_z = _convolve_ftensors(rproj_z, rR)
     rk_out = np.zeros(shape=(2*M+1,)+k_out.shape, dtype=object)
     rk_out[fx.n2i(0, M)] = k_out
     rk_in = np.zeros(shape=(2*M+1,)+k_in.shape, dtype=object)
@@ -255,30 +267,30 @@ def generate_uncontracted_fourier_transforms_symb(verbose=True, filename_prefix=
     for r1 in [r1_p, r1_s]:
         h1 = np.array([tx.tensor_contract(r1[fx.n2i(m, M)], [[1, 2]]) for m in np.arange(-M, M+1)])
         util.oprint(verbose, 'h1 done!')
-        r2 = fx.convolve_tensor_lists(h1, h1)
+        r2 = _convolve_ftensors(h1, h1)
         h2 = np.array([tx.tensor_contract(r2[fx.n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
         util.oprint(verbose, 'h2 done!')
-        r3 = fx.convolve_tensor_lists(rR, rF)
+        r3 = _convolve_ftensors(rR, rF)
         h3 = np.array([tx.tensor_contract(r3[fx.n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
         util.oprint(verbose, 'h3 done!')
-        h4 = fx.convolve_tensor_lists(h2, h3)
+        h4 = _convolve_ftensors(h2, h3)
         util.oprint(verbose, 'h4 done!')
-        h5 = fx.convolve_tensor_lists(h4, h3)
+        h5 = _convolve_ftensors(h4, h3)
         util.oprint(verbose, 'h5 done!')
-        h6 = fx.convolve_tensor_lists(h5, h3)
+        h6 = _convolve_ftensors(h5, h3)
         util.oprint(verbose, 'h6 done!')
-        h7 = fx.convolve_tensor_lists(h6, h3)
+        h7 = _convolve_ftensors(h6, h3)
         util.oprint(verbose, 'h7 done!')
         h7_arr_term1.append(h7)
         if include_quadrupole is True:
-            r4 = fx.convolve_tensor_lists(rR, -1j*rk_in)
+            r4 = _convolve_ftensors(rR, -1j*rk_in)
             h8 = np.array([tx.tensor_contract(r4[fx.n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
             util.oprint(verbose, 'h8 done!')
-            h9 = fx.convolve_tensor_lists(h7, h8)
+            h9 = _convolve_ftensors(h7, h8)
             util.oprint(verbose, 'h9 done!')
             h7_arr_term2.append(h9)
             h7_arr_term3.append(-1*h9)
-            h10 = fx.convolve_tensor_lists(h9, -1*h8)
+            h10 = _convolve_ftensors(h9, -1*h8)
             util.oprint(verbose, 'h10 done!')
             h7_arr_term4.append(h10)
         
