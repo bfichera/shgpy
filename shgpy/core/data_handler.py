@@ -64,27 +64,38 @@ class Data:
         self._data_dict = {k:np.array([v[0]+angle, v[1]]) for k,v in self._data_dict.items()}
         self._phase_shift += angle
 
+    def get_xydata(self, pc, requested_angle_units):
+        requested_angle_units = requested_angle_units.lower()
+        self._check_angle_units(requested_angle_units)
+        if requested_angle_units == 'radians':
+            return np.copy(self._data_dict[pc])
+        if requested_angle_units == 'degrees':
+            return np.copy(self._get_data_dict_degrees()[pc])
+
     def get_keys(self):
         return list(self._data_dict.keys())
 
     def get_values(self, requested_angle_units):
-        self._check_angle_units(requested_angle_units.lower())
-        if requested_angle_units.lower() == 'radians':
+        requested_angle_units = requested_angle_units.lower()
+        self._check_angle_units(requested_angle_units)
+        if requested_angle_units == 'radians':
             return list(self._data_dict.values())
-        elif requested_angle_units.lower() == 'degrees':
+        elif requested_angle_units == 'degrees':
             return list(self._get_data_dict_degrees().values())
 
     def get_items(self, requested_angle_units):
-        self._check_angle_units(requested_angle_units.lower())
-        if requested_angle_units.lower() == 'radians':
+        requested_angle_units = requested_angle_units.lower()
+        self._check_angle_units(requested_angle_units)
+        if requested_angle_units == 'radians':
             return list(self._data_dict.items())
-        elif requested_angle_units.lower() == 'degrees':
+        elif requested_angle_units == 'degrees':
             return list(self._get_data_dict_degrees().items())
 
     def get_scale(self):
         return self._scale
 
     def get_phase_shift(self, requested_angle_units):
+        requested_angle_units = requested_angle_units.lower()
         self._check_angle_units(requested_angle_units)
         if requested_angle_units == 'radians':
             return self._phase_shift
