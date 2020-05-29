@@ -78,8 +78,9 @@ class TestLoadData(unittest.TestCase):
         self.assertIsInstance(dat, shgpy.DataContainer)
         self.assertEqual(dat.get_maxval()[1], 0)
         dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees')
+        self.assertNotEqual(fdat.get_maxval()[1], 0)
         dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
-        print(fdat.get_items())
+        self.assertEqual(fdat.get_maxval()[1], 0)
     
         
         
