@@ -28,7 +28,7 @@ class Data:
             bad_val = False in [type(v) == np.ndarray and v[0].shape == v[1].shape and v.dtype != object and v.ndim == 2 for v in dict(iterable).values()]
         except:
             raise_error()
-        if bad_key is True or bad_val is True:
+        if bad_key or bad_val:
             raise_error()
 
     def _convert_data_dict_to_radians(self):
@@ -112,7 +112,7 @@ class fData:
             bad_val = False in [type(v) == np.ndarray and v.shape == (2*self._M+1,) and v.dtype in [np.complex64, np.complex128] and v.ndim == 1 for v in dict(iterable).values()]
         except:
             raise_error()
-        if bad_key is True or bad_val is True:
+        if bad_key or bad_val:
             raise_error()
 
     def _check_angle_units(self, angle_units):
@@ -164,10 +164,10 @@ class fData:
         if angle_units == 'degrees':
             angle = np.deg2rad(angle)
         for k in self.get_keys():
-            rcomp = self._fdata_dict[k]
-            ans = np.zeros(shape=rcomp.shape, dtype=rcomp.dtype)
+            fexpr = self._fdata_dict[k]
+            ans = np.zeros(shape=fexpr.shape, dtype=fexpr.dtype)
             for m in np.arange(-self._M, self._M + 1):
-                ans[fx.n2i(m, self._M)] = rcomp[fx.n2i(m, self._M)] * (np.cos(m * angle)+1j*np.sin(m * angle))
+                ans[fx.n2i(m, self._M)] = fexpr[fx.n2i(m, self._M)] * (np.cos(m * angle)+1j*np.sin(m * angle))
             self._fdata_dict[k] = ans
         self._phase_shift += angle
 

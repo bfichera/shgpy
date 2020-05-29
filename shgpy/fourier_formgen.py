@@ -7,14 +7,32 @@ from . import fourierutils as fx
 import pickle
 import sys
 
+
+def _fexpr_n(expr_arr, n, precision=7):
+    Rshape = expr_arr.shape
+    expr_arrf = expr_arr.flatten()
+    h = np.zeros(len(expr_arrf), dtype=object)
+    for i in range(len(expr_arrf)):
+        f_re = sp.lambdify(phi, 1/2/sp.pi*expr_arrf[i]*sp.cos(-1*(n*phi)))
+        f_im = sp.lambdify(phi, 1/2/sp.pi*expr_arrf[i]*sp.sin(-1*(n*phi)))
+        t_re,_ = quad(f_re, 0, 2*np.pi)
+        t_im,_ = quad(f_im, 0, 2*np.pi)
+        h[i] = round(t_re, precision)+round(t_im, precision)*1j
+    h = h.reshape(Rshape)
+    return h
+
+
 def load_pickle(filename):
     return np.load(filename, allow_pickle=True)
+
 
 def save_fform_dict(filename, fform_dict):
     pickle.dump(fform_dict, open(filename, 'wb'))
 
+
 def load_fform_dict(filename):
     return pickle.load(open(filename, 'rb'))
+
 
 def generate_uncontracted_fourier_transforms(aoi, verbose=True, filename_prefix='h7', M=16):
 
@@ -51,7 +69,7 @@ def generate_uncontracted_fourier_transforms(aoi, verbose=True, filename_prefix=
     rproj_y[fx.n2i(0, M)] = proj_y
     rproj_z = np.zeros(shape=(2*M+1,)+proj_z.shape, dtype=object)
     rproj_z[fx.n2i(0, M)] = proj_z
-    rR = [fx.rcomp_n(R, m) for m in np.arange(-M, M+1)]
+    rR = [_fexpr_n(R, m) for m in np.arange(-M, M+1)]
     rF = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)
     rF[fx.n2i(0, M)] = F
     rFc = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)
@@ -199,7 +217,7 @@ def generate_uncontracted_fourier_transforms_symb(verbose=True, filename_prefix=
     rproj_y[fx.n2i(0, M)] = proj_y
     rproj_z = np.zeros(shape=(2*M+1,)+proj_z.shape, dtype=object)
     rproj_z[fx.n2i(0, M)] = proj_z
-    rR = [fx.rcomp_n(R, m) for m in np.arange(-M, M+1)]
+    rR = [_fexpr_n(R, m) for m in np.arange(-M, M+1)]
     rF = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)
     rF[fx.n2i(0, M)] = F
     rFc = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)

@@ -10,20 +10,6 @@ def n2i(n, M=16):
     return n+M
 
 
-def rcomp_n(expr_arr, n, precision=7):
-    Rshape = expr_arr.shape
-    expr_arrf = expr_arr.flatten()
-    h = np.zeros(len(expr_arrf), dtype=object)
-    for i in range(len(expr_arrf)):
-        f_re = sp.lambdify(phi, 1/2/sp.pi*expr_arrf[i]*sp.cos(-1*(n*phi)))
-        f_im = sp.lambdify(phi, 1/2/sp.pi*expr_arrf[i]*sp.sin(-1*(n*phi)))
-        t_re,_ = quad(f_re, 0, 2*np.pi)
-        t_im,_ = quad(f_im, 0, 2*np.pi)
-        h[i] = round(t_re, precision)+round(t_im, precision)*1j
-    h = h.reshape(Rshape)
-    return h
-
-
 def convolve_tensor_lists(nR1, nR2, M=16, dtype=object):
     test_prod = tx.tensor_product(nR1[0], nR2[0])
     ans = np.zeros(dtype=dtype, shape=(2*M+1,)+test_prod.shape)
@@ -36,7 +22,7 @@ def convolve_tensor_lists(nR1, nR2, M=16, dtype=object):
     return ans
 
 
-def formula_from_rcomp(t, M=16):
+def formula_from_fexpr(t, M=16):
     expr = 0
     for m in np.arange(-M, M+1):
         expr += t[n2i(m)]*(sp.cos(m*phi)+1j*sp.sin(m*phi))
@@ -54,11 +40,11 @@ def data_dft(data_dict, M=16):
     return ans
 
 
-def apply_phase_shift(rcomp, psi, M=16):
+def apply_phase_shift(fexpr, psi, M=16):
     """f(phi) -> f(phi + psi) <=> rf(m) -> exp(i*m*psi)rf(m)"""
-    ans = np.zeros(shape=rcomp.shape, dtype=object)
+    ans = np.zeros(shape=fexpr.shape, dtype=object)
     for m in np.arange(-M, M+1):
-        ans[n2i(m, M)] = rcomp[n2i(m, M)] * (sp.cos(m*psi)+1j*sp.sin(m*psi))
+        ans[n2i(m, M)] = fexpr[n2i(m, M)] * (sp.cos(m*psi)+1j*sp.sin(m*psi))
     return ans
 
 
