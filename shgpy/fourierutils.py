@@ -1,43 +1,44 @@
 import numpy as np
 import sympy as sp
-from .shg_symbols import *
-from . import core as util
-from scipy.integrate import quad
+from . import shg_symbols as S
+from . import core as shgpy
 from . import tensorutils as tx
+from scipy.interpolate import interp1d
 
 
 def n2i(n, M=16):
     return n+M
 
 
-def convolve_tensor_lists(nR1, nR2, M=16, dtype=object):
-    test_prod = tx.tensor_product(nR1[0], nR2[0])
-    ans = np.zeros(dtype=dtype, shape=(2*M+1,)+test_prod.shape)
-    for n in np.arange(-M, M+1):
-        for m in np.arange(-M, M+1):
-            try:
-                ans[n2i(n, M)] += tx.tensor_product(nR1[n2i(m, M)], nR2[n2i(n-m, M)])
-            except IndexError:
-                pass
-    return ans
-
-
 def formula_from_fexpr(t, M=16):
     expr = 0
     for m in np.arange(-M, M+1):
-        expr += t[n2i(m)]*(sp.cos(m*phi)+1j*sp.sin(m*phi))
+        expr += t[n2i(m)]*(sp.cos(m*S.phi)+1j*sp.sin(m*S.phi))
     return expr
 
 
-def data_dft(data_dict, M=16):
-    ans = {pc:np.zeros(2*M+1, dtype=object) for pc in data_dict.keys()}
-    for k in ans.keys():
+# def data_dft(data_dict, M=16):
+#     ans = {pc:np.zeros(2*M+1, dtype=object) for pc in data_dict.keys()}
+#     for k in ans.keys():
+#         for m in np.arange(-M, M+1):
+#             ydata = np.array(data_dict[k][1])
+#             xdata = np.linspace(0, 2*np.pi, len(ydata), endpoint=False)
+#             dx = xdata[1]-xdata[0]
+#             ans[k][n2i(m, M)] = sum([1/2/np.pi*dx*ydata[i]*np.exp(-1j*m*xdata[i]) for i in range(len(xdata))])
+#     return ans
+
+
+def data_dft(dat, interp_kind='cubic', M=16):
+    ans = {pc:np.zeros(2*M+1, dtype=np.complex64) for pc in dat.get_keys()}
+    for k in dat.get_keys():
         for m in np.arange(-M, M+1):
-            ydata = np.array(data_dict[k][1])
-            xdata = np.linspace(0, 2*np.pi, len(ydata), endpoint=False)
-            dx = xdata[1]-xdata[0]
-            ans[k][n2i(m, M)] = sum([1/2/np.pi*dx*ydata[i]*np.exp(-1j*m*xdata[i]) for i in range(len(xdata))])
-    return ans
+            xdata, ydata = dat.get_xydata(k, 'radians')
+            interp_func = interp1d(xdata, ydata, kind=interp_kind)
+            interp_xdata = np.linspace(0, 2*np.pi, len(ydata), endpoint=False)
+            interp_ydata = interp_func(interp_xdata)
+            dx = interp_xdata[1] - interp_xdata[0]
+            ans[k][n2i(m, M)] = sum([1/2/np.pi*dx*interp_ydata[i]*np.exp(-1j*m*interp_xdata[i]) for i in range(len(interp_xdata))])
+    return shgpy.fData(ans.items(), M=M)
 
 
 def apply_phase_shift(fexpr, psi, M=16):
