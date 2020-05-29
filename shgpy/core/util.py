@@ -1,70 +1,9 @@
 import numpy as np
 import sympy as sp
-from .shg_symbols import *
 from sympy.solvers import solve
 import itertools
 from warnings import warn
-from copy import deepcopy
 
-class Data:
-
-    def __init__(self, items, input_angle_units='radians'):
-        input_angle_units = input_angle_units.lower()
-        self.check_angle_units(input_angle_units)
-        self.input_angle_units = input_angle_units
-        self.scale = 1
-        self.data_dict = {k:v for k,v in items}
-        if input_angle_units == 'degrees':
-            self.convert_data_dict_to_radians()
-
-    def check_angle_units(self, angle_units):
-        if angle_units not in ['radians', 'degrees']:
-            raise ValueError('angle_units input must be one of \'radians\' or \'degrees\'.')
-
-    def convert_data_dict_to_radians(self):
-        self.data_dict = {k:np.array([np.deg2rad(v[0]), np.copy(v[1])]) for k,v in self.data_dict.items()}
-
-    def scale_data(self, scale_factor):
-        self.data_dict = {k:np.array([v[0], scale_factor*v[1]]) for k,v in self.data_dict.items()}
-        self.scale *= scale_factor
-
-    def normalize_data(self, desired_maximum=1):
-        maximum_value = -np.inf
-        for k,v in self.data_dict.items():
-            if max(v[1]) > maximum_value:
-                maximum_value = max(v[1])
-        self.scale_data(desired_maximum / maximum_value)
-
-    def rotate_data(self, angle, angle_units='radians'):
-        angle_units = angle_units.lower()
-        check_angle_units(angle_units)
-        if angle_units == 'degrees':
-            angle = np.deg2rad(angle)
-        self.data_dict = {k:np.array([v[0]+angle, v[1]]) for k,v in self.data_dict.items()}
-
-    def get_data_dict_degrees(self):
-        return {k:np.array([np.rad2deg(v[0]), np.copy(v[1])]) for k,v in self.data_dict.items()}
-
-    def get_keys(self):
-        return list(self.data_dict.keys())
-
-    def get_values(self, requested_angle_units='radians'):
-        if requested_angle_units.lower() == 'radians':
-            return list(self.data_dict.values())
-        elif requested_angle_units.lower() == 'degrees':
-            return list(self.get_data_dict_degrees().values())
-
-    def get_items(self, requested_angle_units='radians'):
-        if requested_angle_units.lower() == 'radians':
-            return list(self.data_dict.items())
-        elif requested_angle_units.lower() == 'degrees':
-            return list(self.get_data_dict_degrees().items())
-
-    def get_input_angle_units(self):
-        return self.input_angle_units
-
-    def get_scale(self):
-        return self.scale
 
 def particularize(tensor, exclude=[]):
 
@@ -87,12 +26,14 @@ def particularize(tensor, exclude=[]):
         return np.array([fa.subs(sol) for fa in tensor.flatten()]).reshape(tensor.shape)
 
     return apply_sol_to_tensor(tensor, get_sols_from_particularization(tensor, exclude=exclude)[0])
-                    
+
+
 def free_symbols_of_array(array):
     total = []
     for a in array.flatten():
         total = total+list(sp.sympify(a).free_symbols)
     return set(total)
+
 
 def make_parameters_complex(expr, prefix=('real_', 'imag_'), suffix=('', '')):
     free_symbols = expr.free_symbols
@@ -101,11 +42,13 @@ def make_parameters_complex(expr, prefix=('real_', 'imag_'), suffix=('', '')):
             expr = expr.subs(str(fs), sp.symbols(prefix[0]+str(fs)+suffix[0], real=True)+sp.I*sp.symbols(prefix[1]+str(fs)+suffix[1], real=True))
     return expr
 
+
 def conjugate_tensor(tensor):
     ans = np.zeros(len(tensor.flatten()), dtype=object)
     for i,expr in enumerate(tensor.flatten()):
         ans[i] = sp.conjugate(sp.sympify(expr))
     return ans.reshape(tensor.shape)
+
 
 def make_tensor_complex(tensor, prefix=('real_', 'imag_'), suffix=('', '')):
     shape = tensor.shape
@@ -113,6 +56,7 @@ def make_tensor_complex(tensor, prefix=('real_', 'imag_'), suffix=('', '')):
     for i in range(len(tensor)):
         tensor[i] = make_parameters_complex(sp.sympify(tensor[i]), prefix=prefix, suffix=suffix)
     return np.reshape(tensor, shape)
+
 
 def d2chi(d):
     ans = np.zeros(shape=(3,3,3), dtype=object)
@@ -125,8 +69,10 @@ def d2chi(d):
                     ans[i][j][k] = d[i][6-(j+k)]
     return ans
 
+
 def gradient(expr, free_symbols):
     return np.array([sp.diff(expr, free_symbol) for free_symbol in free_symbols])
+
 
 def round_float_tensor(t, ndigits):
     ans = t.flatten()
@@ -135,14 +81,17 @@ def round_float_tensor(t, ndigits):
     ans = ans.reshape(t.shape)
     return ans
 
+
 def round_complex(z, ndigits):
     return round(np.real(z), ndigits)+1j*round(np.imag(z), ndigits)
+
 
 def round_expr(expr, ndigits):
     try:
         return expr.xreplace({n:(round(sp.re(n), ndigits)+1j*round(sp.im(n), ndigits)) for n in expr.atoms(sp.Number)})
     except AttributeError:
         return round_complex(expr, ndigits)
+
 
 def round_complex_tensor(t, ndigits):
     ans = t.flatten()
@@ -154,8 +103,10 @@ def round_complex_tensor(t, ndigits):
     ans = ans.reshape(t.shape)
     return ans
 
+
 def modsquared(expr):
     return expr*np.conjugate(expr)
+
 
 def oprint(verbose, *items, filename=None, mode='a'):
     if verbose:
@@ -164,6 +115,7 @@ def oprint(verbose, *items, filename=None, mode='a'):
         f = open(filename, 'a')
         print(*items, file=f)
         f.close()
+
 
 def rotation_matrix3(n, t):
     n_mag = norm(n)
@@ -176,6 +128,7 @@ def rotation_matrix3(n, t):
     row2 = [ny*nx*(1-c)+nz*s, c+ny**2*(1-c), ny*nz*(1-c)-nx*s]
     row3 = [nz*nx*(1-c) - ny*s, nz*ny*(1-c) + nx*s, c+nz**2*(1-c)]
     return [row1, row2, row3]
+
 
 def rotation_matrix3symb(n,t, ndigits=16):
     n_mag = normsymb(n)
@@ -190,6 +143,7 @@ def rotation_matrix3symb(n,t, ndigits=16):
     ans = [row1, row2, row3]
     return ans
 
+
 def normalize(data, val):
     ans = [[],[]]
     ans[0] = data[0]
@@ -197,11 +151,12 @@ def normalize(data, val):
         ans[1].append(data[1][i]/val)
     return ans
 
+
 def levi_civita(i, j, k, first_index=0):
     i -= first_index
     j -= first_index
     k -= first_index
-    ans=0
+    ans = 0
     pos_args = [[0, 1, 2], [1, 2, 0], [2, 0, 1]]
     neg_args = [[1, 0, 2], [0, 2, 1], [2, 1, 0]]
     if [i, j, k] in pos_args:
@@ -209,6 +164,7 @@ def levi_civita(i, j, k, first_index=0):
     if [i, j, k] in neg_args:
         ans = -1
     return ans
+
 
 def cross_product(v1, v2):
     ans = [0, 0, 0]
@@ -218,11 +174,14 @@ def cross_product(v1, v2):
                 ans[i] += levi_civita(i, j, k)*v1[j]*v2[k]
     return ans
 
+
 def norm(v):
     return np.sqrt(v[0]**2 + v[1]**2 + v[2]**2)
 
+
 def normsymb(v):
     return sp.sqrt(v[0]**2 + v[1]**2 + v[2]**2)
+
 
 def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=16):
     iden = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
@@ -259,25 +218,27 @@ def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=1
             ans[i][j] = round(ans[i][j], ndigits)
     return ans
 
+
 def read_csv_file(filename, delimiter=',', num_skip_lines=0):
     with open(filename, 'r') as f:
         datalines = f.readlines()
     if datalines[0][-1] == ',':
-        datalines=datalines[num_skip_lines:]
+        datalines = datalines[num_skip_lines:]
         ans = [[] for i in range(len(datalines[0].split(',')[:-1]))]
         for dataline in datalines:
             extracted_data_strs = dataline.split(',')[:-1]
             for i in range(len(extracted_data_strs)):
                 ans[i].append(float(extracted_data_strs[i]))
     else:
-        datalines=datalines[num_skip_lines:]
+        datalines = datalines[num_skip_lines:]
         ans = [[] for i in range(len(datalines[0].split(',')))]
         for dataline in datalines:
             extracted_data_strs = dataline.split(',')
             for i in range(len(extracted_data_strs)):
                 ans[i].append(float(extracted_data_strs[i]))
-        
+
     return ans
+
 
 def dark_subtract(signal, dark):
     signal_x, signal_y = signal
@@ -292,6 +253,7 @@ def dark_subtract(signal, dark):
         ans = [ans_x, ans_y]
     return ans
 
+
 def dark_subtract_dicts(data_dict, d_datadict):
     ans = {}
     for pc in data_dict.keys():
@@ -300,15 +262,17 @@ def dark_subtract_dicts(data_dict, d_datadict):
         ans[pc].append([data_dict[pc][1][i] - d_datadict[pc][1][i] for i in range(len(data_dict[pc][1]))])
     return ans
 
+
 def load_data_and_dark_subtract(data_filenames, dark_filename):
-    dark_data = util.read_csv_file(dark_filename)
+    dark_data = read_csv_file(dark_filename)
     data_array_dark_subtracted = []
     for data_filename in data_filenames:
         data = read_csv_file(data_filename)
-        data_dark_subtracted.append(util.dark_subtract(data, dark_data))
+        data_array_dark_subtracted.append(dark_subtract(data, dark_data))
 
-    data_dict = {k:v for k,v in zip(['PP', 'PS', 'SP', 'SS'], data_dark_subtracted)}
+    data_dict = {k:v for k,v in zip(['PP', 'PS', 'SP', 'SS'], data_array_dark_subtracted)}
     return data_dict
+
 
 def load_data(data_filenames):
     data_array = []
@@ -318,6 +282,7 @@ def load_data(data_filenames):
 
     data_dict = {k:v for k,v in zip(['PP', 'PS', 'SP', 'SS'], data_array)}
     return data_dict
+
 
 def normalize_data_dict(data_dict):
     new_data_dict = {}

@@ -1,14 +1,14 @@
 import numpy as np
 import sympy as sp
 from .shg_symbols import *
-from scipy.optimize import leastsq
 from . import core as util
-import matplotlib.pyplot as plt
 from scipy.integrate import quad
 from . import tensorutils as tx
 
+
 def n2i(n, M=16):
     return n+M
+
 
 def rcomp_n(expr_arr, n, precision=7):
     Rshape = expr_arr.shape
@@ -19,9 +19,10 @@ def rcomp_n(expr_arr, n, precision=7):
         f_im = sp.lambdify(phi, 1/2/sp.pi*expr_arrf[i]*sp.sin(-1*(n*phi)))
         t_re,_ = quad(f_re, 0, 2*np.pi)
         t_im,_ = quad(f_im, 0, 2*np.pi)
-        h[i] = round(t_re, prescitions)+round(t_im, precision)*1j
+        h[i] = round(t_re, precision)+round(t_im, precision)*1j
     h = h.reshape(Rshape)
     return h
+
 
 def convolve_tensor_lists(nR1, nR2, M=16, dtype=object):
     test_prod = tx.tensor_product(nR1[0], nR2[0])
@@ -34,11 +35,13 @@ def convolve_tensor_lists(nR1, nR2, M=16, dtype=object):
                 pass
     return ans
 
+
 def formula_from_rcomp(t, M=16):
     expr = 0
     for m in np.arange(-M, M+1):
         expr += t[n2i(m)]*(sp.cos(m*phi)+1j*sp.sin(m*phi))
     return expr
+
 
 def data_dft(data_dict, M=16):
     ans = {pc:np.zeros(2*M+1, dtype=object) for pc in data_dict.keys()}
@@ -50,12 +53,14 @@ def data_dft(data_dict, M=16):
             ans[k][n2i(m, M)] = sum([1/2/np.pi*dx*ydata[i]*np.exp(-1j*m*xdata[i]) for i in range(len(xdata))])
     return ans
 
+
 def apply_phase_shift(rcomp, psi, M=16):
     """f(phi) -> f(phi + psi) <=> rf(m) -> exp(i*m*psi)rf(m)"""
     ans = np.zeros(shape=rcomp.shape, dtype=object)
     for m in np.arange(-M, M+1):
         ans[n2i(m, M)] = rcomp[n2i(m, M)] * (sp.cos(m*psi)+1j*sp.sin(m*psi))
     return ans
+
 
 def substitute_into_array(expr_array, *subs_tuples):
     ans = np.zeros(shape=expr_array.shape, dtype=object).flatten()
@@ -66,6 +71,7 @@ def substitute_into_array(expr_array, *subs_tuples):
         except AttributeError:
             ans[i] = temp[i]
     return ans.reshape(expr_array.shape)
+
 
 def load_data_and_fourier_transform(prefix, numbers, suffix, M=16, min_subtract=False, scale=1, d_prefix=None, d_numbers=None, d_suffix=None):
     filenames = [prefix+number+suffix for number in numbers]
@@ -83,21 +89,24 @@ def load_data_and_fourier_transform(prefix, numbers, suffix, M=16, min_subtract=
         min_data_k = min(data_dict[k][1])
         if min_subtract is True:
             data_dict[k][1] = [data_dict[k][1][i] - min_data_k for i in range(len(data_dict[k][1]))]
-    fdata_dict = data_dft(data_dict, M=M) 
+    fdata_dict = data_dft(data_dict, M=M)
 
     for k in data_dict.keys():
         data_dict[k][0] = xdata
 
     return data_dict, fdata_dict
 
+
 def extract_free_symbols_from_fform_dict(fform_dict, M=16):
     free_symbols = tx.union(*[tx.union(*[list(sp.sympify(fform_dict[k][n2i(m, M)]).free_symbols) for m in np.arange(-M, M+1)]) for k in fform_dict.keys()])
     return free_symbols
+
 
 def sanitize_free_symbols(free_symbols):
     ans = free_symbols[:]
     ans.sort(key=lambda x: str(x))
     return ans
+
 
 def fform_dict_subs(fform_dict, subs_array, M=16):
     subs_fform_dict = {}
@@ -106,7 +115,3 @@ def fform_dict_subs(fform_dict, subs_array, M=16):
         for m in np.arange(-M, M+1):
             subs_fform_dict[k][n2i(m)] = sp.sympify(fform_dict[k][n2i(m)]).subs(subs_array)
     return subs_fform_dict
-
-
-
-    
