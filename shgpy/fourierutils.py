@@ -1,13 +1,8 @@
 import numpy as np
 import sympy as sp
 from . import shg_symbols as S
-from . import core as shgpy
+from .core import n2i
 from . import tensorutils as tx
-from scipy.interpolate import interp1d
-
-
-def n2i(n, M=16):
-    return n+M
 
 
 def formula_from_fexpr(t, M=16):

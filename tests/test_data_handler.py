@@ -60,6 +60,27 @@ class TestfData(unittest.TestCase):
         self.assertEqual(hi.get_maxval(), ('PS', 1.0))
         hi.phase_shift_fdata(14, 'degrees')
         self.assertEqual(hi.get_phase_shift('radians'), np.deg2rad(14))
+
+
+class TestLoadData(unittest.TestCase):
+
+    filenames_dict = {
+        'PP':'tests/source/dataPP.csv',
+        'PS':'tests/source/dataPS.csv',
+        'SP':'tests/source/dataSP.csv',
+        'SS':'tests/source/dataSS.csv',
+    }
+    
+    def test_loaders(self):
+        dat = shgpy.load_data(self.filenames_dict, 'degrees')
+        self.assertIsInstance(dat, shgpy.DataContainer)
+        dat = shgpy.load_data_and_dark_subtract(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
+        self.assertIsInstance(dat, shgpy.DataContainer)
+        self.assertEqual(dat.get_maxval()[1], 0)
+        dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees')
+        dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
+        print(fdat.get_items())
+    
         
         
 

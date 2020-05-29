@@ -1,7 +1,6 @@
 import numpy as np
 import csv
-
-from .. import fourierutils as fx
+from scipy.interpolate import interp1d
 
 
 class DataContainer:
@@ -11,7 +10,7 @@ class DataContainer:
         self._check_angle_units(input_angle_units)
         self._check_defining_iterable(iterable)
         self._input_angle_units = input_angle_units
-        self._scale = scale
+        self._scale = 1
         self._data_dict = dict(iterable)
         self._phase_shift = 0
         self._offset = 0
@@ -49,7 +48,7 @@ class DataContainer:
         minval = self.get_minval()
         for k,v in self.get_keys():
             self._data_dict[k] = np.array([v[0], v[1]-minval])
-        offset -= minval
+        self._offset -= minval
 
     def get_maxval(self):
         maximum_value = -np.inf
@@ -209,9 +208,13 @@ class fDataContainer:
             fexpr = self._fdata_dict[k]
             ans = np.zeros(shape=fexpr.shape, dtype=fexpr.dtype)
             for m in np.arange(-self._M, self._M + 1):
-                ans[fx.n2i(m, self._M)] = fexpr[fx.n2i(m, self._M)] * (np.cos(m * angle)+1j*np.sin(m * angle))
+                ans[n2i(m, self._M)] = fexpr[n2i(m, self._M)] * (np.cos(m * angle)+1j*np.sin(m * angle))
             self._fdata_dict[k] = ans
         self._phase_shift += angle
+
+
+def n2i(n, M=16):
+    return n+M
 
 
 def read_csv_file(filename, delimiter=','):
@@ -228,19 +231,21 @@ def read_csv_file(filename, delimiter=','):
 def dat_subtract(dat1, dat2):
     if set(dat1.get_keys()) != set(dat2.get_keys()):
         raise ValueError('DataContainers have different keys.')
-    if dat1.get_values()[0].shape != dat2.get_values()[0].shape:
+    if dat1.get_values('radians')[0].shape != dat2.get_values('radians')[0].shape:
         raise ValueError('DataContainers\' xydatas have different shapes.')
     new_dict = {}
     for k in dat1.get_keys():
         new_xdata, ydata1 = dat1.get_xydata(k, 'radians')
         _, ydata2 = dat2.get_xydata(k, 'radians')
-        new_ydata = ydata2-ydata1
+        if not np.array_equal(new_xdata, _):
+            raise ValueError('DataContainers have different xdatas.')
+        new_ydata = ydata2 - ydata1
         new_dict[k] = np.array([new_xdata, new_ydata])
-    return DataContainer(new_dict[k], 'radians')
+    return DataContainer(new_dict, 'radians')
        
 
-def load_data_and_dark_subtract(data_filenames_dict, dark_filenames_dict, data_angle_units, dark_angle_units):
-    if set(data_filenames_dict.get_keys()) != set(dark_filenames_dict.get_keys()):
+def load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_filenames_dict, dark_angle_units):
+    if set(data_filenames_dict.keys()) != set(dark_filenames_dict.keys()):
         raise ValueError('filename dicts have different keys.')
     dat1 = DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, data_angle_units)
     dat2 = DataContainer({k:read_csv_file(v) for k,v in dark_filenames_dict.items()}, dark_angle_units)
@@ -261,18 +266,18 @@ def data_dft(dat, interp_kind='cubic', M=16):
             interp_ydata = interp_func(interp_xdata)
             dx = interp_xdata[1] - interp_xdata[0]
             ans[k][n2i(m, M)] = sum([1/2/np.pi*dx*interp_ydata[i]*np.exp(-1j*m*interp_xdata[i]) for i in range(len(interp_xdata))])
-    return shgpy.fDataContainer(ans.items(), M=M)
+    return fDataContainer(ans.items(), M=M)
 
 
-def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_filenames_dict=None, dark_angle_units=None, interp_kind='cubic', M=16, min_subtract=False, scale_factor=None)
+def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_filenames_dict=None, dark_angle_units=None, interp_kind='cubic', M=16, min_subtract=False, scale=1):
     if dark_filenames_dict is not None:
-        dat = load_data_and_dark_subtract(data_filenames_dict, dark_filenames_dict, data_angle_units, dark_angle_units)
+        dat = load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_filenames_dict, dark_angle_units)
     else:
         dat = load_data(data_filenames_dict, data_angle_units)
     if min_subtract:
         dat.subtract_min()
     fdat = data_dft(dat, interp_kind=interp_kind, M=M)
-    if scale_factor is not None:
+    if scale != 1:
         dat.scale_data(scale)
         fdat.scale_data(scale)
     return dat, fdat
