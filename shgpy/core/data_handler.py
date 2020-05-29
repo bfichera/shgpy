@@ -1,4 +1,5 @@
 import numpy as np
+
 from .. import fourierutils as fx
 
 
@@ -108,7 +109,7 @@ class fData:
             raise ValueError('Invalid Data input')
         try:
             bad_key = False in [type(k) == str for k in dict(iterable).keys()]
-            bad_val = False in [type(v) == np.ndarray and v.shape == (2*self._M+1,) and v.dtype != object and v.ndim == 1 for v in dict(iterable).values()]
+            bad_val = False in [type(v) == np.ndarray and v.shape == (2*self._M+1,) and v.dtype in [np.complex64, np.complex128] and v.ndim == 1 for v in dict(iterable).values()]
         except:
             raise_error()
         if bad_key is True or bad_val is True:
@@ -130,7 +131,11 @@ class fData:
     def get_scale(self):
         return self._scale
 
-    def get_phase_shift(self):
+    def get_phase_shift(self, requested_angle_units):
+        requested_angle_units = requested_angle_units.lower()
+        self._check_angle_units(requested_angle_units)
+        if requested_angle_units == 'degrees':
+            return np.rad2deg(self._phase_shift)
         return self._phase_shift
         
     def scale_fdata(self, scale_factor):
@@ -146,6 +151,7 @@ class fData:
             this_max = max([abs(nv) for nv in v])
             if this_max > maximum_value:
                 maximum_value = this_max
+                max_pc = k
         return max_pc, maximum_value
 
     def normalize_fdata(self, desired_maximum):
@@ -160,10 +166,20 @@ class fData:
         for k in self.get_keys():
             rcomp = self._fdata_dict[k]
             ans = np.zeros(shape=rcomp.shape, dtype=rcomp.dtype)
-            for m in np.arange(-self.M, self.M + 1):
-                ans[fx.n2i(m, self.M)] = rcomp[fx.n2i(m, self.M)] * (np.cos(m * angle)+1j*np.sin(m * angle))
+            for m in np.arange(-self._M, self._M + 1):
+                ans[fx.n2i(m, self._M)] = rcomp[fx.n2i(m, self._M)] * (np.cos(m * angle)+1j*np.sin(m * angle))
             self._fdata_dict[k] = ans
         self._phase_shift += angle
+
+
+class fForm:
+
+    def __init__(self, iterable):
+        self._fform_dict = dict(iterable)
+
+
+
+
 
 
 
