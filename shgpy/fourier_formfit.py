@@ -3,7 +3,7 @@ import numpy as np
 from . import core as util
 from .shg_symbols import *
 from . import tensorutils as tx
-from . import fourierutils as fx
+from . import formula as fx
 from scipy.optimize import leastsq
 from scipy.optimize import basinhopping
 import time
