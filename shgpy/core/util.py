@@ -3,7 +3,6 @@ import sympy as sp
 from sympy.solvers import solve
 import itertools
 from warnings import warn
-from .core import DataContainer, fDataContainer
 
 
 def particularize(tensor, exclude=[]):
@@ -220,68 +219,3 @@ def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=1
     return ans
 
 
-def read_csv_file(filename, delimiter=',', num_skip_lines=0):
-    with open(filename, 'r') as f:
-        datalines = f.readlines()
-    if datalines[0][-1] == ',':
-        datalines = datalines[num_skip_lines:]
-        ans = [[] for i in range(len(datalines[0].split(',')[:-1]))]
-        for dataline in datalines:
-            extracted_data_strs = dataline.split(',')[:-1]
-            for i in range(len(extracted_data_strs)):
-                ans[i].append(float(extracted_data_strs[i]))
-    else:
-        datalines = datalines[num_skip_lines:]
-        ans = [[] for i in range(len(datalines[0].split(',')))]
-        for dataline in datalines:
-            extracted_data_strs = dataline.split(',')
-            for i in range(len(extracted_data_strs)):
-                ans[i].append(float(extracted_data_strs[i]))
-
-    return ans
-
-
-def dat_subtract(dat1, dat2):
-    if set(dat1.get_keys()) != set(dat2.get_keys()):
-        raise ValueError('DataContainers have different keys.')
-    if dat1.get_values()[0].shape != dat2.get_values()[0].shape:
-        raise ValueError('DataContainers\' xydatas have different shapes.')
-    new_dict = {}
-    for k in dat1.get_keys():
-        new_xdata, ydata1 = dat1.get_xydata(k, 'radians')
-        _, ydata2 = dat2.get_xydata(k, 'radians')
-        new_ydata = ydata2-ydata1
-        new_dict[k] = np.array([new_xdata, new_ydata])
-    return DataContainer(new_dict[k], 'radians')
-       
-
-def load_data_and_dark_subtract(data_filenames, dark_filename):
-    dark_data = read_csv_file(dark_filename)
-    data_array_dark_subtracted = []
-    for data_filename in data_filenames:
-        data = read_csv_file(data_filename)
-        data_array_dark_subtracted.append(dark_subtract(data, dark_data))
-
-    data_dict = {k:v for k,v in zip(['PP', 'PS', 'SP', 'SS'], data_array_dark_subtracted)}
-    return data_dict
-
-
-def load_data(data_filenames):
-    data_array = []
-    for data_filename in data_filenames:
-        data = read_csv_file(data_filename)
-        data_array.append(data)
-
-    data_dict = {k:v for k,v in zip(['PP', 'PS', 'SP', 'SS'], data_array)}
-    return data_dict
-
-
-def normalize_data_dict(data_dict):
-    new_data_dict = {}
-    max_val = 0
-    for pc in ['PP', 'PS', 'SP', 'SS']:
-        this_max_val = max(data_dict[pc][1])
-        max_val = max(max_val, this_max_val)
-    for pc in ['PP', 'PS', 'SP', 'SS']:
-        new_data_dict[pc] = normalize(data_dict[pc],max_val)
-    return new_data_dict

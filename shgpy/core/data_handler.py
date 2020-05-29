@@ -1,4 +1,5 @@
 import numpy as np
+import csv
 
 from .. import fourierutils as fx
 
@@ -10,9 +11,10 @@ class DataContainer:
         self._check_angle_units(input_angle_units)
         self._check_defining_iterable(iterable)
         self._input_angle_units = input_angle_units
-        self._scale = 1
+        self._scale = scale
         self._data_dict = dict(iterable)
         self._phase_shift = 0
+        self._offset = 0
         if input_angle_units == 'degrees':
             self._convert_data_dict_to_radians()
 
@@ -43,6 +45,12 @@ class DataContainer:
         self._data_dict = {k:np.array([v[0], scale_factor*v[1]]) for k,v in self._data_dict.items()}
         self._scale *= scale_factor
 
+    def subtract_min(self):
+        minval = self.get_minval()
+        for k,v in self.get_keys():
+            self._data_dict[k] = np.array([v[0], v[1]-minval])
+        offset -= minval
+
     def get_maxval(self):
         maximum_value = -np.inf
         max_pc = None
@@ -51,6 +59,24 @@ class DataContainer:
                 maximum_value = max(v[1])
                 max_pc = k
         return max_pc, maximum_value
+
+    def get_pc_maxval(self, pc):
+        return max(self._data_dict[pc][1])
+
+    def get_minval(self):
+        minimum_value = np.inf
+        min_pc = None
+        for k,v in self._data_dict.items():
+            if min(v[1]) < minimum_value:
+                minimum_value = min(v[1])
+                min_pc = k
+        return min_pc, minimum_value
+
+    def get_pc_minval(self, pc):
+        return min(self._data_dict[pc][1])
+
+    def get_offset(self):
+        return self._offset
 
     def normalize_data(self, desired_maximum=1):
         _, maximum_value = self.get_maxval()
@@ -165,6 +191,11 @@ class fDataContainer:
                 max_pc = k
         return max_pc, maximum_value
 
+    def get_pc_maxval(self, pc):
+        v = self._fdata_dict[pc]
+        maximum_value = max([abs(nv) for nv in v])
+        return maximum_value
+        
     def normalize_fdata(self, desired_maximum):
         _, maximum_value = self.get_maxval()
         self.scale_fdata(desired_maximum / maximum_value)
@@ -182,6 +213,72 @@ class fDataContainer:
             self._fdata_dict[k] = ans
         self._phase_shift += angle
 
+
+def read_csv_file(filename, delimiter=','):
+    xdata = []
+    ydata = []
+    with open(filename, 'r') as f:
+        reader = csv.reader(f, delimiter=delimiter)
+        for row in reader:
+            xdata.append(float(row[0]))
+            ydata.append(float(row[1]))
+    return np.array([xdata, ydata])
+
+
+def dat_subtract(dat1, dat2):
+    if set(dat1.get_keys()) != set(dat2.get_keys()):
+        raise ValueError('DataContainers have different keys.')
+    if dat1.get_values()[0].shape != dat2.get_values()[0].shape:
+        raise ValueError('DataContainers\' xydatas have different shapes.')
+    new_dict = {}
+    for k in dat1.get_keys():
+        new_xdata, ydata1 = dat1.get_xydata(k, 'radians')
+        _, ydata2 = dat2.get_xydata(k, 'radians')
+        new_ydata = ydata2-ydata1
+        new_dict[k] = np.array([new_xdata, new_ydata])
+    return DataContainer(new_dict[k], 'radians')
+       
+
+def load_data_and_dark_subtract(data_filenames_dict, dark_filenames_dict, data_angle_units, dark_angle_units):
+    if set(data_filenames_dict.get_keys()) != set(dark_filenames_dict.get_keys()):
+        raise ValueError('filename dicts have different keys.')
+    dat1 = DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, data_angle_units)
+    dat2 = DataContainer({k:read_csv_file(v) for k,v in dark_filenames_dict.items()}, dark_angle_units)
+    return dat_subtract(dat1, dat2)
+    
+
+def load_data(data_filenames_dict, angle_units):
+    return DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, angle_units)
+
+
+def data_dft(dat, interp_kind='cubic', M=16):
+    ans = {pc:np.zeros(2*M+1, dtype=np.complex64) for pc in dat.get_keys()}
+    for k in dat.get_keys():
+        for m in np.arange(-M, M+1):
+            xdata, ydata = dat.get_xydata(k, 'radians')
+            interp_func = interp1d(xdata, ydata, kind=interp_kind)
+            interp_xdata = np.linspace(0, 2*np.pi, len(ydata), endpoint=False)
+            interp_ydata = interp_func(interp_xdata)
+            dx = interp_xdata[1] - interp_xdata[0]
+            ans[k][n2i(m, M)] = sum([1/2/np.pi*dx*interp_ydata[i]*np.exp(-1j*m*interp_xdata[i]) for i in range(len(interp_xdata))])
+    return shgpy.fDataContainer(ans.items(), M=M)
+
+
+def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_filenames_dict=None, dark_angle_units=None, interp_kind='cubic', M=16, min_subtract=False, scale_factor=None)
+    if dark_filenames_dict is not None:
+        dat = load_data_and_dark_subtract(data_filenames_dict, dark_filenames_dict, data_angle_units, dark_angle_units)
+    else:
+        dat = load_data(data_filenames_dict, data_angle_units)
+    if min_subtract:
+        dat.subtract_min()
+    fdat = data_dft(dat, interp_kind=interp_kind, M=M)
+    if scale_factor is not None:
+        dat.scale_data(scale)
+        fdat.scale_data(scale)
+    return dat, fdat
+
+
+    
 
 
 
