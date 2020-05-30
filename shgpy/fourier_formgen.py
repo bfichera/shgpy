@@ -40,8 +40,8 @@ def _load_pickle(filename):
     return np.load(filename, allow_pickle=True)
 
 
-def _save_fform_dict(filename, fform_dict):
-    pickle.dump(fform_dict, open(filename, 'wb'))
+def _save_fform_dict(filename, _fform_dict):
+    pickle.dump(_fform_dict, open(filename, 'wb'))
 
 
 def _load_fform_dict(filename):
@@ -373,19 +373,19 @@ def generate_contracted_fourier_transforms(filename_prefix, chi_dipole, chi_quad
     ## has 4 elements, correponsing to the four
     ## terms in |P+ikQ|^2.
     ##
-    fform_dict = {}
+    _fform_dict = {}
     for pc,h7_pc in terms_dict.items():
-        fform_dict[pc] = np.zeros(shape=(2*M+1,), dtype=object)
+        _fform_dict[pc] = np.zeros(shape=(2*M+1,), dtype=object)
         for term in range(len(h7_pc)):
             t8_pc_term = np.array([tx.tensor_contract(tx.tensor_product(h7_pc[term][fx.n2i(m, M)], chi_list_1[term]), contraction_lists_1[term]) for m in np.arange(-M, M+1)])
             t9_pc_term = np.array([tx.tensor_contract(tx.tensor_product(t8_pc_term[fx.n2i(m, M)], chi_list_2[term]), contraction_lists_2[term]) for m in np.arange(-M, M+1)])
-            fform_dict[pc] += np.copy(t9_pc_term)
+            _fform_dict[pc] += np.copy(t9_pc_term)
             util.oprint(verbose, 'finished term %s!' % term)
         if ndigits is not None:
-            fform_dict[pc] = util.round_complex_tensor(fform_dict[pc], ndigits)
+            _fform_dict[pc] = util.round_complex_tensor(_fform_dict[pc], ndigits)
         util.oprint(verbose, 'finished %s!' % pc)
 
-    return fform_dict
+    return _fform_dict
 
 
 def generate_contracted_fourier_transforms_complex(filename_prefix, chi_dipole, chi_quadrupole, M=16, ndigits=None, verbose=True):
@@ -430,16 +430,16 @@ def generate_contracted_fourier_transforms_complex(filename_prefix, chi_dipole, 
     ## has 4 elements, correponsing to the four
     ## terms in |P+ikQ|^2.
     ##
-    fform_dict = {}
+    _fform_dict = {}
     for pc,h7_pc in terms_dict.items():
-        fform_dict[pc] = np.zeros(shape=(2*M+1,), dtype=object)
+        _fform_dict[pc] = np.zeros(shape=(2*M+1,), dtype=object)
         for term in range(len(h7_pc)):
             t8_pc_term = np.array([tx.tensor_contract(tx.tensor_product(h7_pc[term][fx.n2i(m, M)], chi_list_1[term]), contraction_lists_1[term]) for m in np.arange(-M, M+1)])
             t9_pc_term = np.array([tx.tensor_contract(tx.tensor_product(t8_pc_term[fx.n2i(m, M)], chi_list_2[term]), contraction_lists_2[term]) for m in np.arange(-M, M+1)])
-            fform_dict[pc] += np.copy(t9_pc_term)
+            _fform_dict[pc] += np.copy(t9_pc_term)
             util.oprint(verbose, 'finished term %s!' % term)
         if ndigits is not None:
-            fform_dict[pc] = util.round_complex_tensor(fform_dict[pc], ndigits)
+            _fform_dict[pc] = util.round_complex_tensor(_fform_dict[pc], ndigits)
         util.oprint(verbose, 'finished %s!' % pc)
 
-    return fform_dict
+    return _fform_dict
