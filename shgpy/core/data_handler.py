@@ -1,5 +1,7 @@
 import numpy as np
+import sympy as sp
 import csv
+import pickle
 from scipy.interpolate import interp1d
 
 
@@ -213,6 +215,65 @@ class fDataContainer:
         self._phase_shift += angle
 
 
+class fFormContainer:
+
+    def __init__(self, iterable, M=16):
+        self._check_defining_iterable(iterable)
+        self._fform_dict = dict(iterable)
+        self.sympify()
+        self._M = M
+
+    def _check_defining_iterable(self, iterable):
+        def raise_error():
+            raise ValueError('Invalid Data input')
+        try:
+            bad_key = False in [type(k) == str for k in dict(iterable).keys()]
+            bad_val = False in [type(v) == np.ndarray and v.shape == (2*self._M+1,) and v.dtype is object and v.ndim == 1 for v in dict(iterable).values()]
+        except:
+            raise_error()
+        if bad_key or bad_val:
+            raise_error()
+
+    def _sympify(self):
+        for k in self.get_keys():
+            for m in np.arange(-self._M, self._M+1):
+                self._fform_dict[k][n2i(m, self._M)] = sp.sympify(self._fform_dict[k][n2i(m, self._M)])
+
+    def get_free_symbols(self):
+        free_symbols = []
+        for k in self.get_keys():
+            for m in np.arange(-self._M, self._M+1):
+                for fs in self._fform_dict[k][n2i(m, self._M)].free_symbols:
+                    free_symbols.append(fs)
+        free_symbols = list(set(free_symbols))
+        free_symbols.sort(key=str)
+        return free_symbols
+
+    def subs(self, subs_array):
+        subs_fform_dict = {}
+        for k,v in self.get_items():
+            subs_fform_dict[k] = np.zeros(shape=(2*self._M+1,), dtype=object)
+            for m in np.arange(-self._M, self._M+1):
+                subs_fform_dict[k][n2i(m, self._M)] = self._fform_dict[k][n2i(m, self._M)].subs(subs_array)
+        self._fform_dict = subs_fform_dict
+
+    def apply_phase_shift(self, phase_shift):
+        new_fform_dict = {k:np.zeros(shape=(2*self._M+1,), dtype=object) for k in self.get_keys()}
+        for k in self.get_keys():
+            for m in np.arange(-self._M, self._M+1):
+                new_fform_dict[k][n2i(m, self._M)] = self._fform_dict[k][n2i(m, self._M)] * (sp.cos(m * phase_shift) + 1j*sp.sin(m * phase_shift))
+        self._fform_dict = new_fform_dict
+        
+    def get_keys(self):
+        return list(self._fform_dict.keys())
+
+    def get_values(self):
+        return list(self._fform_dict.values())
+
+    def get_items(self):
+        return list(self._fform_dict.items())
+
+
 def n2i(n, M=16):
     return n+M
 
@@ -282,6 +343,12 @@ def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_
         fdat.scale_data(scale)
     return dat, fdat
 
+
+def load_fform_dict(filename):
+    with open(filename, 'rb') as f:
+        fform_dict = pickle.load(f)
+    return fFormContainer(fform_dict)
+        
 
     
 
