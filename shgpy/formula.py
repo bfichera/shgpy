@@ -2,7 +2,7 @@ import numpy as np
 import sympy as sp
 from . import shg_symbols as S
 from .core import n2i
-from . import tensorutils as tx
+from . import tensor as tx
 
 
 def formula_from_fexpr(t, M=16):

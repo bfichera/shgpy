@@ -3,7 +3,7 @@ import numpy as np
 from scipy.integrate import quad
 from . import core as util
 from . import shg_symbols as S
-from . import tensorutils as tx
+from . import tensor as tx
 from . import formula as fx
 from .core import n2i
 import pickle
@@ -36,15 +36,15 @@ def _convolve_ftensors(nR1, nR2, M=16, dtype=object):
     return ans
 
 
-def load_pickle(filename):
+def _load_pickle(filename):
     return np.load(filename, allow_pickle=True)
 
 
-def save_fform_dict(filename, fform_dict):
+def _save_fform_dict(filename, fform_dict):
     pickle.dump(fform_dict, open(filename, 'wb'))
 
 
-def load_fform_dict(filename):
+def _load_fform_dict(filename):
     return pickle.load(open(filename, 'rb'))
 
 
@@ -350,7 +350,7 @@ def generate_contracted_fourier_transforms(filename_prefix, chi_dipole, chi_quad
     ## the number of lines in this program
     ##
     pcs = ['PP', 'PS', 'SP', 'SS']
-    terms_dict = {pc:load_pickle(filename_prefix+'_'+pc.lower()+'.npy') for pc in pcs}
+    terms_dict = {pc:_load_pickle(filename_prefix+'_'+pc.lower()+'.npy') for pc in pcs}
 
     contraction_lists_1 = [[[0, 6], [2, 7], [3, 8]],
                            [[0, 7], [2, 8], [3, 9]],
@@ -407,7 +407,7 @@ def generate_contracted_fourier_transforms_complex(filename_prefix, chi_dipole, 
     ## the number of lines in this program
     ##
     pcs = ['PP', 'PS', 'SP', 'SS']
-    terms_dict = {pc:load_pickle(filename_prefix+'_'+pc.lower()+'.npy') for pc in pcs}
+    terms_dict = {pc:_load_pickle(filename_prefix+'_'+pc.lower()+'.npy') for pc in pcs}
 
     contraction_lists_1 = [[[0, 6], [2, 7], [3, 8]],
                            [[0, 7], [2, 8], [3, 9]],
