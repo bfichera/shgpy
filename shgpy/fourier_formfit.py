@@ -1,40 +1,43 @@
 import sympy as sp
 import numpy as np
-from . import core as util
-from .shg_symbols import *
-from . import tensor as tx
+from . import shg_symbols as S
 from . import formula as fx
-from scipy.optimize import leastsq
+from .core import n2i
 from scipy.optimize import basinhopping
+from scipy.optimize import leastsq
 import time
-import itertools
-from warnings import warn
-from scipy.optimize import OptimizeResult
-from sympy.utilities.lambdify import lambdastr
-import math
+import logging
+import logging.config
+from ._logging_config import cfg
+
+logging.getLogger(__name__)
+logging.config.dictConfig(cfg)
+
 
 def I_component(expr):
     return (expr-expr.subs(sp.I, 0)).subs(sp.I, 1)
 
+
 def no_I_component(expr):
     return expr.subs(sp.I, 0)
 
-def leastsq_fit(fform_dict, fdata_dict, guess_dict, M=16):
-    
-    free_symbols = fx.sanitize_free_symbols(fx.extract_free_symbols_from_fform_dict(fform_dict, M=M))
-    
+
+def leastsq_fit(fform, fdat, guess_dict):
+    free_symbols = fform.get_free_symbols()
+    M = fform.get_M()
+
     expr_residual_list = []
-    for k in sorted(fform_dict.keys()):
+    for pc in fform.get_keys():
         for m in np.arange(-M, M+1):
-            expr_residual_list.append(fform_dict[k][fx.n2i(m, M)]-fdata_dict[k][fx.n2i(m, M)])
+            expr_residual_list.append(fform.get_pc(pc)[n2i(m, M)] - fdat.get_pc(pc)[n2i(m, M)])
 
     pre_residual = sp.lambdify(free_symbols, expr_residual_list)
     residual = lambda x:np.array(pre_residual(*x)).view(np.double)
 
-    guess = [guess_dict[str(k)] for k in free_symbols]
+    guess = [guess_dict[k] for k in free_symbols]
 
-    ans, covr = leastsq(residual, guess)
-    return ans, np.dot(residual(ans), residual(ans))
+    return leastsq(residual, guess)
+
 
 def basinhopping_fit(fform_dict, fdata_dict, guess_dict, niter=200, M=16, method='BFGS', verbose=True, stepsize=0.5):
     
@@ -57,7 +60,6 @@ def basinhopping_fit(fform_dict, fdata_dict, guess_dict, niter=200, M=16, method
     end = time.perf_counter()
     util.oprint(verbose, 'Done with energy function generation. It took %s seconds.' % (end-start))
 
-    
     x0 = [guess_dict[str(k)] for k in free_symbols]
     minimizer_kwargs = {'method':method}
     start = time.perf_counter()
@@ -65,6 +67,7 @@ def basinhopping_fit(fform_dict, fdata_dict, guess_dict, niter=200, M=16, method
     end = time.perf_counter()
 
     return ret,end-start
+
 
 def basinhopping_fit_with_bounds(fform_dict, fdata_dict, guess_dict, bounds_dict, niter=200, M=16, method='L-BFGS-B', verbose=True, stepsize=0.5):
     
@@ -87,7 +90,6 @@ def basinhopping_fit_with_bounds(fform_dict, fdata_dict, guess_dict, bounds_dict
     end = time.perf_counter()
     util.oprint(verbose, 'Done with energy function generation. It took %s seconds.' % (end-start))
 
-    
     x0 = [guess_dict[str(k)] for k in free_symbols]
     if bounds_dict is not None:
         bounds = [bounds_dict[str(k)] for k in free_symbols]
@@ -99,6 +101,7 @@ def basinhopping_fit_with_bounds(fform_dict, fdata_dict, guess_dict, bounds_dict
     end = time.perf_counter()
 
     return ret,end-start
+
 
 def basinhopping_fit_jac(fform_dict, fdata_dict, guess_dict, niter=200, M=16, method='BFGS', verbose=True, stepsize=0.5):
     
@@ -130,3 +133,18 @@ def basinhopping_fit_jac(fform_dict, fdata_dict, guess_dict, niter=200, M=16, me
     end = time.perf_counter()
 
     return ret, end-start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

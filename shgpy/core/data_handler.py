@@ -91,7 +91,7 @@ class DataContainer:
         self._data_dict = {k:np.array([v[0]+angle, v[1]]) for k,v in self._data_dict.items()}
         self._phase_shift += angle
 
-    def get_xydata(self, pc, requested_angle_units):
+    def get_pc(self, pc, requested_angle_units):
         requested_angle_units = requested_angle_units.lower()
         self._check_angle_units(requested_angle_units)
         if requested_angle_units == 'radians':
@@ -182,6 +182,9 @@ class fDataContainer:
         self._fdata_dict = {k:scale_factor*v for k,v in self.get_items()}
         self._scale *= scale_factor
 
+    def get_pc(self, pc):
+        return np.copy(self._fdata_dict[pc])
+
     def get_maxval(self):
         maximum_value = -np.inf
         max_pc = None
@@ -263,6 +266,12 @@ class fFormContainer:
             for m in np.arange(-self._M, self._M+1):
                 new_fform_dict[k][n2i(m, self._M)] = self._fform_dict[k][n2i(m, self._M)] * (sp.cos(m * phase_shift) + 1j*sp.sin(m * phase_shift))
         self._fform_dict = new_fform_dict
+
+    def get_M(self):
+        return self._M
+
+    def get_pc(self, pc):
+        return np.copy(self._fform_dict[pc])
         
     def get_keys(self):
         return list(self._fform_dict.keys())
@@ -296,8 +305,8 @@ def dat_subtract(dat1, dat2):
         raise ValueError('DataContainers\' xydatas have different shapes.')
     new_dict = {}
     for k in dat1.get_keys():
-        new_xdata, ydata1 = dat1.get_xydata(k, 'radians')
-        _, ydata2 = dat2.get_xydata(k, 'radians')
+        new_xdata, ydata1 = dat1.get_pc(k, 'radians')
+        _, ydata2 = dat2.get_pc(k, 'radians')
         if not np.array_equal(new_xdata, _):
             raise ValueError('DataContainers have different xdatas.')
         new_ydata = ydata2 - ydata1
@@ -321,7 +330,7 @@ def data_dft(dat, interp_kind='cubic', M=16):
     ans = {pc:np.zeros(2*M+1, dtype=np.complex64) for pc in dat.get_keys()}
     for k in dat.get_keys():
         for m in np.arange(-M, M+1):
-            xdata, ydata = dat.get_xydata(k, 'radians')
+            xdata, ydata = dat.get_pc(k, 'radians')
             interp_func = interp1d(xdata, ydata, kind=interp_kind)
             interp_xdata = np.linspace(0, 2*np.pi, len(ydata), endpoint=False)
             interp_ydata = interp_func(interp_xdata)
