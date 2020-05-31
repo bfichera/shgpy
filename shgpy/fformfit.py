@@ -31,20 +31,20 @@ def least_squares_fit(fform, fdat, guess_dict):
         for m in np.arange(-M, M+1):
             expr_residual_list.append(fform.get_pc(pc)[n2i(m, M)] - fdat.get_pc(pc)[n2i(m, M)])
 
-    logging.debug('Starting residual function generation.')
+    logging.info('Starting residual function generation.')
     start = time.time()
     pre_residual = sp.lambdify(free_symbols, expr_residual_list)
     residual = lambda x:np.array(pre_residual(*x)).view(np.double)
-    logging.debug(f'Done with residual function generation. It took {time.time()-start} seconds.')
+    logging.info(f'Done with residual function generation. It took {time.time()-start} seconds.')
 
     guess = [guess_dict[k] for k in free_symbols]
 
-    logging.debug('Starting least squares minimizations.')
+    logging.info('Starting least squares minimizations.')
     start = time.time()
     ret = least_squares(residual, guess)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    logging.debug(f'Finished least squares minimization. It took {time.time()-start} seconds.')
+    logging.info(f'Finished least squares minimization. It took {time.time()-start} seconds.')
     
     return ret
 
@@ -59,21 +59,21 @@ def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
         for m in np.arange(-M, M+1):
             expr_residual_list.append(fform.get_pc(pc)[n2i(m, M)] - fdat.get_pc(pc)[n2i(m, M)])
 
-    logging.debug('Starting residual function generation.')
+    logging.info('Starting residual function generation.')
     start = time.time()
     pre_residual = sp.lambdify(free_symbols, expr_residual_list)
     residual = lambda x:np.array(pre_residual(*x)).view(np.double)
-    logging.debug(f'Done with residual function generation. It took {time.time()-start} seconds.')
+    logging.info(f'Done with residual function generation. It took {time.time()-start} seconds.')
 
     guess = [guess_dict[k] for k in free_symbols]
     bounds = [[bounds_dict[k][0] for k in free_symbols], [bounds_dict[k][1] for k in free_symbols]]
 
-    logging.debug('Starting least squares minimizations.')
+    logging.info('Starting least squares minimizations.')
     start = time.time()
     ret = least_squares(residual, guess, bounds=bounds)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    logging.debug(f'Finished least squares minimization. It took {time.time()-start} seconds.')
+    logging.info(f'Finished least squares minimization. It took {time.time()-start} seconds.')
     
     return ret
 
@@ -83,7 +83,7 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
-    logging.debug('Starting energy function generation.')
+    logging.info('Starting energy function generation.')
     start = time.time()
     energy_expr_list = []
     for k in fform.get_keys():
@@ -97,16 +97,16 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5
 
     pre_f_energy = sp.lambdify(free_symbols, energy_expr)
     f_energy = lambda x:pre_f_energy(*x)
-    logging.debug(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    logging.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
     minimizer_kwargs = {'method':method}
-    logging.debug('Starting basinhopping minimization.')
+    logging.info('Starting basinhopping minimization.')
     start = time.time()
     ret = basinhopping(f_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    logging.debug(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+    logging.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
 
     return ret
 
@@ -116,7 +116,7 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
-    logging.debug('Starting energy function generation.')
+    logging.info('Starting energy function generation.')
     start = time.time()
     energy_expr_list = []
     for k in fform.get_keys():
@@ -130,7 +130,7 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
 
     pre_f_energy = sp.lambdify(free_symbols, energy_expr)
     f_energy = lambda x:pre_f_energy(*x)
-    logging.debug(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    logging.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
     if bounds_dict is not None:
@@ -139,11 +139,11 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
         bounds = None
     minimizer_kwargs = {'method':method, 'bounds':bounds}
     start = time.time()
-    logging.debug('Starting basinhopping minimization.')
+    logging.info('Starting basinhopping minimization.')
     ret = basinhopping(f_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    logging.debug(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+    logging.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
 
     return ret
 
@@ -153,7 +153,7 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
-    logging.debug('Starting energy function generation.')
+    logging.info('Starting energy function generation.')
     start = time.time()
     energy_expr_list = []
     for k in fform.get_keys():
@@ -172,16 +172,16 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize
     pre_f_energy = sp.lambdify(free_symbols, energy_expr)
     pre_df_energy = sp.lambdify(free_symbols, denergy_expr)
     fdf_energy = lambda x:(pre_f_energy(*x),np.array(pre_df_energy(*x)))
-    logging.debug(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    logging.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
     minimizer_kwargs = {'method':method, 'jac':True}
-    logging.debug('Starting basinhopping minimization.')
+    logging.info('Starting basinhopping minimization.')
     start = time.time()
     ret = basinhopping(fdf_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    logging.debug(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+    logging.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
 
     return ret
 
@@ -191,7 +191,7 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
-    logging.debug('Starting energy function generation.')
+    logging.info('Starting energy function generation.')
     start = time.time()
     energy_expr_list = []
     for k in fform.get_keys():
@@ -210,7 +210,7 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     pre_f_energy = sp.lambdify(free_symbols, energy_expr)
     pre_df_energy = sp.lambdify(free_symbols, denergy_expr)
     fdf_energy = lambda x:(pre_f_energy(*x),np.array(pre_df_energy(*x)))
-    logging.debug(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    logging.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
     if bounds_dict is not None:
@@ -218,11 +218,11 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     if bounds_dict is None:
         bounds = None
     minimizer_kwargs = {'method':method, 'jac':True, 'bounds':bounds}
-    logging.debug('Starting basinhopping minimization.')
+    logging.info('Starting basinhopping minimization.')
     start = time.time()
     ret = basinhopping(fdf_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    logging.debug(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+    logging.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
 
     return ret
