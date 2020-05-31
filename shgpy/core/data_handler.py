@@ -4,6 +4,8 @@ import csv
 import pickle
 from scipy.interpolate import interp1d
 from copy import deepcopy
+from ..formula import formula_from_fexpr
+from . import shg_symbols as S
 
 
 class DataContainer:
@@ -289,6 +291,60 @@ class fFormContainer:
         return list(self._fform_dict.items())
 
 
+class FormContainer:
+
+    def __init__(self, iterable):
+        self._check_defining_iterable
+        self._form_dict = dict(iterable)
+        self._sympify
+
+    def get_free_symbols(self):
+        free_symbols = []
+        for k in self.get_keys():
+            for fs in self._form_dict[k].free_symbols:
+                free_symbols.append(fs)
+        free_symbols = list(set(free_symbols))
+        free_symbols.sort(key=str)
+        return free_symbols
+
+    def subs(self, subs_array):
+        subs_form_dict = {}
+        for k,v in self.get_items():
+            subs_form_dict[k] = self._form_dict[k].subs(subs_array)
+        self._form_dict = subs_form_dict
+
+    def _check_defining_iterable(self, iterable):
+        def raise_error():
+            raise ValueError('Invalid Data input.')
+        try:
+            bad_key = False in [type(k) == str for k in dict(iterable).keys()]
+        except:
+            raise_error()
+        if bad_key:
+            raise_error()
+
+    def _sympify(self):
+        for k in self.get_keys():
+            self._form_dict[k] = sp.sympify(self._form_dict[k])
+
+    def simplify(self):
+        for k,v in self.get_items():
+            self._form_dict[k] = sp.simplify(v)
+
+    def get_keys(self):
+        return list(self._form_dict.keys())
+
+    def get_values(self):
+        return list(self._form_dict.values())
+
+    def get_items(self):
+        return list(self._form_dict.items())
+
+
+def n2i(n, M=16):
+    return n+M
+
+
 def fform_to_fdat(fform, subs_dict):
     subs_array = [(k,subs_dict[k]) for k in fform.get_free_symbols()]
     new_fform = deepcopy(fform)
@@ -313,8 +369,25 @@ def fform_to_dat(fform, subs_dict, num_points):
     return fdat_to_dat(fform_to_fdat(fform, subs_dict), num_points)
 
 
-def n2i(n, M=16):
-    return n+M
+def fform_to_form(fform):
+    iterable = {}
+    for k,v in fform.get_items():
+        iterable[k] = formula_from_fexpr(v, fform.get_M())
+    return FormContainer(iterable)
+
+
+def form_to_dat(form, subs_array, num_points):
+    new_form = deepcopy(form)
+    new_form.subs(subs_array)
+    if new_form.get_free_symbos() != [S.phi]:
+        raise ValueError('Only one variable allowed in conversion from form to dat. Is subs_array correct?')
+    iterable = {}
+    for k,v in form.get_items():
+        f = sp.lambdify(S.phi, v)
+        xdata = np.array(0, 2*np.pi, num_points, endpoint=False)
+        ydata = f(xdata)
+        iterable[k] = np.array([xdata, ydata])
+    return DataContainer(iterable, 'radians')
 
 
 def read_csv_file(filename, delimiter=','):
