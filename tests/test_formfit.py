@@ -1,7 +1,7 @@
 import unittest
 
 import shgpy
-from shgpy.fourier_formfit import (
+from shgpy.fformfit import (
     least_squares_fit,
     least_squares_fit_with_bounds,
     basinhopping_fit,
