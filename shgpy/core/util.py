@@ -3,6 +3,9 @@ import sympy as sp
 from sympy.solvers import solve
 import itertools
 from warnings import warn
+import logging
+
+logging.getLogger(__name__)
 
 
 def particularize(tensor, exclude=[]):
@@ -24,6 +27,9 @@ def particularize(tensor, exclude=[]):
 
     def apply_sol_to_tensor(tensor, sol):
         return np.array([fa.subs(sol) for fa in tensor.flatten()]).reshape(tensor.shape)
+
+    if np.array_equal(swap_last_two_indices(tensor), tensor):
+        return tensor
 
     return apply_sol_to_tensor(tensor, get_sols_from_particularization(tensor, exclude=exclude)[0])
 
@@ -118,7 +124,7 @@ def rotation_matrix3(n, t):
     row1 = [c+nx**2*(1-c), nx*ny*(1-c)-nz*s, nx*nz*(1-c) + ny*s]
     row2 = [ny*nx*(1-c)+nz*s, c+ny**2*(1-c), ny*nz*(1-c)-nx*s]
     row3 = [nz*nx*(1-c) - ny*s, nz*ny*(1-c) + nx*s, c+nz**2*(1-c)]
-    return [row1, row2, row3]
+    return np.array([row1, row2, row3])
 
 
 def rotation_matrix3symb(n,t, ndigits=16):
@@ -131,15 +137,7 @@ def rotation_matrix3symb(n,t, ndigits=16):
     row1 = [c+nx**2*(1-c), nx*ny*(1-c)-nz*s, nx*nz*(1-c) + ny*s]
     row2 = [ny*nx*(1-c)+nz*s, c+ny**2*(1-c), ny*nz*(1-c)-nx*s]
     row3 = [nz*nx*(1-c) - ny*s, nz*ny*(1-c) + nx*s, c+nz**2*(1-c)]
-    ans = [row1, row2, row3]
-    return ans
-
-
-def normalize(data, val):
-    ans = [[],[]]
-    ans[0] = data[0]
-    for i in range(len(data[1])):
-        ans[1].append(data[1][i]/val)
+    ans = np.array([row1, row2, row3], dtype=object)
     return ans
 
 
@@ -163,7 +161,7 @@ def cross_product(v1, v2):
         for j in range(3):
             for k in range(3):
                 ans[i] += levi_civita(i, j, k)*v1[j]*v2[k]
-    return ans
+    return np.array(ans)
 
 
 def norm(v):
@@ -175,7 +173,9 @@ def normsymb(v):
 
 
 def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=16):
-    iden = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+    v_initial = v_initial.astype(float)
+    v_final = v_final.astype(float)
+    iden = np.identity(3)
     mag_v_initial = norm(v_initial)
     mag_v_final = norm(v_final)
     for i in range(3):
@@ -185,11 +185,11 @@ def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=1
     mag_theta = np.arccos(cos_theta)
     axis = cross_product(v_initial, v_final)
     done = False
-    if axis == [0, 0, 0]:
-        if [-v_initial[i] for i in range(3)] == v_final:
-            ans = [[-iden[i][j] for i in range(3)] for j in range(3)]
+    if np.array_equal(axis, np.zeros(3, dtype=axis.dtype)):
+        if np.array_equal(-v_initial, v_final):
+            ans = -iden
             done = True
-        elif [v_initial[i] for i in range(3)] == v_final:
+        elif np.array_equal(v_initial, v_final):
             ans = iden
             done = True
     if not done:
@@ -207,6 +207,4 @@ def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=1
     for i in range(len(ans)):
         for j in range(len(ans[0])):
             ans[i][j] = round(ans[i][j], ndigits)
-    return ans
-
-
+    return np.array(ans)

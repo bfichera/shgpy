@@ -8,7 +8,6 @@ import shgpy.shg_symbols as S
 from shgpy.plotter import easy_plot
 
 logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 
 class TestData(unittest.TestCase):
@@ -103,14 +102,3 @@ class TestFormAndfForm(unittest.TestCase):
         form = shgpy.fform_to_form(self.fform)
         dat = shgpy.form_to_dat(form, [(k, random.uniform(-1, 1)) for k in form.get_free_symbols() if k != S.phi], 1000)
         easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys())
-        
-        
-        
-        
-
-
-
-
-
-
-

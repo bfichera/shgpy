@@ -396,7 +396,6 @@ def form_to_dat(form, subs_array, num_points):
         xdata = np.linspace(0, 2*np.pi, num_points, endpoint=False)
         ydata = f(xdata)
         iterable[k] = np.array([xdata, ydata], dtype=complex).real
-    logging.debug('hey!!!!')
     return DataContainer(iterable, 'radians')
 
 
