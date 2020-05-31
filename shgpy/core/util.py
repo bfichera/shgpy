@@ -108,15 +108,6 @@ def modsquared(expr):
     return expr*np.conjugate(expr)
 
 
-def oprint(verbose, *items, filename=None, mode='a'):
-    if verbose:
-        print(*items)
-    if filename is not None:
-        f = open(filename, 'a')
-        print(*items, file=f)
-        f.close()
-
-
 def rotation_matrix3(n, t):
     n_mag = norm(n)
     for i in range(3):

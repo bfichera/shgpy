@@ -65,10 +65,10 @@ class TestfData(unittest.TestCase):
 class TestLoadData(unittest.TestCase):
 
     filenames_dict = {
-        'PP':'tests/source/dataPP.csv',
-        'PS':'tests/source/dataPS.csv',
-        'SP':'tests/source/dataSP.csv',
-        'SS':'tests/source/dataSS.csv',
+        'PP':'tests/Data/dataPP.csv',
+        'PS':'tests/Data/dataPS.csv',
+        'SP':'tests/Data/dataSP.csv',
+        'SS':'tests/Data/dataSS.csv',
     }
     
     def test_loaders(self):

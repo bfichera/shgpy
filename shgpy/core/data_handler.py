@@ -3,6 +3,7 @@ import sympy as sp
 import csv
 import pickle
 from scipy.interpolate import interp1d
+from copy import deepcopy
 
 
 class DataContainer:
@@ -169,6 +170,9 @@ class fDataContainer:
     def get_scale(self):
         return self._scale
 
+    def get_M(self):
+        return self._M
+
     def get_phase_shift(self, requested_angle_units):
         requested_angle_units = requested_angle_units.lower()
         self._check_angle_units(requested_angle_units)
@@ -221,20 +225,22 @@ class fDataContainer:
 class fFormContainer:
 
     def __init__(self, iterable, M=16):
+        self._M = M
         self._check_defining_iterable(iterable)
         self._fform_dict = dict(iterable)
-        self.sympify()
-        self._M = M
+        self._sympify()
 
     def _check_defining_iterable(self, iterable):
         def raise_error():
-            raise ValueError('Invalid Data input')
+            raise ValueError('Invalid Data input.')
         try:
             bad_key = False in [type(k) == str for k in dict(iterable).keys()]
-            bad_val = False in [type(v) == np.ndarray and v.shape == (2*self._M+1,) and v.dtype is object and v.ndim == 1 for v in dict(iterable).values()]
+            bad_val = False in [type(v) == np.ndarray and v.shape == (2*self._M+1,) and v.dtype == object and v.ndim == 1 for v in dict(iterable).values()]
         except:
             raise_error()
-        if bad_key or bad_val:
+        if bad_key:
+            raise_error()
+        if bad_val:
             raise_error()
 
     def _sympify(self):
@@ -281,6 +287,30 @@ class fFormContainer:
 
     def get_items(self):
         return list(self._fform_dict.items())
+
+
+def fform_to_fdat(fform, subs_dict):
+    subs_array = [(k,subs_dict[k]) for k in fform.get_free_symbols()]
+    new_fform = deepcopy(fform)
+    new_fform.subs(subs_array)
+    iterable = {k:v.astype(complex) for k,v in new_fform.get_items()}
+    return fDataContainer(iterable, new_fform.get_M())
+    
+
+def fdat_to_dat(fdat, num_points): 
+    iterable = {}
+    M = fdat.get_M()
+    xdata = np.linspace(0, 2*np.pi, num_points, endpoint=False)
+    for k,v in fdat.get_items():
+        ydata = np.zeros(num_points, dtype=complex)
+        for m in np.arange(-M, M+1):
+            ydata += v[n2i(m, M)] * (np.cos(m * xdata) + 1j*np.sin(m * xdata))
+        iterable[k] = np.array([xdata, ydata]).real.astype(float)
+    return DataContainer(iterable, 'radians')
+
+
+def fform_to_dat(fform, subs_dict, num_points):
+    return fdat_to_dat(fform_to_fdat(fform, subs_dict), num_points)
 
 
 def n2i(n, M=16):
@@ -353,7 +383,7 @@ def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_
     return dat, fdat
 
 
-def load_fform_dict(filename):
+def load_fform(filename):
     with open(filename, 'rb') as f:
         fform_dict = pickle.load(f)
     return fFormContainer(fform_dict)
