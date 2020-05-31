@@ -3,9 +3,11 @@ import sympy as sp
 import csv
 import pickle
 from scipy.interpolate import interp1d
+import logging
 from copy import deepcopy
-from ..formula import formula_from_fexpr
-from . import shg_symbols as S
+from .. import shg_symbols as S
+
+logging.getLogger(__name__)
 
 
 class DataContainer:
@@ -376,17 +378,25 @@ def fform_to_form(fform):
     return FormContainer(iterable)
 
 
+def formula_from_fexpr(t, M=16):
+    expr = 0
+    for m in np.arange(-M, M+1):
+        expr += t[n2i(m)]*(sp.cos(m*S.phi)+1j*sp.sin(m*S.phi))
+    return expr
+
+
 def form_to_dat(form, subs_array, num_points):
     new_form = deepcopy(form)
     new_form.subs(subs_array)
-    if new_form.get_free_symbos() != [S.phi]:
+    if new_form.get_free_symbols() != [S.phi]:
         raise ValueError('Only one variable allowed in conversion from form to dat. Is subs_array correct?')
     iterable = {}
-    for k,v in form.get_items():
+    for k,v in new_form.get_items():
         f = sp.lambdify(S.phi, v)
-        xdata = np.array(0, 2*np.pi, num_points, endpoint=False)
+        xdata = np.linspace(0, 2*np.pi, num_points, endpoint=False)
         ydata = f(xdata)
-        iterable[k] = np.array([xdata, ydata])
+        iterable[k] = np.array([xdata, ydata], dtype=complex).real
+    logging.debug('hey!!!!')
     return DataContainer(iterable, 'radians')
 
 

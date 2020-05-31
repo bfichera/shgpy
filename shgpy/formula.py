@@ -5,13 +5,6 @@ from . import shg_symbols as S
 from .core import n2i
 
 
-def formula_from_fexpr(t, M=16):
-    expr = 0
-    for m in np.arange(-M, M+1):
-        expr += t[n2i(m)]*(sp.cos(m*S.phi)+1j*sp.sin(m*S.phi))
-    return expr
-
-
 def apply_phase_shift(fexpr, psi, M=16):
     """f(phi) -> f(phi + psi) <=> rf(m) -> exp(i*m*psi)rf(m)"""
     ans = np.zeros(shape=fexpr.shape, dtype=object)

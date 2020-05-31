@@ -2,6 +2,13 @@ import unittest
 
 import shgpy
 import numpy as np
+import logging
+import random
+import shgpy.shg_symbols as S
+from shgpy.plotter import easy_plot
+
+logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class TestData(unittest.TestCase):
@@ -82,6 +89,22 @@ class TestLoadData(unittest.TestCase):
         dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
         self.assertEqual(fdat.get_maxval()[1], 0)
     
+
+class TestFormAndfForm(unittest.TestCase):
+
+    fform_filename = 'tests/fform/T_d-S_2-S_2(110).p'
+    fform = shgpy.load_fform(fform_filename)
+    fform.apply_phase_shift(S.psi)
+
+    def test_fform_to_form(self):
+        logging.debug(shgpy.fform_to_form(self.fform).get_items())
+
+    def test_form_to_dat(self):
+        form = shgpy.fform_to_form(self.fform)
+        dat = shgpy.form_to_dat(form, [(k, random.uniform(-1, 1)) for k in form.get_free_symbols() if k != S.phi], 1000)
+        easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys())
+        
+        
         
         
 
