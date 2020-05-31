@@ -10,7 +10,7 @@ logging.getLogger(__name__)
 
 def particularize(tensor, exclude=[]):
 
-    def swap_last_two_indices(tensor):
+    def _swap_last_two_indices(tensor):
         rank = len(tensor.shape)
         dim = len(tensor[0])
         ans = np.zeros(shape=tensor.shape, dtype=tensor.dtype)
@@ -20,18 +20,18 @@ def particularize(tensor, exclude=[]):
                 ans[i][(j[1], j[0])] = tensor[i][j]
         return ans
 
-    def get_sols_from_particularization(tensor, exclude=[]):
-        tensor2 = swap_last_two_indices(tensor)
+    def _get_sols_from_particularization(tensor, exclude=[]):
+        tensor2 = _swap_last_two_indices(tensor)
         sols = solve((tensor-tensor2).flatten(), dict=True, exclude=exclude)
         return sols
 
-    def apply_sol_to_tensor(tensor, sol):
+    def _apply_sol_to_tensor(tensor, sol):
         return np.array([fa.subs(sol) for fa in tensor.flatten()]).reshape(tensor.shape)
 
-    if np.array_equal(swap_last_two_indices(tensor), tensor):
+    if np.array_equal(_swap_last_two_indices(tensor), tensor):
         return tensor
 
-    return apply_sol_to_tensor(tensor, get_sols_from_particularization(tensor, exclude=exclude)[0])
+    return _apply_sol_to_tensor(tensor, _get_sols_from_particularization(tensor, exclude=exclude)[0])
 
 
 def free_symbols_of_array(array):

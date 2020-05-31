@@ -3,6 +3,7 @@ import sympy as sp
 import csv
 import pickle
 from scipy.interpolate import interp1d
+from scipy.integrate import quad
 import logging
 from copy import deepcopy
 from .. import shg_symbols as S
@@ -314,6 +315,9 @@ class FormContainer:
         for k,v in self.get_items():
             subs_form_dict[k] = self._form_dict[k].subs(subs_array)
         self._form_dict = subs_form_dict
+    
+    def apply_phase_shift(self, angle_shift, var_to_shift):
+        self.subs([(var_to_shift, var_to_shift + angle_shift)])
 
     def _check_defining_iterable(self, iterable):
         def raise_error():
@@ -332,6 +336,10 @@ class FormContainer:
     def simplify(self):
         for k,v in self.get_items():
             self._form_dict[k] = sp.simplify(v)
+
+    def expand(self):
+        for k,v in self.get_items():
+            self._form_dict[k] = sp.expand(v)
 
     def get_keys(self):
         return list(self._form_dict.keys())
@@ -374,15 +382,29 @@ def fform_to_dat(fform, subs_dict, num_points):
 def fform_to_form(fform):
     iterable = {}
     for k,v in fform.get_items():
-        iterable[k] = formula_from_fexpr(v, fform.get_M())
+        iterable[k] = _formula_from_fexpr(v, fform.get_M())
     return FormContainer(iterable)
 
 
-def formula_from_fexpr(t, M=16):
+def _formula_from_fexpr(t, M=16):
     expr = 0
     for m in np.arange(-M, M+1):
         expr += t[n2i(m)]*(sp.cos(m*S.phi)+1j*sp.sin(m*S.phi))
     return expr
+
+
+def _fexpr_n(expr_arr, n, precision=7):
+    Rshape = expr_arr.shape
+    expr_arrf = expr_arr.flatten()
+    h = np.zeros(len(expr_arrf), dtype=object)
+    for i in range(len(expr_arrf)):
+        f_re = sp.lambdify(S.phi, 1/2/sp.pi*expr_arrf[i]*sp.cos(-1*(n*S.phi)))
+        f_im = sp.lambdify(S.phi, 1/2/sp.pi*expr_arrf[i]*sp.sin(-1*(n*S.phi)))
+        t_re,_ = quad(f_re, 0, 2*np.pi)
+        t_im,_ = quad(f_im, 0, 2*np.pi)
+        h[i] = round(t_re, precision)+round(t_im, precision)*1j
+    h = h.reshape(Rshape)
+    return h
 
 
 def form_to_dat(form, subs_array, num_points):
@@ -394,9 +416,35 @@ def form_to_dat(form, subs_array, num_points):
     for k,v in new_form.get_items():
         f = sp.lambdify(S.phi, v)
         xdata = np.linspace(0, 2*np.pi, num_points, endpoint=False)
-        ydata = f(xdata)
+        ydata = np.array([f(x) for x in xdata])
         iterable[k] = np.array([xdata, ydata], dtype=complex).real
     return DataContainer(iterable, 'radians')
+
+
+def _I_component(expr):
+    return (expr-expr.subs(sp.I, 0)).subs(sp.I, 1)
+
+
+def _no_I_component(expr):
+    return expr.subs(sp.I, 0)
+
+
+def form_to_fform(form, M=16):
+    iterable = {}
+    for k,v in form.get_items():
+        iterable[k] = np.zeros((2*M+1,), dtype=object)
+        logging.info(f'Currently computing {k}.')
+        for m in np.arange(-M, M+1):
+            logging.debug(f'Currently computing m={m}.')
+            expr = sp.expand_trig(v*(sp.cos(-m*S.phi)+1j*sp.sin(-m*S.phi))).expand()
+            expr_re = _no_I_component(expr)
+            expr_im = _I_component(expr)
+            iterable[k][n2i(m, M)] = 1/2/sp.pi*sp.integrate(expr_re, (S.phi, 0, 2*sp.pi)) + 1/2/sp.pi*sp.I*sp.integrate(expr_im, (S.phi, 0, 2*sp.pi))
+    return fFormContainer(iterable, M=M)
+
+
+def form_to_fdat(form, subs_dict):
+    return fform_to_fdat(form_to_fform(form, form.get_M()), subs_dict)
 
 
 def read_csv_file(filename, delimiter=','):
@@ -438,7 +486,7 @@ def load_data(data_filenames_dict, angle_units):
     return DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, angle_units)
 
 
-def data_dft(dat, interp_kind='cubic', M=16):
+def dat_to_fdat(dat, interp_kind='cubic', M=16):
     ans = {pc:np.zeros(2*M+1, dtype=np.complex64) for pc in dat.get_keys()}
     for k in dat.get_keys():
         for m in np.arange(-M, M+1):
@@ -458,7 +506,7 @@ def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_
         dat = load_data(data_filenames_dict, data_angle_units)
     if min_subtract:
         dat.subtract_min()
-    fdat = data_dft(dat, interp_kind=interp_kind, M=M)
+    fdat = dat_to_fdat(dat, interp_kind=interp_kind, M=M)
     if scale != 1:
         dat.scale_data(scale)
         fdat.scale_data(scale)
@@ -469,17 +517,3 @@ def load_fform(filename):
     with open(filename, 'rb') as f:
         fform_dict = pickle.load(f)
     return fFormContainer(fform_dict)
-        
-
-    
-
-
-
-
-
-
-
-
-
-
-

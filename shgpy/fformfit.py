@@ -10,7 +10,6 @@ import logging.config
 from ._logging_config import cfg
 
 logging.getLogger(__name__)
-logging.config.dictConfig(cfg)
 
 
 def I_component(expr):
