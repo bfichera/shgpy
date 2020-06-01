@@ -27,5 +27,5 @@ class TestfFormGen(unittest.TestCase):
         fform = shgpy.load_fform(save_filename)
         fform.apply_phase_shift(S.psi)
         form = shgpy.fform_to_form(fform)
-        dat = shgpy.form_to_dat(form, [(k, random.uniform(-1, 1)) for k in form.get_free_symbols() if k != S.phi], 1000)
+        dat = shgpy.form_to_dat(form, {k:random.uniform(-1, 1) for k in form.get_free_symbols() if k != S.phi}, 1000)
         easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys())
