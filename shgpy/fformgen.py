@@ -24,11 +24,11 @@ depending on whether the angle of incidence is hardcoded or a
 `sympy.Symbol` instance.
 
 Then, at runtime one can choose the susceptibility tensor they want to
-fit (i.e. using :func:`~shgpy.tensor_definitions`) and simply contract
+fit (i.e. using :class:`~shgpy.tensor_definitions`) and simply contract
 it (using :func:`~shgpy.fformgen.generate_contracted_fourier_transforms`
 and :func:`~shgpy.fformgen.generate_contracted_fourier_transforms_complex`)
 with the pickled formula to produce a Fourier formula. This can then
-be manipulated and fitted at will (see :func:`~shgpy.fformfit`).
+be manipulated and fitted at will (see :class:`~shgpy.fformfit`).
 
 See the tutorial for more details.
 
@@ -322,7 +322,7 @@ def generate_uncontracted_fourier_transforms_symb(uncontracted_filename_prefix, 
     -----
     Saves uncontracted Fourier transforms using `pickle` to the
     specified filenames. The angle of incidence is hardcoded to
-    be the `sympy.Symbol` `theta` defined in :func:`~shgpy.shg_symbols`.
+    be the `sympy.Symbol` `theta` defined in :class:`~shgpy.shg_symbols`.
 
     """
     start = time.time()

@@ -762,7 +762,7 @@ def fform_to_fdat(fform, subs_dict):
     Parameters
     ----------
     fform : fFormContainer
-        Instance of :func:`~shgpy.core.data_handler.fFormContainer`
+        Instance of :class:`~shgpy.core.data_handler.fFormContainer`
     subs_dict : dict
         Dict of `{sympy.Symbol : float}` pairs to perform the substitution.
 
@@ -791,14 +791,14 @@ def fdat_to_dat(fdat, num_points):
     Parameters
     ----------
     fdat : fDataContainer
-        Instance of :func:`~shgpy.core.data_handler.fDataContainer`
+        Instance of :class:`~shgpy.core.data_handler.fDataContainer`
     num_points : int
         Number of different points to put into the `DataContainer`.
 
     Returns
     -------
     dat : DataContainer
-        Instance of :func:`~shgpy.core.data_handler.DataContainer`
+        Instance of :class:`~shgpy.core.data_handler.DataContainer`
 
     Notes
     -----
@@ -823,7 +823,7 @@ def fform_to_dat(fform, subs_dict, num_points):
     Parameters
     ----------
     fform : fFormContainer
-        Instance of :func:`~shgpy.core.data_handler.fFormContainer`
+        Instance of :class:`~shgpy.core.data_handler.fFormContainer`
     subs_dict : dict
         Dict of `{sympy.Symbol : float}` pairs to perform the substitution.
     num_points : int
@@ -832,7 +832,7 @@ def fform_to_dat(fform, subs_dict, num_points):
     Returns
     -------
     dat : DataContainer
-        Instance of :func:`~shgpy.core.data_handler.DataContainer`
+        Instance of :class:`~shgpy.core.data_handler.DataContainer`
 
     Notes
     -----
@@ -851,12 +851,12 @@ def fform_to_form(fform):
     Parameters
     ----------
     fform : fFormContainer
-        Instance of :func:`~shgpy.core.data_handler.fFormContainer`
+        Instance of :class:`~shgpy.core.data_handler.fFormContainer`
 
     Returns
     -------
     form : FormContainer
-        Instance of :func:`~shgpy.core.data_handler.FormContainer`
+        Instance of :class:`~shgpy.core.data_handler.FormContainer`
 
     Notes
     -----
@@ -897,7 +897,7 @@ def form_to_dat(form, subs_dict, num_points):
     Parameters
     ----------
     form : FormContainer
-        Instance of :func:`~shgpy.core.data_handler.FormContainer`
+        Instance of :class:`~shgpy.core.data_handler.FormContainer`
     subs_dict : dict
         Dict of `{sympy.Symbol : float}` pairs to perform the substitution.
     num_points : int
@@ -906,7 +906,7 @@ def form_to_dat(form, subs_dict, num_points):
     Returns
     -------
     dat : DataContainer
-        Instance of :func:`~shgpy.core.data_handler.DataContainer`
+        Instance of :class:`~shgpy.core.data_handler.DataContainer`
 
     Notes
     -----
@@ -944,14 +944,14 @@ def form_to_fform(form, M=16):
     Parameters
     ----------
     form : FormContainer
-        Instance of :func:`~shgpy.core.data_handler.FormContainer`
+        Instance of :class:`~shgpy.core.data_handler.FormContainer`
     M : int, optional
         Number of Fourier frequencies, defaults to `16`.
 
     Returns
     -------
     fform : fFormContainer
-        Instance of :func:`~shgpy.core.data_handler.fFormContainer`
+        Instance of :class:`~shgpy.core.data_handler.fFormContainer`
 
     Notes
     -----
@@ -978,7 +978,7 @@ def form_to_fdat(form, subs_dict):
     Parameters
     ----------
     fform : FormContainer
-        Instance of :func:`~shgpy.core.data_handler.FormContainer`
+        Instance of :class:`~shgpy.core.data_handler.FormContainer`
     subs_dict : dict
         Dict of `{sympy.Symbol : float}` pairs to perform the substitution.
 
@@ -1029,14 +1029,14 @@ def dat_subtract(dat1, dat2):
     Parameters
     ----------
     dat1 : DataContainer
-        Instance of :func:`~shgpy.core.data_handler.DataContainer`
+        Instance of :class:`~shgpy.core.data_handler.DataContainer`
     dat2 : DataContainer
-        Instance of :func:`~shgpy.core.data_handler.DataContainer`
+        Instance of :class:`~shgpy.core.data_handler.DataContainer`
 
     Returns
     -------
     dat_result : DataContainer
-        Instance of :func:`~shgpy.core.data_handler.DataContainer` containing
+        Instance of :class:`~shgpy.core.data_handler.DataContainer` containing
         the contents of `dat1-dat2`.
     
     """
@@ -1105,7 +1105,7 @@ def dat_to_fdat(dat, interp_kind='cubic', M=16):
     Parameters
     ----------
     dat : DataContainer
-        Instance of :func:`~shgpy.core.data_handler.DataContainer`
+        Instance of :class:`~shgpy.core.data_handler.DataContainer`
     interp_kind : str or int, optional
         Specifies the kind of interpolation as a string (‘linear’,
         ‘nearest’, ‘zero’, ‘slinear’, ‘quadratic’, ‘cubic’, ‘previous’,
@@ -1194,7 +1194,7 @@ def load_fform(fform_filename):
     """Creat instance of fFormContainer from a fform_filename.
 
     ``fform_filename`` s are generated using the utilities provided
-    in the :func:`~shgpy.fformgen` package. Those utilities output
+    in the :class:`~shgpy.fformgen` package. Those utilities output
     a pickled fFormContainer-like object which can be loaded into
     a true fFormContainer instance using this function.
 

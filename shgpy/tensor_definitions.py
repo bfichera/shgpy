@@ -17,7 +17,7 @@ renamed e.g. from `xxx` -> `sxxx`. This is useful when analyzing
 SHG signal involving both bulk and surface dipole sources.
 
 All of the variables defined in this module are sympy.Symbol objects
-and are defined in the :func:`~shgpy.shg_symbols` package.
+and are defined in the :class:`~shgpy.shg_symbols` package.
 
 The crystallographic point groups which are defined in this module are
 

@@ -1,6 +1,6 @@
 """This module defines a number of sympy.Symbol objects
 which are used throughout `shgpy`. They are used to define
-free parameters in suscepitbility tensors (see :func:`~shgpy.tensor_definitions`),
+free parameters in suscepitbility tensors (see :class:`~shgpy.tensor_definitions`),
 and to standardize name conventions for important variables
 (like `phi` and `theta`, which are used throughout shgpy as the standard
 azimuthal and incidence angles, respectively).

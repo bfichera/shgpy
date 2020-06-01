@@ -8,7 +8,7 @@ def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot=True,
     Parameters
     ----------
     list_of_dats : list of DataContainer
-        List of :func:`~shgpy.core.data_handler.DataContainer` instances to plot.
+        List of :class:`~shgpy.core.data_handler.DataContainer` instances to plot.
     list_of_param_dicts : list of dict
         List of `matplotlib` parameter dictionaries, each corresponding to
         a particular `DataContainer`.
@@ -48,7 +48,7 @@ def easy_polar_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot
     Parameters
     ----------
     list_of_dats : list of DataContainer
-        List of :func:`~shgpy.core.data_handler.DataContainer` instances to plot.
+        List of :class:`~shgpy.core.data_handler.DataContainer` instances to plot.
     list_of_param_dicts : list of dict
         List of `matplotlib` parameter dictionaries, each corresponding to
         a particular `DataContainer`.

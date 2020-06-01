@@ -2,8 +2,8 @@
 
 This module provides a number of routines for calculating the SHG 
 response of a given material (encoded by its susceptbility tensor,
-see :func:`~shgpy.tensor_definitions` ). These routines are much
-more straightforward than those found in :func:`~shgpy.fformgen`,
+see :class:`~shgpy.tensor_definitions` ). These routines are much
+more straightforward than those found in :class:`~shgpy.fformgen`,
 but are only suited for the most simple problems because the
 conversion from formulas to Fourier formulas (which is all but
 necessary for efficient fitting functionality) is typically quite
@@ -26,14 +26,14 @@ def formgen_just_dipole_complex(t1, theta):
     Parameters
     ----------
     t1 : ndarray of sympy.Expr
-        SHG susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+        SHG susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
     theta : float or sympy.Symbol
         Angle of incidence
 
     Returns
     -------
     fform : FormContainer
-        Instance of :func:`~shgpy.core.data_handler.FormContainer`.
+        Instance of :class:`~shgpy.core.data_handler.FormContainer`.
 
     Notes
     -----
@@ -69,14 +69,14 @@ def formgen_just_dipole_real(t1, theta):
     Parameters
     ----------
     t1 : ndarray of sympy.Expr
-        SHG susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+        SHG susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
     theta : float or sympy.Symbol
         Angle of incidence
 
     Returns
     -------
     fform : FormContainer
-        Instance of :func:`~shgpy.core.data_handler.FormContainer`.
+        Instance of :class:`~shgpy.core.data_handler.FormContainer`.
 
     Notes
     -----
@@ -113,16 +113,16 @@ def formgen_dipole_quadrupole_real(t1, t2, theta):
     Parameters
     ----------
     t1 : ndarray of sympy.Expr
-        SHG dipole susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+        SHG dipole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
     t2 : ndarray of sympy.Expr
-        SHG quadrupole susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+        SHG quadrupole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
     theta : float or sympy.Symbol
         Angle of incidence
 
     Returns
     -------
     fform : FormContainer
-        Instance of :func:`~shgpy.core.data_handler.FormContainer`.
+        Instance of :class:`~shgpy.core.data_handler.FormContainer`.
 
     Notes
     -----
@@ -159,16 +159,16 @@ def formgen_dipole_quadrupole_complex(t1, t2, theta):
     Parameters
     ----------
     t1 : ndarray of sympy.Expr
-        SHG dipole susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+        SHG dipole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
     t2 : ndarray of sympy.Expr
-        SHG quadrupole susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+        SHG quadrupole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
     theta : float or sympy.Symbol
         Angle of incidence
 
     Returns
     -------
     fform : FormContainer
-        Instance of :func:`~shgpy.core.data_handler.FormContainer`.
+        Instance of :class:`~shgpy.core.data_handler.FormContainer`.
 
     Notes
     -----

@@ -1,3 +1,15 @@
+"""Fourier fitting module for fitting RA-SHG data in Fourier space.
+
+This module provides two different methods (up to minor variations) for
+fitting RA-SHG data in Fourier space. The first is a simple
+least-square method (using `scipy.optimize.least_squares`) which is
+extremely fast and works well for simple problems. The second is
+a so-called basinhopping method (using `scipy.optimize.basinhopping`)
+which is proficient at finding the global minimum of complicated cost
+functions with many fitting parameters and local minima. See the
+relevant `scipy` documentation for more info.
+
+"""
 import sympy as sp
 import numpy as np
 from .core import n2i
@@ -10,16 +22,38 @@ import logging.config
 logging.getLogger(__name__)
 
 
-def I_component(expr):
+def _I_component(expr):
     return (expr-expr.subs(sp.I, 0)).subs(sp.I, 1)
 
 
-def no_I_component(expr):
+def _no_I_component(expr):
     return expr.subs(sp.I, 0)
 
 
 def least_squares_fit(fform, fdat, guess_dict):
+    """Least-squares fit of RA-SHG data.
 
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
+        This is the (Fourier-transformed) fitting formula.
+    fdat : fDataContainer
+        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
+        This is the (Fourier-transformed) data to fit.
+    guess_dict : dict
+        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
+
+    Returns
+    -------
+    ret : scipy.optimize.OptimizeResult
+        Instance of class :class:`~scipy.optimize.OptimizeResult`.
+        See `scipy` documentation for further description. Includes
+        additional attribute ``ret.xdict`` which is a `dict` of 
+        ``{sympy.Symbol:float}`` indicating the final answer as
+        a dictionary.
+
+    """
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -47,7 +81,32 @@ def least_squares_fit(fform, fdat, guess_dict):
 
 
 def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
+    """Least-squares fit of RA-SHG data with bounds.
 
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
+        This is the (Fourier-transformed) fitting formula.
+    fdat : fDataContainer
+        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
+        This is the (Fourier-transformed) data to fit.
+    guess_dict : dict
+        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
+    bounds_dict : dict
+        Dict of form ``{sympy.Symbol:tuple}``. `tuple` should be of form
+        ``(lower_bound, upper_bound)``.
+
+    Returns
+    -------
+    ret : scipy.optimize.OptimizeResult
+        Instance of class :class:`~scipy.optimize.OptimizeResult`.
+        See `scipy` documentation for further description. Includes
+        additional attribute ``ret.xdict`` which is a `dict` of 
+        ``{sympy.Symbol:float}`` indicating the final answer as
+        a dictionary.
+
+    """
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -76,7 +135,37 @@ def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
 
 
 def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5):
-    
+    """Basinhopping fit of RA-SHG data.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
+        This is the (Fourier-transformed) fitting formula.
+    fdat : fDataContainer
+        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
+        This is the (Fourier-transformed) data to fit.
+    guess_dict : dict
+        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
+    niter : int
+        Number of basinhopping iterations (see scipy documentation)
+    method : str, optional
+        Minimization method to use, defaults to `'BFGS'`. See scipy
+        documentation for more information.
+    stepsize : float, optional
+        Basinhopping stepsize, defaults to `0.5`. See scipy documentation
+        for more information.
+
+    Returns
+    -------
+    ret : scipy.optimize.OptimizeResult
+        Instance of class :class:`~scipy.optimize.OptimizeResult`.
+        See `scipy` documentation for further description. Includes
+        additional attribute ``ret.xdict`` which is a `dict` of 
+        ``{sympy.Symbol:float}`` indicating the final answer as
+        a dictionary.
+
+    """
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -85,8 +174,8 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5
     energy_expr_list = []
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
-            expr1 = no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
             energy_expr_list.append(expr1**2)
             energy_expr_list.append(expr2**2)
 
@@ -109,7 +198,40 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5
 
 
 def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', stepsize=0.5):
-    
+    """Basinhopping fit of RA-SHG data with bounds.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
+        This is the (Fourier-transformed) fitting formula.
+    fdat : fDataContainer
+        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
+        This is the (Fourier-transformed) data to fit.
+    guess_dict : dict
+        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
+    bounds_dict : dict
+        Dict of form ``{sympy.Symbol:tuple}``. `tuple` should be of form
+        ``(lower_bound, upper_bound)``.
+    niter : int
+        Number of basinhopping iterations (see scipy documentation)
+    method : str, optional
+        Minimization method to use, defaults to `'L-BFGS-B'`. See scipy
+        documentation for more information.
+    stepsize : float, optional
+        Basinhopping stepsize, defaults to `0.5`. See scipy documentation
+        for more information.
+
+    Returns
+    -------
+    ret : scipy.optimize.OptimizeResult
+        Instance of class :class:`~scipy.optimize.OptimizeResult`.
+        See `scipy` documentation for further description. Includes
+        additional attribute ``ret.xdict`` which is a `dict` of 
+        ``{sympy.Symbol:float}`` indicating the final answer as
+        a dictionary.
+
+    """
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -118,8 +240,8 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     energy_expr_list = []
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
-            expr1 = no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
             energy_expr_list.append(expr1**2)
             energy_expr_list.append(expr2**2)
 
@@ -146,6 +268,43 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
 
 
 def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5):
+    """Basinhopping fit of RA-SHG data.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
+        This is the (Fourier-transformed) fitting formula.
+    fdat : fDataContainer
+        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
+        This is the (Fourier-transformed) data to fit.
+    guess_dict : dict
+        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
+    niter : int
+        Number of basinhopping iterations (see scipy documentation)
+    method : str, optional
+        Minimization method to use, defaults to `'BFGS'`. See scipy
+        documentation for more information.
+    stepsize : float, optional
+        Basinhopping stepsize, defaults to `0.5`. See scipy documentation
+        for more information.
+
+    Returns
+    -------
+    ret : scipy.optimize.OptimizeResult
+        Instance of class :class:`~scipy.optimize.OptimizeResult`.
+        See `scipy` documentation for further description. Includes
+        additional attribute ``ret.xdict`` which is a `dict` of 
+        ``{sympy.Symbol:float}`` indicating the final answer as
+        a dictionary.
+
+    Notes
+    -----
+    This function computes and supplies the gradient function to the scipy
+    basinhopping algorithm. This requires some computational power up front
+    but can speed up the minimization algorithm.
+
+    """
     
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
@@ -155,8 +314,8 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize
     energy_expr_list = []
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
-            expr1 = no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
             energy_expr_list.append(expr1**2)
             energy_expr_list.append(expr2**2)
 
@@ -184,7 +343,46 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize
 
 
 def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', stepsize=0.5):
-    
+    """Basinhopping fit of RA-SHG data with bounds.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
+        This is the (Fourier-transformed) fitting formula.
+    fdat : fDataContainer
+        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
+        This is the (Fourier-transformed) data to fit.
+    guess_dict : dict
+        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
+    bounds_dict : dict
+        Dict of form ``{sympy.Symbol:tuple}``. `tuple` should be of form
+        ``(lower_bound, upper_bound)``.
+    niter : int
+        Number of basinhopping iterations (see scipy documentation)
+    method : str, optional
+        Minimization method to use, defaults to `'L-BFGS-B'`. See scipy
+        documentation for more information.
+    stepsize : float, optional
+        Basinhopping stepsize, defaults to `0.5`. See scipy documentation
+        for more information.
+
+    Returns
+    -------
+    ret : scipy.optimize.OptimizeResult
+        Instance of class :class:`~scipy.optimize.OptimizeResult`.
+        See `scipy` documentation for further description. Includes
+        additional attribute ``ret.xdict`` which is a `dict` of 
+        ``{sympy.Symbol:float}`` indicating the final answer as
+        a dictionary.
+
+    Notes
+    -----
+    This function computes and supplies the gradient function to the scipy
+    basinhopping algorithm. This requires some computational power up front
+    but can speed up the minimization algorithm.
+
+    """
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -193,8 +391,8 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     energy_expr_list = []
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
-            expr1 = no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
             energy_expr_list.append(expr1**2)
             energy_expr_list.append(expr2**2)
 
