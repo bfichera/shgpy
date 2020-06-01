@@ -13,7 +13,6 @@ from shgpy.formgen import (
     formgen_dipole_quadrupole_real,
 )
 import shgpy.shg_symbols as S
-import shgpy.tensor as tx
 from shgpy.plotter import easy_plot
 import shgpy.fformfit
 
@@ -42,10 +41,9 @@ class TestFormGen(unittest.TestCase):
 
     def test_formfit(self):
         R = shgpy.rotation_matrix_from_two_vectors(np.array([1, 1, 0]), np.array([0, 0, 1]))
-        t_dip = tx.transform(shgpy.particularize(td.dipole['T_d']), R)
+        t_dip = shgpy.transform(shgpy.particularize(td.dipole['T_d']), R)
         form = formgen_just_dipole_real(t_dip, 0.1745)
         fform = shgpy.form_to_fform(form)
-        fform_filename = 'tests/fform/T_d-S_2-S_2(110)-particularized.p'
         fform.apply_phase_shift(S.psi)
         data_filenames_dict = {
             'PP':'tests/Data/dataPP.csv',

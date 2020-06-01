@@ -3,7 +3,6 @@ import unittest
 import numpy as np
 import shgpy
 import shgpy.fformgen
-import shgpy.tensor as tx
 import shgpy.tensor_definitions as td
 import shgpy.shg_symbols as S
 import logging
@@ -21,7 +20,7 @@ class TestfFormGen(unittest.TestCase):
     
     def test_generate_contracted_fourier_transforms(self):
 
-        t_dip = shgpy.make_tensor_complex(tx.transform(shgpy.particularize(td.dipole['T_d']), shgpy.rotation_matrix_from_two_vectors(np.array([1, 1, 0]), np.array([0, 0, 1]))))
+        t_dip = shgpy.make_tensor_complex(shgpy.transform(shgpy.particularize(td.dipole['T_d']), shgpy.rotation_matrix_from_two_vectors(np.array([1, 1, 0]), np.array([0, 0, 1]))))
         t_quad = shgpy.make_tensor_complex(np.zeros(shape=(3,3,3,3), dtype=object))
         save_filename = 'tests/fform/T_d-S_2-S_2(110)-particularized-complex.p'
         shgpy.fformgen.generate_contracted_fourier_transforms_complex(save_filename, 'tests/fform/uft10deg', t_dip, t_quad, ndigits=4)
