@@ -9,11 +9,11 @@ logging.getLogger(__name__)
 
 
 def particularize(tensor, exclude=[]):
-    """Particularize `tensor` (e.g. enforce chi_ijk = chi_ikj
+    """Particularize `tensor` (e.g. enforce ``chi_ijk = chi_ikj``).
 
-    Because e.g. P_i = chi_ijk E_j E_k, chi_ijk needs to be symmetric
+    Because (e.g.) ``P_i = chi_ijk E_j E_k``, ``chi_ijk`` needs to be symmetric
     in its last two indices. This symmetry is not documented in SHG tables,
-    so it needs to be implemented manually. Functions using the `solve`
+    so it needs to be implemented manually. Functions using the ``solve``
     function of sympy.solvers.
 
     Parameters
@@ -63,6 +63,28 @@ def _make_parameters_in_expr_complex(expr, prefix=('real_', 'imag_'), suffix=(''
 
 
 def make_tensor_complex(tensor, prefix=('real_', 'imag_'), suffix=('', '')):
+    """Substitute e.g. ``x`` in sympy expression with ``real_x+1j*imag_x``.
+
+    In sympy, variables initalized by ``x = sympy.symbols('x')`` are by
+    default assumed to be complex. In order to make this more explicit
+    (e.g. for :func:`~shgpy.fformgen.generate_contracted_fourier_transforms_complex`),
+    we replace ``x`` by ``real_x + 1j*imag_x``.
+    
+
+    Parameters
+    ----------
+    tensor : array_like
+    prefix : tuple of str, optional
+        The prefixes of the newly-created real and imaginary variables.
+        Defaults to ``('real_', 'imag_')``.
+    suffix : tuple of str, optional
+        The prefixes of the newly-created real and imaginary variables.
+        Defaults to ``('', '')``.
+
+    Returns
+    -------
+    complex_tensor : array_like
+    """
     shape = tensor.shape
     tensor = tensor.flatten()
     for i in range(len(tensor)):
@@ -71,6 +93,19 @@ def make_tensor_complex(tensor, prefix=('real_', 'imag_'), suffix=('', '')):
 
 
 def rotation_matrix3(n, t):
+    """Returns the 3x3 matrix which rotates by `t` about `n`
+
+    Parameters
+    ----------
+    n : array_like
+        Axis of rotation (ndim = 3).
+    t : int, float, ...
+        Angle (in radians) to rotate by.
+
+    Returns
+    -------
+    rotation_matrix3 : array_like of float
+    """
     n_mag = _norm(n)
     for i in range(3):
         n[i] /= n_mag
@@ -84,6 +119,19 @@ def rotation_matrix3(n, t):
 
 
 def rotation_matrix3symb(n,t, ndigits=16):
+    """Duplicate of :func:`~shgpy.core.utilities.rotation_matrix3`, but accepts sympy.Symbol angle argument.
+
+    Parameters
+    ----------
+    n : array_like
+        Axis of rotation (ndim = 3).
+    t : sympy.Symbol, ...
+        Angle to rotate by.
+
+    Returns
+    -------
+    rotation_matrix3symb : array_like of sympy.Expr
+    """
     n_mag = _normsymb(n)
     for i in range(3):
         n[i] /= n_mag
@@ -129,6 +177,21 @@ def _normsymb(v):
 
 
 def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=16):
+    """Return rotation matrix which takes `v_initial` -> `v_final`.
+
+    Parameters
+    ----------
+    v_initial : array_like
+    v_final : array_like
+    accuracy : float, optional
+        Precision to which `v_final` is achieved. Defaults to `0.1`.
+    ndigits : int, optional
+        Number of digits to round off to. Defaults to `16`.
+
+    Returns
+    -------
+    rotation_matrix3 : array_like of float
+    """
     v_initial = v_initial.astype(float)
     v_final = v_final.astype(float)
     iden = np.identity(3)
@@ -166,9 +229,10 @@ def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=1
     return np.array(ans)
 
 
-def union(*array):
+def union(*arrays):
+    """Union of multiple arrays."""
     ans = []
-    for y in array:
+    for y in arrays:
         for x in y:
             if x not in ans:
                 ans.append(x)
@@ -176,6 +240,7 @@ def union(*array):
 
 
 def tensor_product(*tensors):
+    """Tensor product of multiple tensors."""
     if len(tensors) == 2:
         return np.tensordot(tensors[0], tensors[1], axes=0)
     else:
@@ -183,6 +248,14 @@ def tensor_product(*tensors):
 
 
 def tensor_contract(tensor, index_pairs):
+    """Contract a tensor against to pairs of indices.
+
+    Parameters
+    ----------
+    tensor : array_like
+    index_pairs : array_like of array_like of int
+        List of pairs of indices.
+    """
     ans = tensor
     index_idx = list(range(len(np.shape(tensor))))
     index_pairs = index_pairs[:]
