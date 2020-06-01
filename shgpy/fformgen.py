@@ -4,6 +4,8 @@ from scipy.integrate import quad
 from .core import (
     rotation_matrix3symb,
     n2i,
+    tensor_contract,
+    tensor_product,
 )
 from . import shg_symbols as S
 import pickle
@@ -76,12 +78,12 @@ def _fexpr_n(expr_arr, n, precision=7):
 
 
 def _convolve_ftensors(nR1, nR2, M=16, dtype=object):
-    test_prod = tx.tensor_product(nR1[0], nR2[0])
+    test_prod = tensor_product(nR1[0], nR2[0])
     ans = np.zeros(dtype=dtype, shape=(2*M+1,)+test_prod.shape)
     for n in np.arange(-M, M+1):
         for m in np.arange(-M, M+1):
             try:
-                ans[n2i(n, M)] += tx.tensor_product(nR1[n2i(m, M)], nR2[n2i(n-m, M)])
+                ans[n2i(n, M)] += tensor_product(nR1[n2i(m, M)], nR2[n2i(n-m, M)])
             except IndexError:
                 pass
     return ans
@@ -115,7 +117,7 @@ def generate_uncontracted_fourier_transforms(aoi, uncontracted_filename_prefix, 
     Id = np.identity(3)
     k_out = _substitute_into_array(np.array([-sp.sin(S.theta), 0, -sp.cos(S.theta)]), (S.theta, aoi))
     k_in = _substitute_into_array(np.array([-sp.sin(S.theta), 0, sp.cos(S.theta)]), (S.theta, aoi))
-    proj = Id - tx.tensor_product(k_out, k_out)
+    proj = Id - tensor_product(k_out, k_out)
     proj_x = proj[0]
     proj_y = proj[1]
     proj_z = proj[2]
@@ -171,13 +173,13 @@ def generate_uncontracted_fourier_transforms(aoi, uncontracted_filename_prefix, 
     h7_arr_term3 = []
     h7_arr_term4 = []
     for r1 in [r1_p, r1_s]:
-        h1 = np.array([tx.tensor_contract(r1[n2i(m, M)], [[1, 2]]) for m in np.arange(-M, M+1)])
+        h1 = np.array([tensor_contract(r1[n2i(m, M)], [[1, 2]]) for m in np.arange(-M, M+1)])
         logging.info('h1 done.')
         r2 = _convolve_ftensors(h1, h1)
-        h2 = np.array([tx.tensor_contract(r2[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
+        h2 = np.array([tensor_contract(r2[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
         logging.info('h2 done.')
         r3 = _convolve_ftensors(rR, rF)
-        h3 = np.array([tx.tensor_contract(r3[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
+        h3 = np.array([tensor_contract(r3[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
         logging.info('h3 done.')
         h4 = _convolve_ftensors(h2, h3)
         logging.info('h4 done.')
@@ -190,7 +192,7 @@ def generate_uncontracted_fourier_transforms(aoi, uncontracted_filename_prefix, 
         h7_arr_term1.append(h7)
         if include_quadrupole is True:
             r4 = _convolve_ftensors(rR, -1j*rk_in)
-            h8 = np.array([tx.tensor_contract(r4[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
+            h8 = np.array([tensor_contract(r4[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
             logging.info('h8 done.')
             h9 = _convolve_ftensors(h7, h8)
             logging.info('h9 done.')
@@ -264,7 +266,7 @@ def generate_uncontracted_fourier_transforms_symb(uncontracted_filename_prefix, 
 ##     k_in = _substitute_into_array(np.array([-sp.sin(theta), 0, sp.cos(theta)]), (theta, aoi))
     k_out = np.array([-sp.sin(S.theta), 0, -sp.cos(S.theta)])
     k_in = np.array([-sp.sin(S.theta), 0, sp.cos(S.theta)])
-    proj = Id - tx.tensor_product(k_out, k_out)
+    proj = Id - tensor_product(k_out, k_out)
     proj_x = proj[0]
     proj_y = proj[1]
     proj_z = proj[2]
@@ -320,13 +322,13 @@ def generate_uncontracted_fourier_transforms_symb(uncontracted_filename_prefix, 
     h7_arr_term3 = []
     h7_arr_term4 = []
     for r1 in [r1_p, r1_s]:
-        h1 = np.array([tx.tensor_contract(r1[n2i(m, M)], [[1, 2]]) for m in np.arange(-M, M+1)])
+        h1 = np.array([tensor_contract(r1[n2i(m, M)], [[1, 2]]) for m in np.arange(-M, M+1)])
         logging.info('h1 done.')
         r2 = _convolve_ftensors(h1, h1)
-        h2 = np.array([tx.tensor_contract(r2[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
+        h2 = np.array([tensor_contract(r2[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
         logging.info('h2 done.')
         r3 = _convolve_ftensors(rR, rF)
-        h3 = np.array([tx.tensor_contract(r3[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
+        h3 = np.array([tensor_contract(r3[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
         logging.info('h3 done.')
         h4 = _convolve_ftensors(h2, h3)
         logging.info('h4 done.')
@@ -339,7 +341,7 @@ def generate_uncontracted_fourier_transforms_symb(uncontracted_filename_prefix, 
         h7_arr_term1.append(h7)
         if include_quadrupole is True:
             r4 = _convolve_ftensors(rR, -1j*rk_in)
-            h8 = np.array([tx.tensor_contract(r4[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
+            h8 = np.array([tensor_contract(r4[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
             logging.info('h8 done.')
             h9 = _convolve_ftensors(h7, h8)
             logging.info('h9 done.')
@@ -430,8 +432,8 @@ def generate_contracted_fourier_transforms(save_filename, uncontracted_filename_
     for pc,h7_pc in terms_dict.items():
         _fform_dict[pc] = np.zeros(shape=(2*M+1,), dtype=object)
         for term in range(len(h7_pc)):
-            t8_pc_term = np.array([tx.tensor_contract(tx.tensor_product(h7_pc[term][n2i(m, M)], chi_list_1[term]), contraction_lists_1[term]) for m in np.arange(-M, M+1)])
-            t9_pc_term = np.array([tx.tensor_contract(tx.tensor_product(t8_pc_term[n2i(m, M)], chi_list_2[term]), contraction_lists_2[term]) for m in np.arange(-M, M+1)])
+            t8_pc_term = np.array([tensor_contract(tensor_product(h7_pc[term][n2i(m, M)], chi_list_1[term]), contraction_lists_1[term]) for m in np.arange(-M, M+1)])
+            t9_pc_term = np.array([tensor_contract(tensor_product(t8_pc_term[n2i(m, M)], chi_list_2[term]), contraction_lists_2[term]) for m in np.arange(-M, M+1)])
             _fform_dict[pc] += np.copy(t9_pc_term)
             logging.info('Finished term %s.' % term)
         if ndigits is not None:
@@ -487,8 +489,8 @@ def generate_contracted_fourier_transforms_complex(save_filename, uncontracted_f
     for pc,h7_pc in terms_dict.items():
         _fform_dict[pc] = np.zeros(shape=(2*M+1,), dtype=object)
         for term in range(len(h7_pc)):
-            t8_pc_term = np.array([tx.tensor_contract(tx.tensor_product(h7_pc[term][n2i(m, M)], chi_list_1[term]), contraction_lists_1[term]) for m in np.arange(-M, M+1)])
-            t9_pc_term = np.array([tx.tensor_contract(tx.tensor_product(t8_pc_term[n2i(m, M)], chi_list_2[term]), contraction_lists_2[term]) for m in np.arange(-M, M+1)])
+            t8_pc_term = np.array([tensor_contract(tensor_product(h7_pc[term][n2i(m, M)], chi_list_1[term]), contraction_lists_1[term]) for m in np.arange(-M, M+1)])
+            t9_pc_term = np.array([tensor_contract(tensor_product(t8_pc_term[n2i(m, M)], chi_list_2[term]), contraction_lists_2[term]) for m in np.arange(-M, M+1)])
             _fform_dict[pc] += np.copy(t9_pc_term)
             logging.info('Finished term %s.' % term)
         if ndigits is not None:
