@@ -3,11 +3,9 @@ import numpy as np
 from .core import n2i
 from scipy.optimize import basinhopping
 from scipy.optimize import least_squares
-from scipy.optimize import OptimizeResult
 import time
 import logging
 import logging.config
-from ._logging_config import cfg
 
 logging.getLogger(__name__)
 

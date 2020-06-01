@@ -1,7 +1,6 @@
 import unittest
 
 import logging
-import sympy as sp
 
 import shgpy
 from shgpy.fformfit import (
