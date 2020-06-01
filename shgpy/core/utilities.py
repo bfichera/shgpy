@@ -9,6 +9,26 @@ logging.getLogger(__name__)
 
 
 def particularize(tensor, exclude=[]):
+    """Particularize `tensor` (e.g. enforce chi_ijk = chi_ikj
+
+    Because e.g. P_i = chi_ijk E_j E_k, chi_ijk needs to be symmetric
+    in its last two indices. This symmetry is not documented in SHG tables,
+    so it needs to be implemented manually. Functions using the `solve`
+    function of sympy.solvers.
+
+    Parameters
+    ----------
+    tensor : array_like
+        Tensor to be particularized. 
+
+    exclude : list of sympy.Symbol objects
+        Variables to exlude from the solver. Defaults to ``[]``.
+
+    Returns
+    -------
+    particularized_tensor : array_like
+
+    """
 
     def _swap_last_two_indices(tensor):
         rank = len(tensor.shape)
