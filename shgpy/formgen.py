@@ -1,3 +1,15 @@
+"""Module for (non-Fourier) formula derivation
+
+This module provides a number of routines for calculating the SHG 
+response of a given material (encoded by its susceptbility tensor,
+see :func:`~shgpy.tensor_definitions` ). These routines are much
+more straightforward than those found in :func:`~shgpy.fformgen`,
+but are only suited for the most simple problems because the
+conversion from formulas to Fourier formulas (which is all but
+necessary for efficient fitting functionality) is typically quite
+slow.
+
+"""
 import numpy as np
 import sympy as sp
 from .core import (
@@ -9,6 +21,30 @@ from . import shg_symbols as S
 
 
 def formgen_just_dipole_complex(t1, theta):
+    """Generate formula assuming dipole SHG with complex coefficients.
+
+    Parameters
+    ----------
+    t1 : ndarray of sympy.Expr
+        SHG susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+    theta : float or sympy.Symbol
+        Angle of incidence
+
+    Returns
+    -------
+    fform : FormContainer
+        Instance of :func:`~shgpy.core.data_handler.FormContainer`.
+
+    Notes
+    -----
+    This routine differs from :func:`~shgpy.formgen.formgen_just_dipole_real` 
+    only in the sense that the computed intensity function is computed by
+    computing the modulus-squared (rather than ``**2``) of the polarization.
+    For this reason, it is usually suggested to explicitly substitute 
+    ``x -> real_x+1j*imag_x`` for each `x` in `t1`. See :func:`~shgpy.core.utilities.make_tensor_complex`
+    and the tutorial.
+
+    """
     c = sp.cos(theta)
     s = sp.sin(theta)
     kout = np.array([s, 0, -c], dtype=object)
@@ -28,6 +64,31 @@ def formgen_just_dipole_complex(t1, theta):
 
 
 def formgen_just_dipole_real(t1, theta):
+    """Generate formula assuming dipole SHG with real coefficients.
+
+    Parameters
+    ----------
+    t1 : ndarray of sympy.Expr
+        SHG susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+    theta : float or sympy.Symbol
+        Angle of incidence
+
+    Returns
+    -------
+    fform : FormContainer
+        Instance of :func:`~shgpy.core.data_handler.FormContainer`.
+
+    Notes
+    -----
+    This routine differs from :func:`~shgpy.formgen.formgen_just_dipole_complex` 
+    only in the sense that the computed intensity function is computed by
+    computing ``**2`` (rather than the modulus squared) of the polarization.
+    This is usually easier as long as you're not worrying about the imaginary
+    component of the susceptibility (valid away from resonance in the presence
+    of time-reversal symmetry).
+    
+
+    """
     c = sp.cos(theta)
     s = sp.sin(theta)
     kout = np.array([s, 0, -c], dtype=object)
@@ -47,6 +108,27 @@ def formgen_just_dipole_real(t1, theta):
 
 
 def formgen_dipole_quadrupole_real(t1, t2, theta):
+    """Generate formula assuming dipole+quadrupole SHG with real coefficients.
+
+    Parameters
+    ----------
+    t1 : ndarray of sympy.Expr
+        SHG dipole susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+    t2 : ndarray of sympy.Expr
+        SHG quadrupole susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+    theta : float or sympy.Symbol
+        Angle of incidence
+
+    Returns
+    -------
+    fform : FormContainer
+        Instance of :func:`~shgpy.core.data_handler.FormContainer`.
+
+    Notes
+    -----
+    See note in :func:`~shgpy.formgen.formgen_just_dipole_real`.
+    
+    """
     c = sp.cos(theta)
     s = sp.sin(theta)
     kin = np.array([s, 0, c], dtype=object)
@@ -72,6 +154,27 @@ def formgen_dipole_quadrupole_real(t1, t2, theta):
 
 
 def formgen_dipole_quadrupole_complex(t1, t2, theta):
+    """Generate formula assuming dipole+quadrupole SHG with complex coefficients.
+
+    Parameters
+    ----------
+    t1 : ndarray of sympy.Expr
+        SHG dipole susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+    t2 : ndarray of sympy.Expr
+        SHG quadrupole susceptibility tensor; see :func:`~shgpy.tensor_definitions`.
+    theta : float or sympy.Symbol
+        Angle of incidence
+
+    Returns
+    -------
+    fform : FormContainer
+        Instance of :func:`~shgpy.core.data_handler.FormContainer`.
+
+    Notes
+    -----
+    See note in :func:`~shgpy.formgen.formgen_just_dipole_complex`.
+    
+    """
     theta = sp.sympify(theta)
     if not theta.is_real:
         raise ValueError('theta must be a real variable (did you forget real=True in sympy.symbols?)')
