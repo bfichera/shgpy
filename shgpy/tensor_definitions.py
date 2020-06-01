@@ -1,4 +1,72 @@
-import sympy as sp
+"""This module provides a collection of susceptibility tensors (both
+dipole and quadrupole) which have each been simplified using the
+symmetry constraints implied by different crystallographic point
+groups. The tensors are contained in dictionaries of numpy `ndarray` s,
+where the keys of the dictionaries are strings containing the name
+of the relevant point group. For example, to get the dipole tensor
+implied by the crystallographic point group C_4v, one would use
+
+>>> import shgpy.tensor_definitions as td
+>>> t1 = td.dipole['C_4v']
+
+In addition to the `dipole` dictionary, this module also provides
+a `quadrupole` dictionary with the rank-4 susceptibility tensors
+needed to compute quadrupole SHG, as well as a special `surface`
+dictionary (which is a duplicate of `dipole` but with the variables
+renamed e.g. from `xxx` -> `sxxx`. This is useful when analyzing
+SHG signal involving both bulk and surface dipole sources.
+
+All of the variables defined in this module are sympy.Symbol objects
+and are defined in the :func:`~shgpy.shg_symbols` package.
+
+The crystallographic point groups which are defined in this module are
+
+
+- ``'S_2'``
+- ``'C_2h'``
+- ``'D_2h'``
+- ``'C_4h'``
+- ``'D_4h'``
+- ``'T_h'``
+- ``'O_h'``
+- ``'S_6'``
+- ``'D_3d'``
+- ``'C_6h'``
+- ``'D_6h'``
+- ``'C_2'``
+- ``'C_1h'``
+- ``'D_2'``
+- ``'C_2v'``
+- ``'C_4'``
+- ``'S_4'``
+- ``'D_4'``
+- ``'C_4v'``
+- ``'D_2d'``
+- ``'O'``
+- ``'T_d'``
+- ``'T'``
+- ``'D_3'``
+- ``'C_3'``
+- ``'C_3v'``
+- ``'C_6'``
+- ``'C_3h'``
+- ``'D_6'``
+- ``'C_6v'``
+- ``'D_3h'``
+- ``'C_1'``
+
+In `quadrupole`, there is an additional key ``'Isotropic'``.
+
+Please note that an additional constraint on typical SHG tensors which
+is not captured by the definitions in this module is that, since the
+SHG response function is symmetric in exchange of the electric field
+vectors, SHG tensors should be symmetric in their last two indices.
+This constraint is not captured in these definitions because one could
+imagine a broader use case in which this symmetry is not necessarily
+valid. In scripts, one should use :func:`~shgpy.core.utilities.particularize`
+to implement this constraint.
+
+"""
 import numpy as np
 from .shg_symbols import *
 
