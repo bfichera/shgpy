@@ -1,7 +1,10 @@
 import numpy as np
 import sympy as sp
-from .core import FormContainer
-from . import tensor as tx
+from .core import (
+    FormContainer,
+    tensor_contract,
+    tensor_product,
+)
 from . import shg_symbols as S
 
 
@@ -12,9 +15,9 @@ def formgen_just_dipole_complex(t1, theta):
     Fp = np.array([-c, 0, s], dtype=object)
     Fs = np.array([0, 1, 0], dtype=object)
     R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tx.tensor_contract(tx.tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    Ps = tx.tensor_contract(tx.tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tx.tensor_contract(tx.tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
+    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
+    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
+    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
     PP = Pp[0]*sp.conjugate(Pp[0])+Pp[2]*sp.conjugate(Pp[2])
@@ -31,9 +34,9 @@ def formgen_just_dipole_real(t1, theta):
     Fp = np.array([-c, 0, s], dtype=object)
     Fs = np.array([0, 1, 0], dtype=object)
     R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tx.tensor_contract(tx.tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    Ps = tx.tensor_contract(tx.tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tx.tensor_contract(tx.tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
+    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
+    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
+    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
     PP = Pp[0]**2+Pp[2]**2
@@ -51,12 +54,12 @@ def formgen_dipole_quadrupole_real(t1, t2, theta):
     Fp = np.array([-c, 0, s], dtype=object)
     Fs = np.array([0, 1, 0], dtype=object)
     R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tx.tensor_contract(tx.tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    rotated_qtensor = tx.tensor_contract(tx.tensor_product(R, R, R, R, t2), [[1, 8], [3, 9], [5, 10], [7, 11]])
-    Ps = tx.tensor_contract(tx.tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tx.tensor_contract(tx.tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
-    Qs = tx.tensor_contract(tx.tensor_product(rotated_qtensor, kin, Fs, Fs), [[1, 4], [2, 5], [3, 6]])
-    Qp = tx.tensor_contract(tx.tensor_product(rotated_qtensor, kin, Fp, Fp), [[1, 4], [2, 5], [3, 6]])
+    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
+    rotated_qtensor = tensor_contract(tensor_product(R, R, R, R, t2), [[1, 8], [3, 9], [5, 10], [7, 11]])
+    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
+    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
+    Qs = tensor_contract(tensor_product(rotated_qtensor, kin, Fs, Fs), [[1, 4], [2, 5], [3, 6]])
+    Qp = tensor_contract(tensor_product(rotated_qtensor, kin, Fp, Fp), [[1, 4], [2, 5], [3, 6]])
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
     Qs -= np.dot(kout, Qs)*kout
@@ -79,12 +82,12 @@ def formgen_dipole_quadrupole_complex(t1, t2, theta):
     Fp = np.array([-c, 0, s], dtype=object)
     Fs = np.array([0, 1, 0], dtype=object)
     R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tx.tensor_contract(tx.tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    rotated_qtensor = tx.tensor_contract(tx.tensor_product(R, R, R, R, t2), [[1, 8], [3, 9], [5, 10], [7, 11]])
-    Ps = tx.tensor_contract(tx.tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tx.tensor_contract(tx.tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
-    Qs = tx.tensor_contract(tx.tensor_product(rotated_qtensor, kin, Fs, Fs), [[1, 4], [2, 5], [3, 6]])
-    Qp = tx.tensor_contract(tx.tensor_product(rotated_qtensor, kin, Fp, Fp), [[1, 4], [2, 5], [3, 6]])
+    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
+    rotated_qtensor = tensor_contract(tensor_product(R, R, R, R, t2), [[1, 8], [3, 9], [5, 10], [7, 11]])
+    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
+    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
+    Qs = tensor_contract(tensor_product(rotated_qtensor, kin, Fs, Fs), [[1, 4], [2, 5], [3, 6]])
+    Qp = tensor_contract(tensor_product(rotated_qtensor, kin, Fp, Fp), [[1, 4], [2, 5], [3, 6]])
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
     Qs -= np.dot(kout, Qs)*kout
