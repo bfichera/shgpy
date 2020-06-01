@@ -18,7 +18,7 @@ def particularize(tensor, exclude=[]):
 
     Parameters
     ----------
-    tensor : array_like
+    tensor : ndarray
         Tensor to be particularized. 
 
     exclude : list of sympy.Symbol objects
@@ -26,7 +26,7 @@ def particularize(tensor, exclude=[]):
 
     Returns
     -------
-    particularized_tensor : array_like
+    particularized_tensor : ndarray
 
     """
 
@@ -67,13 +67,14 @@ def make_tensor_complex(tensor, prefix=('real_', 'imag_'), suffix=('', '')):
 
     In sympy, variables initalized by ``x = sympy.symbols('x')`` are by
     default assumed to be complex. In order to make this more explicit
-    (e.g. for :func:`~shgpy.fformgen.generate_contracted_fourier_transforms_complex`),
+    (e.g. for
+    :func:`~shgpy.fformgen.generate_contracted_fourier_transforms_complex`),
     we replace ``x`` by ``real_x + 1j*imag_x``.
-    
+
 
     Parameters
     ----------
-    tensor : array_like
+    tensor : ndarray
     prefix : tuple of str, optional
         The prefixes of the newly-created real and imaginary variables.
         Defaults to ``('real_', 'imag_')``.
@@ -83,7 +84,7 @@ def make_tensor_complex(tensor, prefix=('real_', 'imag_'), suffix=('', '')):
 
     Returns
     -------
-    complex_tensor : array_like
+    complex_tensor : ndarray
     """
     shape = tensor.shape
     tensor = tensor.flatten()
@@ -97,14 +98,14 @@ def rotation_matrix3(n, t):
 
     Parameters
     ----------
-    n : array_like
+    n : ndarray
         Axis of rotation (ndim = 3).
     t : int, float, ...
         Angle (in radians) to rotate by.
 
     Returns
     -------
-    rotation_matrix3 : array_like of float
+    rotation_matrix3 : ndarray of float
     """
     n_mag = _norm(n)
     for i in range(3):
@@ -123,14 +124,14 @@ def rotation_matrix3symb(n,t, ndigits=16):
 
     Parameters
     ----------
-    n : array_like
+    n : ndarray
         Axis of rotation (ndim = 3).
     t : sympy.Symbol, ...
         Angle to rotate by.
 
     Returns
     -------
-    rotation_matrix3symb : array_like of sympy.Expr
+    rotation_matrix3symb : ndarray of sympy.Expr
     """
     n_mag = _normsymb(n)
     for i in range(3):
@@ -181,8 +182,8 @@ def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=1
 
     Parameters
     ----------
-    v_initial : array_like
-    v_final : array_like
+    v_initial : ndarray
+    v_final : ndarray
     accuracy : float, optional
         Precision to which `v_final` is achieved. Defaults to `0.1`.
     ndigits : int, optional
@@ -190,7 +191,7 @@ def rotation_matrix_from_two_vectors(v_initial, v_final, accuracy=.01, ndigits=1
 
     Returns
     -------
-    rotation_matrix3 : array_like of float
+    rotation_matrix3 : ndarray of float
     """
     v_initial = v_initial.astype(float)
     v_final = v_final.astype(float)
@@ -252,9 +253,9 @@ def tensor_contract(tensor, index_pairs):
 
     Parameters
     ----------
-    tensor : array_like
+    tensor : ndarray
     index_pairs : array_like of array_like of int
-        List of pairs of indices.
+        List of pairs of indices, e.g. ``[[1, 3], [2, 4]]``.
     """
     ans = tensor
     index_idx = list(range(len(np.shape(tensor))))
@@ -269,6 +270,18 @@ def tensor_contract(tensor, index_pairs):
     
 
 def transform(tensor, operation):
+    """Transform a tensor by a given operation.
+
+    Parameters
+    ----------
+    tensor : ndarray
+    operation : ndarray
+        Operation to transform `tensor` by. Should be rank 2.
+
+    Returns
+    -------
+    transformed_tensor : ndarray
+    """
     rank = len(tensor.shape)
     args = [operation]*rank
     args.append(tensor)
