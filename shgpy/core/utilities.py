@@ -3,9 +3,6 @@ import sympy as sp
 from sympy.solvers import solve
 import itertools
 from warnings import warn
-import logging
-
-logging.getLogger(__name__)
 
 
 def particularize(tensor, exclude=[]):

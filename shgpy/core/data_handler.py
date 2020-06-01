@@ -8,7 +8,7 @@ import logging
 from copy import deepcopy
 from .. import shg_symbols as S
 
-logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 class DataContainer:
@@ -962,9 +962,9 @@ def form_to_fform(form, M=16):
     iterable = {}
     for k,v in form.get_items():
         iterable[k] = np.zeros((2*M+1,), dtype=object)
-        logging.info(f'Currently computing {k}.')
+        _logger.info(f'Currently computing {k}.')
         for m in np.arange(-M, M+1):
-            logging.debug(f'Currently computing m={m}.')
+            _logger.debug(f'Currently computing m={m}.')
             expr = sp.expand_trig(v*(sp.cos(-m*S.phi)+1j*sp.sin(-m*S.phi))).expand()
             expr_re = _no_I_component(expr)
             expr_im = _I_component(expr)

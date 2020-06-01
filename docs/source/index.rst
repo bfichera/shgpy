@@ -10,6 +10,11 @@ Welcome to ShgPy's documentation!
    :maxdepth: 3
    :caption: Contents:
 
+   installation
+
+.. toctree::
+   :maxdepth: 1
+
    modules
 
 
