@@ -103,6 +103,11 @@ dipole['D_6'] = np.array([[[0, 0, 0], [0, 0, -yxz], [0, -yxz, 0]], [[0, 0, yxz],
 dipole['C_6v'] = np.array([[[0, 0, yyz], [0, 0, 0], [yzy, 0, 0]], [[0, 0, 0], [0, 0, yyz], [0, yzy, 0]], [[zyy, 0, 0], [0, zyy, 0], [0, 0, zzz]]], dtype=object)
 dipole['D_3h'] = np.array([[[0, xyx, 0], [xyx, 0, 0], [0, 0, 0]], [[xyx, 0, 0], [0, -xyx, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=object)
 dipole['C_1'] = np.array([[[xxx, xxy, xxz], [xyx, xyy, xyz], [xzx, xzy, xzz]], [[yxx, yxy, yxz], [yyx, yyy, yyz], [yzx, yzy, yzz]], [[zxx, zxy, zxz], [zyx, zyy, zyz], [zzx, zzy, zzz]]], dtype=object)
+for k,v in dipole.items():
+    new_dipole = np.zeros(shape=v.shape, dtype=object).flatten()
+    for i,g in enumerate(dipole[k].flatten()):
+        new_dipole[i] = sp.sympify(g)
+    dipole[k] = new_dipole.reshape(v.shape)
 
 surface = {}
 surface['S_2'] = np.array([[[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=object)
@@ -137,6 +142,11 @@ surface['D_6'] = np.array([[[0, 0, 0], [0, 0, -syxz], [0, -syxz, 0]], [[0, 0, sy
 surface['C_6v'] = np.array([[[0, 0, syyz], [0, 0, 0], [syzy, 0, 0]], [[0, 0, 0], [0, 0, syyz], [0, syzy, 0]], [[szyy, 0, 0], [0, szyy, 0], [0, 0, szzz]]], dtype=object)
 surface['D_3h'] = np.array([[[0, sxyx, 0], [sxyx, 0, 0], [0, 0, 0]], [[sxyx, 0, 0], [0, -sxyx, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=object)
 surface['C_1'] = np.array([[[sxxx, sxxy, sxxz], [sxyx, sxyy, sxyz], [sxzx, sxzy, sxzz]], [[syxx, syxy, syxz], [syyx, syyy, syyz], [syzx, syzy, syzz]], [[szxx, szxy, szxz], [szyx, szyy, szyz], [szzx, szzy, szzz]]], dtype=object)
+for k,v in surface.items():
+    new_surface = np.zeros(shape=v.shape, dtype=object).flatten()
+    for i,g in enumerate(surface[k].flatten()):
+        new_surface[i] = sp.sympify(g)
+    surface[k] = new_surface.reshape(v.shape)
 
 quadrupole={}
 quadrupole['Isotropic'] = np.array([[[[yxxy + yxyx + yyxx, 0, 0], [0, yyxx, 0], [0, 0, yyxx]], [[0, yxyx, 0], [yxxy, 0, 0], [0, 0, 0]], [[0, 0, yxyx], [0, 0, 0], [yxxy, 0, 0]]], [[[0, yxxy, 0], [yxyx, 0, 0], [0, 0, 0]], [[yyxx, 0, 0], [0, yxxy + yxyx + yyxx, 0], [0, 0, yyxx]], [[0, 0, 0], [0, 0, yxyx], [0, yxxy, 0]]], [[[0, 0, yxxy], [0, 0, 0], [yxyx, 0, 0]], [[0, 0, 0], [0, 0, yxxy], [0, yxyx, 0]], [[yyxx, 0, 0], [0, yyxx, 0], [0, 0, yxxy + yxyx + yyxx]]]], dtype=object)
@@ -197,3 +207,8 @@ quadrupole['C_1'] = np.array([[[[xxxx, xxxy, xxxz],
     [[zzxx, zzxy, zzxz],
     [zzyx, zzyy, zzyz],
     [zzzx, zzzy, zzzz]]]], dtype=object)
+for k,v in quadrupole.items():
+    new_quadrupole = np.zeros(shape=v.shape, dtype=object).flatten()
+    for i,g in enumerate(quadrupole[k].flatten()):
+        new_quadrupole[i] = sp.sympify(g)
+    quadrupole[k] = new_quadrupole.reshape(v.shape)

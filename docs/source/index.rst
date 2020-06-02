@@ -28,18 +28,26 @@ Installation of ShgPy is easy! Just install the `shgpy` package::
 
     $ pip install shgpy
 
+You'll also need to install `numpy`, `scipy`, `sympy`, and, optionally, `matplotlib`; refer to the corresponding documentation for more information on these packages.
+
 Getting started
 ===============
 
-After installing ShgPy, the next thing to do is to read the tutorials.
+After installing ShgPy, familiarize yourself with the basic routines by reading the tutorials.
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorial/getting_started_tutorial
+   tutorial/tensor_tutorial
+   tutorial/fitting_tutorial
 
 Documentation
 =============
 
-Know what you're looking for and just want API details? View the auto-generated API documentation:
+For further details, consult the auto-generated API documentation:
 
 .. toctree::
-   :maxdepth: 4
 
    modules
 
@@ -47,7 +55,6 @@ How to contribute
 =================
 
 .. toctree::
-   :maxdepth: 2
 
    contribute
 
