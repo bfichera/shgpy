@@ -1,39 +1,7 @@
 # ShgPy
 
-ShgPy is an open-source software toolkit for the analysis of rotational anisotropy second harmonic generation (RA-SHG) data. It is designed to facilitate the refinment of RA-SHG datasets requiring large numbers of fitting parameters.
+ShgPy is a simple toolkit for analyzing rotational-anisotropy second harmonic generation (RA-SHG) data. It depends mainly on three packages, [NumPy](https://numpy.org/), [SciPy](https://www.scipy.org/), and [SymPy](https://www.sympy.org/en/index.html) -- as well as (optionally) [Matplolib](https://matplotlib.org/) for some basic plotting capability -- to simulate, manipulate, and fit RA-SHG data in a (hopefully!) intuitive way.
 
-ShgPy depends on three packages -- [NumPy](https://numpy.org/), [SciPy](https://www.scipy.org/), and [SymPy](https://www.sympy.org/en/index.html) -- which provide access to a combination of fast array-manipulation tools, optimization routines, and symbolic manipulation capabilities. 
+Fitting RA-SHG data involves solving a complex global minimization problem with many degrees of freedom. Moreover, the fitting functions naively involve a degree of complexity due to the trigonometric nature of the problem. This software therefore takes a dual approach to fitting RA-SHG data -- first of all, all of the fits are done in Fourier space, which significantly reduces the complexity of the fitting formulas, and second of all, ShgPy makes heavy use of the [scipy.optimize.basinhopping](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html) algorithm, which is particularly useful for these types of global optimization problems.
 
-## Table of contents
-- [Getting started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Usage](#usage)
-- [Contibuting](#contibuting)
-- [How to cite this software](#how-to-cite-this-software)
-
-## Getting started
-
-### Prerequisites
-
-ShgPy requires the following packages to be installed on a system with Python 3.6 or greater:
-```
-numpy
-scipy
-sympy
-```
-
-### Installation
-To install ShgPy, simply:
-```
-$ pip install shgpy
-```
-
-### Usage
-*Usage instructions go here*
-
-## Contibuting
-*Contributing instructions go here*
-
-## How to cite this software
-*Citation instructions go here* 
+For more information, please see the [tutorials and documentation](https://bfichera.github.io/shgpy/).

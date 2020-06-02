@@ -4,7 +4,7 @@ Tensor tutorial
 Prerequisites
 -------------
 
-Before going through this tutorial, make sure you've :doc:`installed shgpy <../index>` and read through :doc:`the last tutorial <getting_started_tutorial>`.
+Before going through this tutorial, make sure you've :doc:`installed shgpy <../index>` and read through :doc:`the last tutorial <data_access_tutorial>`.
 
 Introduction
 ------------

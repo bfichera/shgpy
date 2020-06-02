@@ -9,7 +9,7 @@ Before going through this tutorial, make sure you've :doc:`installed shgpy <../i
 Introduction
 ------------
 
-In :doc:`the first tutorial <getting_started_tutorial>`, we learned how to load RA-SHG data into ShgPy using :func:`shgpy.core.data_handler.load_data` and the `shgpy.core.data_handler.DataContainer` class. In :doc:`the last tutorial <tensor_tutorial>`, we learned about how tensors for different point groups were defined in ShgPy and how to manipulate them. Now, we're going to put these concepts together and learn how to fit RA-SHG data.
+In :doc:`the first tutorial <data_access_tutorial>`, we learned how to load RA-SHG data into ShgPy using :func:`shgpy.core.data_handler.load_data` and the `shgpy.core.data_handler.DataContainer` class. In :doc:`the last tutorial <tensor_tutorial>`, we learned about how tensors for different point groups were defined in ShgPy and how to manipulate them. Now, we're going to put these concepts together and learn how to fit RA-SHG data.
 
 Fourier formula generation
 --------------------------
@@ -102,7 +102,7 @@ The final step: fitting your first RA-SHG data
 
 All that's left now is to load the Fourier formula just generated (at ``'T_d-None-None(110)-particularized.p'``) into ShgPy, load the data that we want to fit, and then fun one of the functions in :mod:`shgpy.fformfit`.
 
-Before we begin, let's recall from :doc:`the first tutorial <getting_started_tutorial>` how we loaded RA-SHG data into ShgPy. In that tutorial, we loaded the data into an instance of the special class :class:`shgpy.core.data_handler.DataContainer`, and noted that other datatypes would be loaded into similar objects when it came to actually doing the fitting.
+Before we begin, let's recall from :doc:`the first tutorial <data_access_tutorial>` how we loaded RA-SHG data into ShgPy. In that tutorial, we loaded the data into an instance of the special class :class:`shgpy.core.data_handler.DataContainer`, and noted that other datatypes would be loaded into similar objects when it came to actually doing the fitting.
 
 Let's review these other datatypes now. First, we consider the class :class:`shgpy.core.data_handler.fDataContainer`, which, in brief, simply contains the Fourier transform of the sort of data which would go into a :class:`shgpy.core.data_handler.DataContainer` instance. Like :class:`shgpy.core.data_handler.DataContainer`, it also includes methods for scaling and phase-shifting the data contained in it.
 
