@@ -17,6 +17,8 @@ import shgpy.shg_symbols as S
 
 logging.getLogger(__name__)
 
+MANUAL = False
+
 
 class TestFit(unittest.TestCase):
 
@@ -41,8 +43,9 @@ class TestFit(unittest.TestCase):
             self.assertAlmostEqual(abs(ret.xdict[S.zyx]), 1.23, delta=0.1)
 
         fit_dat = shgpy.fform_to_dat(self.fform, ret1.xdict, 1000)
-        easy_plot([self.dat, fit_dat], [{'linestyle':' ', 'markerfacecolor':'none', 'color':'blue', 'marker':'o'}, {'linestyle':'-', 'color':'blue'}], ['PP', 'PS', 'SP', 'SS'], show_plot=True, filename=None, show_legend=False)
-        easy_polar_plot([self.dat, fit_dat], [{'linestyle':' ', 'markerfacecolor':'none', 'color':'blue', 'marker':'o'}, {'linestyle':'-', 'color':'blue'}], ['PP', 'PS', 'SP', 'SS'], show_plot=True, filename=None, show_legend=False)
+        if MANUAL:
+            easy_plot([self.dat, fit_dat], [{'linestyle':' ', 'markerfacecolor':'none', 'color':'blue', 'marker':'o'}, {'linestyle':'-', 'color':'blue'}], ['PP', 'PS', 'SP', 'SS'], show_plot=True, filename=None, show_legend=False)
+            easy_polar_plot([self.dat, fit_dat], [{'linestyle':' ', 'markerfacecolor':'none', 'color':'blue', 'marker':'o'}, {'linestyle':'-', 'color':'blue'}], ['PP', 'PS', 'SP', 'SS'], show_plot=True, filename=None, show_legend=False)
 
     def test_basinhopping(self):
         niter = 100

@@ -20,6 +20,8 @@ show_plot = False
 
 logging.getLogger(__name__)
 
+MANUAL = False
+
 
 class TestFormGen(unittest.TestCase):
 
@@ -37,7 +39,8 @@ class TestFormGen(unittest.TestCase):
         for form in forms:
             form.apply_phase_shift(S.psi, S.phi)
             dat = shgpy.form_to_dat(form, {k:random.uniform(-1, 1) for k in form.get_free_symbols() if k != S.phi}, 1000)
-            easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys(), show_plot=False)
+            if MANUAL:
+                easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys(), show_plot=False)
 
     def test_formfit(self):
         R = shgpy.rotation_matrix_from_two_vectors(np.array([1, 1, 0]), np.array([0, 0, 1]))
@@ -57,4 +60,5 @@ class TestFormGen(unittest.TestCase):
         self.assertAlmostEqual(abs(ret.xdict[S.psi]), 1.59, delta=0.1)
         self.assertAlmostEqual(abs(ret.xdict[S.zyx]), 1.23, delta=0.1)
         fit_dat = shgpy.fform_to_dat(fform, ret.xdict, 1000)
-        easy_plot([dat, fit_dat], [{'linestyle':' ', 'markerfacecolor':'none', 'color':'blue', 'marker':'o'}, {'linestyle':'-', 'color':'blue'}], ['PP', 'PS', 'SP', 'SS'], show_plot=True, filename=None, show_legend=False)
+        if MANUAL:
+            easy_plot([dat, fit_dat], [{'linestyle':' ', 'markerfacecolor':'none', 'color':'blue', 'marker':'o'}, {'linestyle':'-', 'color':'blue'}], ['PP', 'PS', 'SP', 'SS'], show_plot=True, filename=None, show_legend=False)

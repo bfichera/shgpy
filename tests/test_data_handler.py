@@ -7,7 +7,9 @@ import random
 import shgpy.shg_symbols as S
 from shgpy.plotter import easy_plot
 
-logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
+
+MANUAL = False
 
 
 class TestData(unittest.TestCase):
@@ -96,9 +98,49 @@ class TestFormAndfForm(unittest.TestCase):
     fform.apply_phase_shift(S.psi)
 
     def test_fform_to_form(self):
-        logging.debug(shgpy.fform_to_form(self.fform).get_items())
+        _logger.debug(shgpy.fform_to_form(self.fform).get_items())
 
     def test_form_to_dat(self):
         form = shgpy.fform_to_form(self.fform)
         dat = shgpy.form_to_dat(form, {k:random.uniform(-1, 1) for k in form.get_free_symbols() if k != S.phi}, 1000)
-        easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys())
+        if MANUAL:
+            easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys())
+
+
+class TestConversions(unittest.TestCase):
+
+    def random_subs_dict(keys):
+        ans = {}
+        for k in keys:
+            ans[k] = random.uniform(-1, 1)
+        return ans
+
+    def test_convert(self):
+
+        fform_filename = 'tests/fform/T_d-S_2-S_2(110).p'
+        fform = shgpy.load_fform(fform_filename)
+        data_filenames_dict = {
+            'PP':'Data/dataPP.csv',
+            'PS':'Data/dataPS.csv',
+            'SP':'Data/dataSP.csv',
+            'SS':'Data/dataSS.csv',
+        }
+        dat, fdat = shgpy.load_data_and_fourier_transform(data_filenames_dict, 'degrees')
+        form = shgpy.fform_to_form(fform)
+
+        t1 = shgpy.dat_to_fdat(dat)
+        self.assertIsInstance(t1, type(fdat))
+        t2 = shgpy.fdat_to_dat(fdat, 1000)
+        self.assertIsInstance(t2, type(dat))
+        t3 = shgpy.form_to_dat(form, self.random_subs_dict(fform.get_free_symbols()))
+        self.assertIsInstance(t3, type(dat))
+        t4 = shgpy.form_to_fform(form)
+        self.assertIsInstance(t4, type(fform))
+        t5 = shgpy.form_to_fdat(form, self.random_subs_dict(fform.get_free_symbols()))
+        self.assertIsInstance(t5, type(fdat))
+        t6 = shgpy.fform_to_fdat(fform, self.random_subs_dict(fform.get_free_symbols()))
+        self.assertIsInstance(t6, type(fdat))
+        t7 = shgpy.fform_to_dat(fform, self.random_subs_dict(fform.get_free_symbols()), 1000)
+        self.assertIsInstance(t7, type(dat))
+        t8 = shgpy.fform_to_form(fform)
+        self.assertIsInstance(t8, type(form))

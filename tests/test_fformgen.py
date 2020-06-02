@@ -9,7 +9,9 @@ import logging
 import random
 from shgpy.plotter import easy_plot
 
-logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
+
+MANUAL = False
 
 
 class TestfFormGen(unittest.TestCase):
@@ -28,4 +30,5 @@ class TestfFormGen(unittest.TestCase):
         fform.apply_phase_shift(S.psi)
         form = shgpy.fform_to_form(fform)
         dat = shgpy.form_to_dat(form, {k:random.uniform(-1, 1) for k in form.get_free_symbols() if k != S.phi}, 1000)
-        easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys())
+        if MANUAL:
+            easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys())
