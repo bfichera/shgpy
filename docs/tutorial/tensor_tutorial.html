@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tensor tutorial &#8212; ShgPy 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fitting tutorial" href="fitting_tutorial.html" />
+    <link rel="prev" title="Data access tutorial" href="data_access_tutorial.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ShgPy</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A collection of Python utilities for SHG data analysis</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_access_tutorial.html">Data access tutorial</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tensor tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting_tutorial.html">Fitting tutorial</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="data_access_tutorial.html" title="previous chapter">Data access tutorial</a></li>
+      <li>Next: <a href="fitting_tutorial.html" title="next chapter">Fitting tutorial</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="tensor-tutorial">
+<h1>Tensor tutorial<a class="headerlink" href="#tensor-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>Before going through this tutorial, make sure you’ve <a class="reference internal" href="../index.html"><span class="doc">installed shgpy</span></a> and read through <a class="reference internal" href="data_access_tutorial.html"><span class="doc">the last tutorial</span></a>.</p>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>RA-SHG is a technique which is designed to measure a particular set of numbers which we collectively call the “susceptibility tensor.” This tutorial will go through the basics of how tensors are implemented in ShgPy, so that in the next tutorial we’ll know how to generate fitting formulas depending on the tensor that we want to fit to.</p>
+</div>
+<div class="section" id="tensor-definitions">
+<h2>Tensor definitions<a class="headerlink" href="#tensor-definitions" title="Permalink to this headline">¶</a></h2>
+<p>Depending on the point group of the material that we’re trying to study, the susceptibility tensor will take on a variety of different forms. For example, if the material has inversion symmetry, then the susceptibility tensor will be identically zero – if, instead, it has threefold rotational symmetry, it might take on a form like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chi</span> <span class="o">=</span> <span class="p">[[[</span> <span class="n">xxx</span><span class="p">,</span> <span class="o">-</span><span class="n">yyy</span><span class="p">,</span>  <span class="n">yyz</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="n">yyy</span><span class="p">,</span> <span class="o">-</span><span class="n">xxx</span><span class="p">,</span> <span class="o">-</span><span class="n">yxz</span><span class="p">],</span>
+        <span class="p">[</span> <span class="n">yzy</span><span class="p">,</span> <span class="o">-</span><span class="n">yzx</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">]],</span>
+
+       <span class="p">[[</span><span class="o">-</span><span class="n">yyy</span><span class="p">,</span> <span class="o">-</span><span class="n">xxx</span><span class="p">,</span>  <span class="n">yxz</span><span class="p">],</span>
+        <span class="p">[</span><span class="o">-</span><span class="n">xxx</span><span class="p">,</span>  <span class="n">yyy</span><span class="p">,</span>  <span class="n">yyz</span><span class="p">],</span>
+        <span class="p">[</span> <span class="n">yzx</span><span class="p">,</span>  <span class="n">yzy</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">]],</span>
+
+       <span class="p">[[</span><span class="n">zyy</span><span class="p">,</span>  <span class="o">-</span><span class="n">zyx</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">],</span>
+        <span class="p">[</span><span class="n">zyx</span><span class="p">,</span>   <span class="n">zyy</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">0</span> <span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>   <span class="n">zzz</span><span class="p">]]]</span>
+</pre></div>
+</div>
+<p>In ShgPy, all of these definitions (e.g. for each of the 32 crystallographic point groups) are defined in <a class="reference internal" href="../api/shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.tensor_definitions</span></code></a>. <a class="reference internal" href="../api/shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.tensor_definitions</span></code></a> defines three dictionaries: <cite>dipole</cite>, <cite>surface</cite>, and <cite>quadrupole</cite>. Let’s look at what these dictionaries contain.</p>
+<p>First, let’s import the dictionary <cite>dipole</cite>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.tensor_definitions</span> <span class="kn">import</span> <span class="n">dipole</span>
+</pre></div>
+</div>
+<p>and look at its keys:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dipole</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">dict_keys([&#39;S_2&#39;, &#39;C_2h&#39;, &#39;D_2h&#39;, &#39;C_4h&#39;, &#39;D_4h&#39;, &#39;T_h&#39;, &#39;O_h&#39;, &#39;S_6&#39;, &#39;D_3d&#39;, &#39;C_6h&#39;, &#39;D_6h&#39;, &#39;C_2&#39;, &#39;C_1h&#39;, &#39;D_2&#39;, &#39;C_2v&#39;, &#39;C_4&#39;, &#39;S_4&#39;, &#39;D_4&#39;, &#39;C_4v&#39;, &#39;D_2d&#39;, &#39;O&#39;, &#39;T_d&#39;, &#39;T&#39;, &#39;D_3&#39;, &#39;C_3&#39;, &#39;C_3v&#39;, &#39;C_6&#39;, &#39;C_3h&#39;, &#39;D_6&#39;, &#39;C_6v&#39;, &#39;D_3h&#39;, &#39;C_1&#39;])</span>
+</pre></div>
+</div>
+<p>so the <cite>dipole</cite> dictionary contains one entry for each of the 32 crystallographic point groups. If we look at, e.g., <code class="docutils literal notranslate"><span class="pre">dipole['S_2']</span></code>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;S_2&#39;</span><span class="p">]</span>
+<span class="go">array([[[0, 0, 0],</span>
+<span class="go">        [0, 0, 0],</span>
+<span class="go">        [0, 0, 0]],</span>
+</pre></div>
+</div>
+<blockquote>
+<div><dl class="simple">
+<dt>[[0, 0, 0],</dt><dd><p>[0, 0, 0],
+[0, 0, 0]],</p>
+</dd>
+<dt>[[0, 0, 0],</dt><dd><p>[0, 0, 0],
+[0, 0, 0]]], dtype=object)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>we see that it is a <cite>numpy.ndarray</cite> with zero for all entries. This makes sense because the point group <cite>S_2</cite> contains inversion symmetry. Let’s look at a more exciting point group:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;C_3v&#39;</span><span class="p">]</span>
+<span class="go">array([[[0, xyx, yyz],</span>
+<span class="go">        [xyx, 0, 0],</span>
+<span class="go">        [yzy, 0, 0]],</span>
+<span class="go">       [[xyx, 0, 0],</span>
+<span class="go">        [0, -xyx, yyz],</span>
+<span class="go">        [0, yzy, 0]],</span>
+<span class="go">       [[zyy, 0, 0],</span>
+<span class="go">        [0, zyy, 0],</span>
+<span class="go">        [0, 0, zzz]]], dtype=object)</span>
+</pre></div>
+</div>
+<p>Let’s pause to discuss two things here. For one, we see that the <cite>dtype</cite> of dipole values is <cite>object</cite>. This is simply because the entries of each <cite>dipole</cite> tensor are actually <cite>sympy.Expr</cite> objects. Second, notice that <cite>dipole[‘C_3v’]</cite> has <cite>yyz</cite> and <cite>yzy</cite> as independent elements. However, we know that these should in fact be the same, as the SHG response function <code class="docutils literal notranslate"><span class="pre">P_i</span> <span class="pre">=</span> <span class="pre">chi_ijk</span> <span class="pre">E_j</span> <span class="pre">E_k</span></code> is symmetric in <code class="docutils literal notranslate"><span class="pre">j</span> <span class="pre">&lt;-&gt;</span> <span class="pre">k</span></code>, we should have <code class="docutils literal notranslate"><span class="pre">chi_ijk</span> <span class="pre">=</span> <span class="pre">chi_ikj</span></code>. This type of simplification is not implemented in <a class="reference internal" href="../api/shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.tensor_definitions</span></code></a>, because certain use cases actually require this symmetry not be implemented. But we can just do it manually, using <a class="reference internal" href="../api/shgpy.core.utilities.html#shgpy.core.utilities.particularize" title="shgpy.core.utilities.particularize"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.utilities.particularize()</span></code></a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy</span> <span class="kn">import</span> <span class="n">particularize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">particularize</span><span class="p">(</span><span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;C_3v&#39;</span><span class="p">])</span>
+<span class="go">array([[[0, xyx, yzy],</span>
+<span class="go">        [xyx, 0, 0],</span>
+<span class="go">        [yzy, 0, 0]],</span>
+<span class="go">       [[xyx, 0, 0],</span>
+<span class="go">        [0, -xyx, yzy],</span>
+<span class="go">        [0, yzy, 0]],</span>
+<span class="go">       [[zyy, 0, 0],</span>
+<span class="go">        [0, zyy, 0],</span>
+<span class="go">        [0, 0, zzz]]], dtype=object)</span>
+</pre></div>
+</div>
+<p>In addition to <cite>dipole</cite>, there are two other dictionaries defined in <a class="reference internal" href="../api/shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.tensor_definitions</span></code></a>: <cite>surface</cite> and <cite>quadrupole</cite>. <cite>surface</cite> is an exact duplicate of <cite>dipole</cite> except with an <code class="docutils literal notranslate"><span class="pre">'s'</span></code> prepended to every parameter; e.g.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.tensor_definitions</span> <span class="kn">import</span> <span class="n">surface</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">surface</span><span class="p">[</span><span class="s1">&#39;C_3v&#39;</span><span class="p">]</span>
+<span class="go">array([[[0, sxyx, syyz],</span>
+<span class="go">        [sxyx, 0, 0],</span>
+<span class="go">        [syzy, 0, 0]],</span>
+<span class="go">       [[sxyx, 0, 0],</span>
+<span class="go">        [0, -sxyx, syyz],</span>
+<span class="go">        [0, syzy, 0]],</span>
+<span class="go">       [[szyy, 0, 0],</span>
+<span class="go">        [0, szyy, 0],</span>
+<span class="go">        [0, 0, szzz]]], dtype=object)</span>
+</pre></div>
+</div>
+<p>The reason that <cite>surface</cite> exists is because sometimes you want to be able to fit a particular dataset to e.g.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_tensor</span> <span class="o">=</span> <span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;C_3v&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">surface</span><span class="p">[</span><span class="s1">&#39;C_3&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>and this is a convenient way of doing that. But by all accounts <cite>dipole</cite> is much more frequently used.</p>
+<p>The last tensor type we haven’t talked about, <cite>quadrupole</cite>, is the same idea except we’re talking about quadrupole SHG so the tensor is actually rank 4. Go ahead and load a quadrupole tensor into your python session to get a feel for how it looks.</p>
+<p>By the way, there is an ambiguity involving the direction of relevant high-symmetry axes in a given point group compared to the <cite>x</cite>, <cite>y</cite>, and <cite>z</cite> axes implicitly defined here. Except where otherwise noted, the convention in these definitions is to follow that of Boyd’s textbook, “Nonlinear Optics.” The user is encouraged to consult this textbook for further information (author’s note: if there’s need, I would be happy to make these definitions more explicit in the documentation, I just haven’t had time. See <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>).</p>
+<p>When in doubt, you can always test that the tensor you’re using has the right symmetries by using <a class="reference internal" href="../api/shgpy.core.utilities.html#shgpy.core.utilities.transform" title="shgpy.core.utilities.transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.utilities.transform()</span></code></a> (see the next section for more details).</p>
+</div>
+<div class="section" id="manipulating-tensors">
+<h2>Manipulating tensors<a class="headerlink" href="#manipulating-tensors" title="Permalink to this headline">¶</a></h2>
+<p>So far we’ve learned how to load predefined tensors into ShgPy. But sometimes we want to use a tensor not exactly how it’s written in <a class="reference internal" href="../api/shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.tensor_definitions</span></code></a>, but perhaps rotated by 90 degrees or inverted. In this section, we explore the basic means provided in ShgPy for doing just that.</p>
+<p>The most relevant function for transforming SHG tensors is <a class="reference internal" href="../api/shgpy.core.utilities.html#shgpy.core.utilities.transform" title="shgpy.core.utilities.transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.utilities.transform()</span></code></a>. Let’s see how this function works.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy</span> <span class="kn">import</span> <span class="n">transform</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;C_3v&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<span class="go">array([[[0, -xyx, -yyz],</span>
+<span class="go">        [-xyx, 0, 0],</span>
+<span class="go">        [-yzy, 0, 0]],</span>
+<span class="go">       [[-xyx, 0, 0],</span>
+<span class="go">        [0, xyx, -yyz],</span>
+<span class="go">        [0, -yzy, 0]],</span>
+<span class="go">       [[-zyy, 0, 0],</span>
+<span class="go">        [0, -zyy, 0],</span>
+<span class="go">        [0, 0, -zzz]]], dtype=object)</span>
+</pre></div>
+</div>
+<p>As expected. As another example, let’s transform our tensor by 3-fold rotation about the z-axis:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sympy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">rotation_matrix3symb</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="mi">2</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+<span class="go">array([[[0, xyx, yyz],</span>
+<span class="go">        [xyx, 0, 0],</span>
+<span class="go">        [yzy, 0, 0]],</span>
+<span class="go">       [[xyx, 0, 0],</span>
+<span class="go">        [0, -xyx, yyz],</span>
+<span class="go">        [0, yzy, 0]],</span>
+<span class="go">       [[zyy, 0, 0],</span>
+<span class="go">        [0, zyy, 0],</span>
+<span class="go">        [0, 0, zzz]]], dtype=object)</span>
+</pre></div>
+</div>
+<p>That’s good, our tensor is actually invariant under 3-fold rotation as advertised.</p>
+<p>This ends our tutorial on tensors in ShgPy, but feel free to peruse through the relevant <a class="reference internal" href="../modules.html"><span class="doc">documentation</span></a> for more info before moving on to the <a class="reference internal" href="fitting_tutorial.html"><span class="doc">next tutorial</span></a></p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Bryan Fichera.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/tutorial/tensor_tutorial.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

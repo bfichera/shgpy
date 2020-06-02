@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>shgpy.formgen module &#8212; ShgPy 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="shgpy.plotter module" href="shgpy.plotter.html" />
+    <link rel="prev" title="shgpy.fformgen module" href="shgpy.fformgen.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ShgPy</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A collection of Python utilities for SHG data analysis</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorials.html">Tutorials</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="shgpy.core.data_handler.html">shgpy.core.data_handler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.core.utilities.html">shgpy.core.utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.fformfit.html">shgpy.fformfit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.fformgen.html">shgpy.fformgen module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shgpy.formgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.plotter.html">shgpy.plotter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.shg_symbols.html">shgpy.shg_symbols module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.tensor_definitions.html">shgpy.tensor_definitions module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../modules.html">API</a><ul>
+      <li>Previous: <a href="shgpy.fformgen.html" title="previous chapter">shgpy.fformgen module</a></li>
+      <li>Next: <a href="shgpy.plotter.html" title="next chapter">shgpy.plotter module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-shgpy.formgen">
+<span id="shgpy-formgen-module"></span><h1>shgpy.formgen module<a class="headerlink" href="#module-shgpy.formgen" title="Permalink to this headline">¶</a></h1>
+<p>Module for (non-Fourier) formula derivation</p>
+<p>This module provides a number of routines for calculating the SHG 
+response of a given material (encoded by its susceptbility tensor,
+see <a class="reference internal" href="shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor_definitions</span></code></a> ). These routines are much
+more straightforward than those found in <a class="reference internal" href="shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-class docutils literal notranslate"><span class="pre">fformgen</span></code></a>,
+but are only suited for the most simple problems because the
+conversion from formulas to Fourier formulas (which is all but
+necessary for efficient fitting functionality) is typically quite
+slow.</p>
+<dl class="py function">
+<dt id="shgpy.formgen.formgen_dipole_quadrupole_complex">
+<code class="sig-prename descclassname">shgpy.formgen.</code><code class="sig-name descname">formgen_dipole_quadrupole_complex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t1</span></em>, <em class="sig-param"><span class="n">t2</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.formgen.formgen_dipole_quadrupole_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate formula assuming dipole+quadrupole SHG with complex coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>t1</strong><span class="classifier">ndarray of sympy.Expr</span></dt><dd><p>SHG dipole susceptibility tensor; see <a class="reference internal" href="shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor_definitions</span></code></a>.</p>
+</dd>
+<dt><strong>t2</strong><span class="classifier">ndarray of sympy.Expr</span></dt><dd><p>SHG quadrupole susceptibility tensor; see <a class="reference internal" href="shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor_definitions</span></code></a>.</p>
+</dd>
+<dt><strong>theta</strong><span class="classifier">float or sympy.Symbol</span></dt><dd><p>Angle of incidence</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>fform</strong><span class="classifier">FormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FormContainer</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>See note in <a class="reference internal" href="#shgpy.formgen.formgen_just_dipole_complex" title="shgpy.formgen.formgen_just_dipole_complex"><code class="xref py py-func docutils literal notranslate"><span class="pre">formgen_just_dipole_complex()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.formgen.formgen_dipole_quadrupole_real">
+<code class="sig-prename descclassname">shgpy.formgen.</code><code class="sig-name descname">formgen_dipole_quadrupole_real</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t1</span></em>, <em class="sig-param"><span class="n">t2</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.formgen.formgen_dipole_quadrupole_real" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate formula assuming dipole+quadrupole SHG with real coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>t1</strong><span class="classifier">ndarray of sympy.Expr</span></dt><dd><p>SHG dipole susceptibility tensor; see <a class="reference internal" href="shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor_definitions</span></code></a>.</p>
+</dd>
+<dt><strong>t2</strong><span class="classifier">ndarray of sympy.Expr</span></dt><dd><p>SHG quadrupole susceptibility tensor; see <a class="reference internal" href="shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor_definitions</span></code></a>.</p>
+</dd>
+<dt><strong>theta</strong><span class="classifier">float or sympy.Symbol</span></dt><dd><p>Angle of incidence</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>fform</strong><span class="classifier">FormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FormContainer</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>See note in <a class="reference internal" href="#shgpy.formgen.formgen_just_dipole_real" title="shgpy.formgen.formgen_just_dipole_real"><code class="xref py py-func docutils literal notranslate"><span class="pre">formgen_just_dipole_real()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.formgen.formgen_just_dipole_complex">
+<code class="sig-prename descclassname">shgpy.formgen.</code><code class="sig-name descname">formgen_just_dipole_complex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t1</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.formgen.formgen_just_dipole_complex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate formula assuming dipole SHG with complex coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>t1</strong><span class="classifier">ndarray of sympy.Expr</span></dt><dd><p>SHG susceptibility tensor; see <a class="reference internal" href="shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor_definitions</span></code></a>.</p>
+</dd>
+<dt><strong>theta</strong><span class="classifier">float or sympy.Symbol</span></dt><dd><p>Angle of incidence</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>fform</strong><span class="classifier">FormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FormContainer</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routine differs from <a class="reference internal" href="#shgpy.formgen.formgen_just_dipole_real" title="shgpy.formgen.formgen_just_dipole_real"><code class="xref py py-func docutils literal notranslate"><span class="pre">formgen_just_dipole_real()</span></code></a> 
+only in the sense that the computed intensity function is computed by
+computing the modulus-squared (rather than <code class="docutils literal notranslate"><span class="pre">**2</span></code>) of the polarization.
+For this reason, it is usually suggested to explicitly substitute 
+<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">-&gt;</span> <span class="pre">real_x+1j*imag_x</span></code> for each <cite>x</cite> in <cite>t1</cite>. See <a class="reference internal" href="shgpy.core.utilities.html#shgpy.core.utilities.make_tensor_complex" title="shgpy.core.utilities.make_tensor_complex"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_tensor_complex()</span></code></a>
+and the tutorial.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.formgen.formgen_just_dipole_real">
+<code class="sig-prename descclassname">shgpy.formgen.</code><code class="sig-name descname">formgen_just_dipole_real</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t1</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.formgen.formgen_just_dipole_real" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate formula assuming dipole SHG with real coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>t1</strong><span class="classifier">ndarray of sympy.Expr</span></dt><dd><p>SHG susceptibility tensor; see <a class="reference internal" href="shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensor_definitions</span></code></a>.</p>
+</dd>
+<dt><strong>theta</strong><span class="classifier">float or sympy.Symbol</span></dt><dd><p>Angle of incidence</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>fform</strong><span class="classifier">FormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FormContainer</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This routine differs from <a class="reference internal" href="#shgpy.formgen.formgen_just_dipole_complex" title="shgpy.formgen.formgen_just_dipole_complex"><code class="xref py py-func docutils literal notranslate"><span class="pre">formgen_just_dipole_complex()</span></code></a> 
+only in the sense that the computed intensity function is computed by
+computing <code class="docutils literal notranslate"><span class="pre">**2</span></code> (rather than the modulus squared) of the polarization.
+This is usually easier as long as you’re not worrying about the imaginary
+component of the susceptibility (valid away from resonance in the presence
+of time-reversal symmetry).</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Bryan Fichera.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/shgpy.formgen.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

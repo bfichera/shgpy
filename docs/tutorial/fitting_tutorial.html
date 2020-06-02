@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Fitting tutorial &#8212; ShgPy 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API" href="../modules.html" />
+    <link rel="prev" title="Tensor tutorial" href="tensor_tutorial.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ShgPy</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A collection of Python utilities for SHG data analysis</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_access_tutorial.html">Data access tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tensor_tutorial.html">Tensor tutorial</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fitting tutorial</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="tensor_tutorial.html" title="previous chapter">Tensor tutorial</a></li>
+      <li>Next: <a href="../modules.html" title="next chapter">API</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="fitting-tutorial">
+<h1>Fitting tutorial<a class="headerlink" href="#fitting-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>Before going through this tutorial, make sure you’ve <a class="reference internal" href="../index.html"><span class="doc">installed shgpy</span></a> and read through <a class="reference internal" href="tensor_tutorial.html"><span class="doc">the last tutorial</span></a>.</p>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In <a class="reference internal" href="data_access_tutorial.html"><span class="doc">the first tutorial</span></a>, we learned how to load RA-SHG data into ShgPy using <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data" title="shgpy.core.data_handler.load_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data()</span></code></a> and the <cite>shgpy.core.data_handler.DataContainer</cite> class. In <a class="reference internal" href="tensor_tutorial.html"><span class="doc">the last tutorial</span></a>, we learned about how tensors for different point groups were defined in ShgPy and how to manipulate them. Now, we’re going to put these concepts together and learn how to fit RA-SHG data.</p>
+</div>
+<div class="section" id="fourier-formula-generation">
+<h2>Fourier formula generation<a class="headerlink" href="#fourier-formula-generation" title="Permalink to this headline">¶</a></h2>
+<p>As alluded to previously, the central idea behind fitting in ShgPy is to fit in Fourier space. This provides a drastic simplification to the cost function. However, the problem is that computing a Fourier transform symbolically is difficult, and we have resort to some tricks to compute it efficiently (or at least, ahead of time).</p>
+<p>What do I mean by the last part? To begin, let’s think about what the function is that we’re trying to compute. Ultimately, we want to compute an intensity as a function of the azimuthal angle <cite>phi</cite> in the experiment. This is given by the square of the nonlinear polarization, i.e.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span> <span class="o">=</span> <span class="o">|</span><span class="n">P_i</span><span class="o">|**</span><span class="mi">2</span> <span class="o">=</span> <span class="o">|</span><span class="n">chi_ijk</span> <span class="n">E_j</span> <span class="n">E_k</span><span class="o">|**</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>What part of this formula depends on <cite>phi</cite>? In the experiment, the electric field changes as a function of <cite>phi</cite> like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">E_i</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">=</span> <span class="n">R_ij</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="n">E_j</span>
+</pre></div>
+</div>
+<p>And that’s it – no other part of the formula depends on <cite>phi</cite> (note: it’s actually more complicated than this; in code we not only consider an additional quadrupole contribution, but also the fact that the component of the SHG signal along the direction of propogation is not measurable. However, these considerations do not affect the basic argument here; feel free to look through the source code of <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms" title="shgpy.fformgen.generate_uncontracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms()</span></code></a> for more information).</p>
+<p>In particular, the susceptibility tensor , which is the only part of the formula that will change from problem to problem, does not natively depend on <cite>phi</cite>. Therefore, to compute the Fourier transform of the intensity, we can compute the Fourier transform of everything not involving the susceptibility, and then do a (conceptually complicated, but not numerically difficult) contraction by <cite>chi_ijk</cite>. In ShgPy, we perform this two-step process by</p>
+<ol class="arabic simple">
+<li><p>Running <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms" title="shgpy.fformgen.generate_uncontracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms()</span></code></a></p></li>
+<li><p>Running <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms" title="shgpy.fformgen.generate_uncontracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms()</span></code></a></p></li>
+</ol>
+<p>Most importantly, since step 1 involves every part of the formula which doesn’t depend on <cite>chi</cite>, it only needs to be run once. The result can then be cached and used every time you want to calculate a new Fourier formula (e.g. because you want to fit a new tensor). Step 2 is more specific, but only has to be run once for each tensor you want to try to fit. The result can then be saved and used later, having saved a lot of computation time.</p>
+<p>That all was pretty conceptual, but luckily, none of the details are really important in order to <em>use</em> ShgPy (note: if there’s interest, I would be happy to expand more on this point; see <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>). For now, let’s just see how it all works in practice.</p>
+<p>Remember that the goal is to generate a formula for the SHG intensity as a function of <cite>phi</cite> (or, since we’re working in Fourier space, a Fourier formula for the SHG intensity as a function of the Fourier frequency <cite>n</cite>). We proceed according to steps 1 and 2 above.</p>
+<p>To perform step 1, let’s follow shgpy/examples/generate_uft_example.py. We start by importing the logging module, which provides a flexible event-logging system and is widely implemented in ShgPy.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">logging</span>
+</pre></div>
+</div>
+<p>We’ll also need the <code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core</span></code> modules and <a class="reference internal" href="../api/shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformgen</span></code></a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shgpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shgpy.fformgen</span>
+</pre></div>
+</div>
+<p>Let’s configure the logger:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mylogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(Note that while useful, the logging implementation is purely optional; it just let’s us look into some of the debugging messages produced by the functions in <a class="reference internal" href="../api/shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen()</span></code></a>).</p>
+<p>Although the angle of incidence can be left as a free variable in the Fourier formula generation (see <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms_symb" title="shgpy.fformgen.generate_uncontracted_fourier_transforms_symb"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms_symb()</span></code></a>), it is a useless complication unless truly needed. So let’s hardcode it:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AOI</span> <span class="o">=</span> <span class="mf">0.1745</span>  <span class="c1"># 10 degrees, in radians</span>
+</pre></div>
+</div>
+<p>For your implementation, you may want to use a different angle of incidence.</p>
+<p>Now we’re ready to generated the uncontracted Fourier transforms. Simply run</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shgpy</span><span class="o">.</span><span class="n">fformgen</span><span class="o">.</span><span class="n">generate_uncontracted_fourier_transforms</span><span class="p">(</span><span class="n">AOI</span><span class="p">,</span> <span class="s1">&#39;uft_filename_prefix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This calculation takes about five minutes on my machine. Note here that ‘uft_filename_prefix’ is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory <cite>uft</cite> and save the answers at <cite>uft/uft10deg</cite>. That means that <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms`()</span></code> will save four files: <cite>uft/uft10deg_pp</cite>, <cite>uft/uft10deg_ps</cite>, <cite>uft/uft10deg_sp</cite>, and <cite>uft/uft10deg_ss</cite>, each of which corresponds to a particular uncontracted Fourier transform.</p>
+<p>Note that in the typical use case, the above should be the only time you have to run <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms`()</span></code>. The answers saved at <code class="docutils literal notranslate"><span class="pre">'uft_filename_prefix'+...</span></code> can be used for essentially any SHG fitting problem that you might encounter.</p>
+<p>Now let us turn to our specific use case. As an example, imagine that we are trying to fit the GaAs data available in <cite>shgpy/examples/Data</cite> to the tensor <code class="docutils literal notranslate"><span class="pre">shgpy.tensor_definitions.dipole['T_d']</span></code> oriented along the (110) direction. First, we define the fitting tensor</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.tensor_definitions</span> <span class="kn">import</span> <span class="n">dipole</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t_dipole</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">particularize</span><span class="p">(</span><span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;T_d&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">rotation_matrix_from_two_vectors</span><span class="p">(</span>
+<span class="go">    np.array([1, 1, 0]),</span>
+<span class="go">    np.array([0, 0, 1]),</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t_dipole</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">t_dipole</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We’re not going to add any quadrupole contribution, so we can set the quadrupole tensor to zero:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sympy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t_quad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dype</span><span class="o">=</span><span class="n">sympy</span><span class="o">.</span><span class="n">Expr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Lastly, we’ll define the place that we want to save the Fourier formula</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">save_filename</span> <span class="o">=</span> <span class="s1">&#39;T_d-None-None(110)-particularized.p&#39;</span>
+</pre></div>
+</div>
+<p>(Note: this is the typical filename convention for Fourier formulas. It denotes the dipole, surface, and quadrupole tensors used, the orientation, and the fact that the tensor was particularized.)</p>
+<p>Finally, we run</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shgpy</span><span class="o">.</span><span class="n">fformgen</span><span class="o">.</span><span class="n">generate_contracted_fourier_transforms</span><span class="p">(</span><span class="n">save_filename</span><span class="p">,</span> <span class="s1">&#39;uft/uft10deg&#39;</span><span class="p">,</span> <span class="n">t_dipole</span><span class="p">,</span> <span class="n">t_quad</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On my machine, this takes about five to ten minutes, depending on the complexity of the susceptibility tensors. When it completes, the function will save a pickled Fourier formula object to the location specified by <cite>save_filename</cite>.</p>
+<p>This is by far the most difficult step (both conceptually and computationally) in ShgPy, but it is easily worth it. By spending 10-15 minutes of computation time now, we have dramatically simplified the routines that we are about to run in the next section of this tutorial.</p>
+</div>
+<div class="section" id="the-final-step-fitting-your-first-ra-shg-data">
+<h2>The final step: fitting your first RA-SHG data<a class="headerlink" href="#the-final-step-fitting-your-first-ra-shg-data" title="Permalink to this headline">¶</a></h2>
+<p>All that’s left now is to load the Fourier formula just generated (at <code class="docutils literal notranslate"><span class="pre">'T_d-None-None(110)-particularized.p'</span></code>) into ShgPy, load the data that we want to fit, and then fun one of the functions in <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a>.</p>
+<p>Before we begin, let’s recall from <a class="reference internal" href="data_access_tutorial.html"><span class="doc">the first tutorial</span></a> how we loaded RA-SHG data into ShgPy. In that tutorial, we loaded the data into an instance of the special class <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a>, and noted that other datatypes would be loaded into similar objects when it came to actually doing the fitting.</p>
+<p>Let’s review these other datatypes now. First, we consider the class <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer" title="shgpy.core.data_handler.fDataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fDataContainer</span></code></a>, which, in brief, simply contains the Fourier transform of the sort of data which would go into a <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a> instance. Like <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a>, it also includes methods for scaling and phase-shifting the data contained in it.</p>
+<p>To create an instance of <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer" title="shgpy.core.data_handler.fDataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fDataContainer</span></code></a>, one can load a dataset into a <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a> instance and then convert it using <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.dat_to_fdat" title="shgpy.core.data_handler.dat_to_fdat"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.dat_to_fdat()</span></code></a>, or use the function <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data_and_fourier_transform" title="shgpy.core.data_handler.load_data_and_fourier_transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data_and_fourier_transform()</span></code></a>, which does both at the same time:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data_filenames_dict</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">    &#39;PP&#39;:&#39;Data/dataPP.csv&#39;,</span>
+<span class="go">    &#39;PS&#39;:&#39;Data/dataPS.csv&#39;,</span>
+<span class="go">    &#39;SP&#39;:&#39;Data/dataSP.csv&#39;,</span>
+<span class="go">    &#39;SS&#39;:&#39;Data/dataSS.csv&#39;,</span>
+<span class="go">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dat</span><span class="p">,</span> <span class="n">fdat</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">load_data_and_fourier_transform</span><span class="p">(</span><span class="n">data_filenames_dict</span><span class="p">,</span> <span class="s1">&#39;degrees&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Ultimately, it is the data contained in an <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer" title="shgpy.core.data_handler.fDataContainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fDataContainer()</span></code></a> object that we are going to want to fit to.</p>
+<p>The fitting formula, on the other other hand, is stored in a related object called <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fFormContainer</span></code></a>. To create an instance of <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fFormContainer</span></code></a>, simply load the Fourier formula we just created</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fform_filename</span> <span class="o">=</span> <span class="s1">&#39;T_d-None-None(110)-particularized.p&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fform</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">load_fform</span><span class="p">(</span><span class="n">fform_filename</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This would be a good time to read the documentation provided in <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a> to familiarize oneself with these functions. (You will find that there is a fourth object, <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.FormContainer</span></code></a>, which is designed to contain <cite>phi</cite>-space formulas; see also <a class="reference internal" href="../api/shgpy.formgen.html#module-shgpy.formgen" title="shgpy.formgen"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.formgen</span></code></a> and the documentation therein for more details.)</p>
+<p>There is one more fitting parameter which is not captured by <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_contracted_fourier_transforms()</span></code></a>, which is the relative phase shift between the data and the fitting formula. So let’s phase shift the formula by an arbitrary angle.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.shg_symbols</span> <span class="kn">import</span> <span class="n">psi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fform</span><span class="o">.</span><span class="n">apply_phase_shift</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The fitting routines require an initial guess; let’s just guess 1 for each parameter:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">guess_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">fs</span> <span class="ow">in</span> <span class="n">fform</span><span class="o">.</span><span class="n">get_free_symbols</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">guess_dict</span><span class="p">[</span><span class="n">fs</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>And now we’re finally ready to run the fitting:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.fformfit</span> <span class="kn">import</span> <span class="n">least_squares_fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ret</span> <span class="o">=</span> <span class="n">least_squares_fit</span><span class="p">(</span><span class="n">fform</span><span class="p">,</span> <span class="n">fdat</span><span class="p">,</span> <span class="n">guess_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, <cite>ret</cite> is an instance of the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult">scipy.optimize.OptimizeResult</a> class, see the documentation in that link for more information. The most important attribute of <cite>ret</cite> for us is the answer:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ret</span><span class="o">.</span><span class="n">xdict</span>
+<span class="go">{psi: 1.5914701873213561, zyx: 1.2314580678986173}</span>
+</pre></div>
+</div>
+<p>In addition to <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.least_squares_fit" title="shgpy.fformfit.least_squares_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.least_squares_fit()</span></code></a>, there are a couple of other routines available for fitting RA-SHG data. The most useful one for most problems is actually <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.basinhopping_fit" title="shgpy.fformfit.basinhopping_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.basinhopping_fit()</span></code></a> (and its cousins, see the <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> reference), which is based on the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html#scipy.optimize.basinhopping">scipy.optimize.basinhopping</a> function provided by SciPy. It is specifically designed to treat problems with many local minima and degrees of freedom. In the future, further fitting routines will be added, if there is interest (see <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>).</p>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>This concludes the ShgPy tutorials. For more information, I recommend looking through the <a class="reference internal" href="../modules.html"><span class="doc">API</span></a>; there are a lot of important functions there which we haven’t covered here but may be useful for your application. And, as always, if you have questions please feel free to <a class="reference internal" href="../contact.html"><span class="doc">contact me</span></a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Bryan Fichera.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/tutorial/fitting_tutorial.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
