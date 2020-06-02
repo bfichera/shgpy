@@ -120,10 +120,10 @@ class TestConversions(unittest.TestCase):
         fform_filename = 'tests/fform/T_d-S_2-S_2(110).p'
         fform = shgpy.load_fform(fform_filename)
         data_filenames_dict = {
-            'PP':'Data/dataPP.csv',
-            'PS':'Data/dataPS.csv',
-            'SP':'Data/dataSP.csv',
-            'SS':'Data/dataSS.csv',
+            'PP':'tests/Data/dataPP.csv',
+            'PS':'tests/Data/dataPS.csv',
+            'SP':'tests/Data/dataSP.csv',
+            'SS':'tests/Data/dataSS.csv',
         }
         dat, fdat = shgpy.load_data_and_fourier_transform(data_filenames_dict, 'degrees')
         form = shgpy.fform_to_form(fform)
