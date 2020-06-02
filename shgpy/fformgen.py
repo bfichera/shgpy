@@ -230,32 +230,32 @@ def generate_uncontracted_fourier_transforms(aoi, uncontracted_filename_prefix, 
     h7_arr_term4 = []
     for r1 in [r1_p, r1_s]:
         h1 = np.array([tensor_contract(r1[n2i(m, M)], [[1, 2]]) for m in np.arange(-M, M+1)])
-        _logger.info('h1 done.')
+        _logger.debug('h1 done.')
         r2 = _convolve_ftensors(h1, h1)
         h2 = np.array([tensor_contract(r2[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
-        _logger.info('h2 done.')
+        _logger.debug('h2 done.')
         r3 = _convolve_ftensors(rR, rF)
         h3 = np.array([tensor_contract(r3[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
-        _logger.info('h3 done.')
+        _logger.debug('h3 done.')
         h4 = _convolve_ftensors(h2, h3)
-        _logger.info('h4 done.')
+        _logger.debug('h4 done.')
         h5 = _convolve_ftensors(h4, h3)
-        _logger.info('h5 done.')
+        _logger.debug('h5 done.')
         h6 = _convolve_ftensors(h5, h3)
-        _logger.info('h6 done.')
+        _logger.debug('h6 done.')
         h7 = _convolve_ftensors(h6, h3)
-        _logger.info('h7 done.')
+        _logger.debug('h7 done.')
         h7_arr_term1.append(h7)
         if include_quadrupole is True:
             r4 = _convolve_ftensors(rR, -1j*rk_in)
             h8 = np.array([tensor_contract(r4[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
-            _logger.info('h8 done.')
+            _logger.debug('h8 done.')
             h9 = _convolve_ftensors(h7, h8)
-            _logger.info('h9 done.')
+            _logger.debug('h9 done.')
             h7_arr_term2.append(h9)
             h7_arr_term3.append(-1*h9)
             h10 = _convolve_ftensors(h9, -1*h8)
-            _logger.info('h10 done.')
+            _logger.debug('h10 done.')
             h7_arr_term4.append(h10)
         
     ##
@@ -265,29 +265,29 @@ def generate_uncontracted_fourier_transforms(aoi, uncontracted_filename_prefix, 
     ##
     list_of_terms = [h7_arr_term1, h7_arr_term2, h7_arr_term3, h7_arr_term4]
     nterms = len(list_of_terms)
-    _logger.info('Started substitution.')
+    _logger.debug('Started substitution.')
 
     h7_pp = np.empty(nterms, dtype=object)
     for i,h7_arr in enumerate(list_of_terms):
         h7_pp[i] = _substitute_into_array(h7_arr[0], (S.Fx, np.cos(aoi)), (S.Fy, 0), (S.Fz, np.sin(aoi)))
-    _logger.info('done 1.')
+    _logger.debug('done 1.')
 
     h7_ps = np.empty(nterms, dtype=object)
     for i,h7_arr in enumerate(list_of_terms):
         h7_ps[i] = _substitute_into_array(h7_arr[1], (S.Fx, np.cos(aoi)), (S.Fy, 0), (S.Fz, np.sin(aoi)))
-    _logger.info('done 2.')
+    _logger.debug('done 2.')
     
     h7_sp = np.empty(nterms, dtype=object)
     for i,h7_arr in enumerate(list_of_terms):
         h7_sp[i] = _substitute_into_array(h7_arr[0], (S.Fx, 0), (S.Fy, -1), (S.Fz, 0))
-    _logger.info('done 3.')
+    _logger.debug('done 3.')
 
     h7_ss = np.empty(nterms, dtype=object)
     for i,h7_arr in enumerate(list_of_terms):
         h7_ss[i] = _substitute_into_array(h7_arr[1], (S.Fx, 0), (S.Fy, -1), (S.Fz, 0))
-    _logger.info('done 4.')
+    _logger.debug('done 4.')
 
-    _logger.info(f'Generation of uncontracted fourier transforms completed. It took {time.time()-start} seconds.')
+    _logger.debug(f'Generation of uncontracted fourier transforms completed. It took {time.time()-start} seconds.')
     
     ##
     ## Now to generate the fourier transformed
@@ -398,32 +398,32 @@ def generate_uncontracted_fourier_transforms_symb(uncontracted_filename_prefix, 
     h7_arr_term4 = []
     for r1 in [r1_p, r1_s]:
         h1 = np.array([tensor_contract(r1[n2i(m, M)], [[1, 2]]) for m in np.arange(-M, M+1)])
-        _logger.info('h1 done.')
+        _logger.debug('h1 done.')
         r2 = _convolve_ftensors(h1, h1)
         h2 = np.array([tensor_contract(r2[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
-        _logger.info('h2 done.')
+        _logger.debug('h2 done.')
         r3 = _convolve_ftensors(rR, rF)
         h3 = np.array([tensor_contract(r3[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
-        _logger.info('h3 done.')
+        _logger.debug('h3 done.')
         h4 = _convolve_ftensors(h2, h3)
-        _logger.info('h4 done.')
+        _logger.debug('h4 done.')
         h5 = _convolve_ftensors(h4, h3)
-        _logger.info('h5 done.')
+        _logger.debug('h5 done.')
         h6 = _convolve_ftensors(h5, h3)
-        _logger.info('h6 done.')
+        _logger.debug('h6 done.')
         h7 = _convolve_ftensors(h6, h3)
-        _logger.info('h7 done.')
+        _logger.debug('h7 done.')
         h7_arr_term1.append(h7)
         if include_quadrupole is True:
             r4 = _convolve_ftensors(rR, -1j*rk_in)
             h8 = np.array([tensor_contract(r4[n2i(m, M)], [[0, 2]]) for m in np.arange(-M, M+1)])
-            _logger.info('h8 done.')
+            _logger.debug('h8 done.')
             h9 = _convolve_ftensors(h7, h8)
-            _logger.info('h9 done.')
+            _logger.debug('h9 done.')
             h7_arr_term2.append(h9)
             h7_arr_term3.append(-1*h9)
             h10 = _convolve_ftensors(h9, -1*h8)
-            _logger.info('h10 done.')
+            _logger.debug('h10 done.')
             h7_arr_term4.append(h10)
         
     ##
@@ -433,29 +433,29 @@ def generate_uncontracted_fourier_transforms_symb(uncontracted_filename_prefix, 
     ##
     list_of_terms = [h7_arr_term1, h7_arr_term2, h7_arr_term3, h7_arr_term4]
     nterms = len(list_of_terms)
-    _logger.info('Started substitution.')
+    _logger.debug('Started substitution.')
 
     h7_pp = np.empty(nterms, dtype=object)
     for i,h7_arr in enumerate(list_of_terms):
         h7_pp[i] = _substitute_into_array(h7_arr[0], (S.Fx, sp.cos(S.theta)), (S.Fy, 0), (S.Fz, sp.sin(S.theta)))
-    _logger.info('done 1.')
+    _logger.debug('done 1.')
 
     h7_ps = np.empty(nterms, dtype=object)
     for i,h7_arr in enumerate(list_of_terms):
         h7_ps[i] = _substitute_into_array(h7_arr[1], (S.Fx, sp.cos(S.theta)), (S.Fy, 0), (S.Fz, sp.sin(S.theta)))
-    _logger.info('done 2.')
+    _logger.debug('done 2.')
     
     h7_sp = np.empty(nterms, dtype=object)
     for i,h7_arr in enumerate(list_of_terms):
         h7_sp[i] = _substitute_into_array(h7_arr[0], (S.Fx, 0), (S.Fy, -1), (S.Fz, 0))
-    _logger.info('done 3.')
+    _logger.debug('done 3.')
 
     h7_ss = np.empty(nterms, dtype=object)
     for i,h7_arr in enumerate(list_of_terms):
         h7_ss[i] = _substitute_into_array(h7_arr[1], (S.Fx, 0), (S.Fy, -1), (S.Fz, 0))
-    _logger.info('done 4.')
+    _logger.debug('done 4.')
 
-    _logger.info(f'Generation of uncontracted fourier transforms completed. It took {time.time()-start} seconds.')
+    _logger.debug(f'Generation of uncontracted fourier transforms completed. It took {time.time()-start} seconds.')
     
     ##
     ## Now to generate the fourier transformed
@@ -519,7 +519,7 @@ def generate_contracted_fourier_transforms(save_filename, uncontracted_filename_
     chi_list_1 = [chi_dipole, chi_dipole, chi_quadrupole, chi_quadrupole]
     chi_list_2 = [chi_dipole, chi_quadrupole, chi_dipole, chi_quadrupole]
 
-    _logger.info('Finished preparation.')
+    _logger.debug('Finished preparation.')
 
     ##
     ## Now we do the contraction with chi x chi,
@@ -535,10 +535,10 @@ def generate_contracted_fourier_transforms(save_filename, uncontracted_filename_
             t8_pc_term = np.array([tensor_contract(tensor_product(h7_pc[term][n2i(m, M)], chi_list_1[term]), contraction_lists_1[term]) for m in np.arange(-M, M+1)])
             t9_pc_term = np.array([tensor_contract(tensor_product(t8_pc_term[n2i(m, M)], chi_list_2[term]), contraction_lists_2[term]) for m in np.arange(-M, M+1)])
             _fform_dict[pc] += np.copy(t9_pc_term)
-            _logger.info('Finished term %s.' % term)
+            _logger.debug('Finished term %s.' % term)
         if ndigits is not None:
             _fform_dict[pc] = _round_complex_tensor(_fform_dict[pc], ndigits)
-        _logger.info('Finished %s.' % pc)
+        _logger.debug('Finished %s.' % pc)
 
     _save_fform_dict(save_filename, _fform_dict)
 
@@ -611,7 +611,7 @@ def generate_contracted_fourier_transforms_complex(save_filename, uncontracted_f
     chi_list_1 = [chi_dipole, chi_dipole, chi_quadrupole, chi_quadrupole]
     chi_list_2 = [_conjugate_tensor(chi_dipole), _conjugate_tensor(chi_quadrupole), _conjugate_tensor(chi_dipole), _conjugate_tensor(chi_quadrupole)]
 
-    _logger.info('Finished preparation.')
+    _logger.debug('Finished preparation.')
 
     ##
     ## Now we do the contraction with chi x chi,
@@ -627,9 +627,9 @@ def generate_contracted_fourier_transforms_complex(save_filename, uncontracted_f
             t8_pc_term = np.array([tensor_contract(tensor_product(h7_pc[term][n2i(m, M)], chi_list_1[term]), contraction_lists_1[term]) for m in np.arange(-M, M+1)])
             t9_pc_term = np.array([tensor_contract(tensor_product(t8_pc_term[n2i(m, M)], chi_list_2[term]), contraction_lists_2[term]) for m in np.arange(-M, M+1)])
             _fform_dict[pc] += np.copy(t9_pc_term)
-            _logger.info('Finished term %s.' % term)
+            _logger.debug('Finished term %s.' % term)
         if ndigits is not None:
             _fform_dict[pc] = _round_complex_tensor(_fform_dict[pc], ndigits)
-        _logger.info('Finished %s.' % pc)
+        _logger.debug('Finished %s.' % pc)
 
     _save_fform_dict(save_filename, _fform_dict)
