@@ -1,3 +1,3 @@
 #!/bin/bash
-sphinx-apidoc -f -o source ../shgpy
-make html
+rm -r source/api
+sphinx-apidoc -feT -o source/api ../shgpy
