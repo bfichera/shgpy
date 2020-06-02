@@ -109,7 +109,7 @@ class TestFormAndfForm(unittest.TestCase):
 
 class TestConversions(unittest.TestCase):
 
-    def random_subs_dict(keys):
+    def random_subs_dict(self, keys):
         ans = {}
         for k in keys:
             ans[k] = random.uniform(-1, 1)
@@ -132,7 +132,7 @@ class TestConversions(unittest.TestCase):
         self.assertIsInstance(t1, type(fdat))
         t2 = shgpy.fdat_to_dat(fdat, 1000)
         self.assertIsInstance(t2, type(dat))
-        t3 = shgpy.form_to_dat(form, self.random_subs_dict(fform.get_free_symbols()))
+        t3 = shgpy.form_to_dat(form, self.random_subs_dict(fform.get_free_symbols()), 1000)
         self.assertIsInstance(t3, type(dat))
         t4 = shgpy.form_to_fform(form)
         self.assertIsInstance(t4, type(fform))

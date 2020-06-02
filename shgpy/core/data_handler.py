@@ -972,7 +972,7 @@ def form_to_fform(form, M=16):
     return fFormContainer(iterable, M=M)
 
 
-def form_to_fdat(form, subs_dict):
+def form_to_fdat(form, subs_dict, M=16):
     """Convert instance of `FormContainer` to instance of `fDataContainer`
 
     Parameters
@@ -995,7 +995,7 @@ def form_to_fdat(form, subs_dict):
     `subs_dict`.
 
     """
-    return fform_to_fdat(form_to_fform(form, form.get_M()), subs_dict)
+    return fform_to_fdat(form_to_fform(form, M), subs_dict)
 
 
 def read_csv_file(filename, delimiter=','):
