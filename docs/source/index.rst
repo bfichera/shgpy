@@ -10,7 +10,7 @@ Welcome to ShgPy!
 What is ShgPy?
 ==============
 
-ShgPy is an open-source toolkit for analyzing rotational-anisotropy
+ShgPy is a simple toolkit for analyzing rotational-anisotropy
 second harmonic generation (RA-SHG) data. It depends mainly on
 three packages, `NumPy <https://numpy.org/>`_, `SciPy <https://www.scipy.org/>`_, and `SymPy <https://www.sympy.org/en/index.html>`_ -- as well as (optionally) `Matplolib <https://matplotlib.org/>`_ for some basic plotting capability -- to simulate, manipulate, and fit RA-SHG data in a (hopefully!) intuitive way.
 
