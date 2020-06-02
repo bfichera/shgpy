@@ -1,5 +1,7 @@
 # Other files
 TODO.md
+examples/uft/*
+examples/fform/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
