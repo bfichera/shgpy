@@ -23,11 +23,11 @@ div.documentwrapper {
 }
 
 div.bodywrapper {
-    margin: 0 0 0 250px;
+    margin: 0 0 0 175px;
 }
 
 div.sphinxsidebar {
-    width: 250px;
+    width: 175px;
     font-size: 14px;
     line-height: 1.5;
 }

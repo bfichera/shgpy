@@ -4,6 +4,9 @@ import shgpy
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
+with open('.version', 'r') as fh:
+    version=fh.read().splitlines()[0]
+
 setuptools.setup(
     name='shgpy',
     version=shgpy.__version__,
