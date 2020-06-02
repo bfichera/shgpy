@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Data access tutorial &#8212; ShgPy 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tensor tutorial" href="tensor_tutorial.html" />
+    <link rel="prev" title="Tutorials" href="tutorials.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ShgPy</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">A collection of Python utilities for SHG data analysis</p>
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data access tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tensor_tutorial.html">Tensor tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting_tutorial.html">Fitting tutorial</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="tutorials.html" title="previous chapter">Tutorials</a></li>
+      <li>Next: <a href="tensor_tutorial.html" title="next chapter">Tensor tutorial</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="data-access-tutorial">
+<h1>Data access tutorial<a class="headerlink" href="#data-access-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Wecome to ShgPy! In this tutorial, we will go through the basic steps to understand how ShgPy deals with accessing and manipulating data. Before starting this tutorial, make sure you have installed ShgPy by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install shgpy
+</pre></div>
+</div>
+<p>at the terminal. You’ll also need to install <cite>numpy</cite>, <cite>scipy</cite>, <cite>sympy</cite>, and, optionally, <cite>matplotlib</cite>; refer to the corresponding documentation for more information on these packages.</p>
+<p>The main functionality of ShgPy is to be able to fit RA-SHG data to specific fitting formulas, and ultimately to extract susceptibility tensor values from those fits. But before we get into the details, it’s useful to first familiarize ourselves with the basic routines for loading, manipulating, and plotting SHG data – without worrying yet about any internal computation.</p>
+</div>
+<div class="section" id="loading-ra-shg-data-into-shgpy">
+<h2>Loading RA-SHG data into ShgPy<a class="headerlink" href="#loading-ra-shg-data-into-shgpy" title="Permalink to this headline">¶</a></h2>
+<p>The first thing we’re going to try to do is just to load a collection of RA-SHG data into python. To do this, we’re going to make use of some routines in <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a>. Throughout this tutorial, feel free to reference the API documentation for further details about the functions and classes that we’re going to be using.</p>
+<p>By the way, this tutorial will be loosely following the example program located at shgpy/examples/data_plot_example.py, so you are welcome to follow along there (or else type these commands into a python terminal of your own).</p>
+<p>The first thing we need to do is to import <cite>shgpy</cite>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shgpy</span>
+</pre></div>
+</div>
+<p>This gives us access to all of the routines located in the modules <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a> and <a class="reference internal" href="../api/shgpy.core.utilities.html#module-shgpy.core.utilities" title="shgpy.core.utilities"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.utilities</span></code></a>. The function we’re going to use right now is <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data" title="shgpy.core.data_handler.load_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data()</span></code></a>, which takes two parameters as input. The first is <cite>data_filenames_dict</cite>, which is a dictionary of filenames labelled by a <cite>str</cite> polarization combination. For example, the <cite>shgpy/examples/Data</cite> directory contains four <cite>.csv</cite> files</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><cite>shgpy/examples/Data/dataPP.csv</cite></p></li>
+<li><p><cite>shgpy/examples/Data/dataPS.csv</cite></p></li>
+<li><p><cite>shgpy/examples/Data/dataSP.csv</cite></p></li>
+<li><p><cite>shgpy/examples/Data/dataSS.csv</cite></p></li>
+</ul>
+</div></blockquote>
+<p>which contain RA-SHG data from the (110) surface of GaAs. Take a look at these files to see an example of the type of syntax to use in your own <cite>.csv</cite> files.</p>
+<p>Working in the <cite>shgpy/examples</cite> directory, let’s create a filename dictionary</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data_filenames_dict</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">    &#39;PP&#39;:&#39;Data/dataPP.csv&#39;,</span>
+<span class="go">    &#39;PS&#39;:&#39;Data/dataPS.csv&#39;,</span>
+<span class="go">    &#39;SP&#39;:&#39;Data/dataSP.csv&#39;,</span>
+<span class="go">    &#39;SS&#39;:&#39;Data/dataSS.csv&#39;,</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>and then call</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dat</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">data_filenames_dict</span><span class="p">,</span> <span class="s1">&#39;degrees&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The last argument tells ShgPy that the x-axis of our data is typed in degrees rather than radians.</p>
+<p><a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data" title="shgpy.core.data_handler.load_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data()</span></code></a> returns an instance of a class called <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a>, which does exactly what it says it does – it contains data. Later we’ll see that similar classes exist for holding Fourier-transformed data, formulas, and Fourier-transformed formulas. But for now, let’s familiarize ourselves with all the different things we can do with a <cite>DataContainer</cite> object.</p>
+<p>Note also that in addition to <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data" title="shgpy.core.data_handler.load_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data()</span></code></a>, we could have also used <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data_and_dark_subtract" title="shgpy.core.data_handler.load_data_and_dark_subtract"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data_and_dark_subtract()</span></code></a>, if we wanted to dark-subtract our data before loading it in.</p>
+<p>First, let’s just plot the data to make sure it was accessed correctly. The easiest (but least flexible) way to do this is to use the <a class="reference internal" href="../api/shgpy.plotter.html#module-shgpy.plotter" title="shgpy.plotter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.plotter</span></code></a> module. Let’s import the function <cite>easy_plot</cite> from <a class="reference internal" href="../api/shgpy.plotter.html#module-shgpy.plotter" title="shgpy.plotter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.plotter</span></code></a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.plotter</span> <span class="kn">import</span> <span class="n">easy_plot</span>
+</pre></div>
+</div>
+<p>and then plot the data</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">easy_plot</span><span class="p">(</span>
+<span class="go">    list_of_dats=[dat],</span>
+<span class="go">    list_of_param_dicts=[</span>
+<span class="go">        {</span>
+<span class="go">            &#39;linestyle&#39;:&#39;-&#39;,</span>
+<span class="go">            &#39;color&#39;:&#39;blue&#39;,</span>
+<span class="go">            &#39;markerfacecolor&#39;:&#39;none&#39;,</span>
+<span class="go">            &#39;marker&#39;:&#39;o&#39;,</span>
+<span class="go">        },</span>
+<span class="go">    ],</span>
+<span class="go">    pcs_to_include=[&#39;PP&#39;, &#39;PS&#39;, &#39;SP&#39;, &#39;SS&#39;],</span>
+<span class="go">    show_plot=True,</span>
+<span class="go">    filename=None,</span>
+<span class="go">    show_legend=False,</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<p>If you have <cite>matplolib</cite> installed correctly, then you should see a (reasonably) nice plot of some RA-SHG data. It’s important to note that ShgPy isn’t a plotting utility – in fact, the user is encouraged to write their own routines for making even prettier plots than <cite>easy_plot</cite> (e.g. for publication-quality plots). For just checking data and fits however, the routines in <a class="reference internal" href="../api/shgpy.plotter.html#module-shgpy.plotter" title="shgpy.plotter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.plotter</span></code></a> should do just fine.</p>
+<p>For more information about the <cite>easy_plot</cite> function, feel free to scroll through the related documentation in <a class="reference internal" href="../api/shgpy.plotter.html#shgpy.plotter.easy_plot" title="shgpy.plotter.easy_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.plotter.easy_plot()</span></code></a>. You’ll find that we can also make a polar plot using <a class="reference internal" href="../api/shgpy.plotter.html#shgpy.plotter.easy_polar_plot" title="shgpy.plotter.easy_polar_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.plotter.easy_polar_plot()</span></code></a>.</p>
+<p>Now let’s see what else we can do with our <cite>DataContainer</cite> object. For example, let’s write</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dat</span><span class="o">.</span><span class="n">scale_data</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dat</span><span class="o">.</span><span class="n">phase_shift_data</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;radians&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If we plot the data again, we’ll see that all of the data has been scaled by a factor of 100 and rotated through an angle <code class="docutils literal notranslate"><span class="pre">np.pi/2</span></code>.</p>
+<p>Take a minute now to skim the documentation for <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a>, to see what else can be done with <cite>DataContainer</cite> s. As always, if there’s something you think is missing, feel free to submit a feature request! See <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>.</p>
+<p>Onec you’re satisfied, move on to <a class="reference internal" href="fitting_tutorial.html"><span class="doc">the next tutorial</span></a> to start fitting your data.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Bryan Fichera.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/tutorial/getting_started_tutorial.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

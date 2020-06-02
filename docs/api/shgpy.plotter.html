@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>shgpy.plotter module &#8212; ShgPy 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="shgpy.shg_symbols module" href="shgpy.shg_symbols.html" />
+    <link rel="prev" title="shgpy.formgen module" href="shgpy.formgen.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ShgPy</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=bfichera&repo=shgpy&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorials.html">Tutorials</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="shgpy.core.data_handler.html">shgpy.core.data_handler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.core.utilities.html">shgpy.core.utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.fformfit.html">shgpy.fformfit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.fformgen.html">shgpy.fformgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.formgen.html">shgpy.formgen module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shgpy.plotter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.shg_symbols.html">shgpy.shg_symbols module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.tensor_definitions.html">shgpy.tensor_definitions module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../modules.html">Documentation</a><ul>
+      <li>Previous: <a href="shgpy.formgen.html" title="previous chapter">shgpy.formgen module</a></li>
+      <li>Next: <a href="shgpy.shg_symbols.html" title="next chapter">shgpy.shg_symbols module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-shgpy.plotter">
+<span id="shgpy-plotter-module"></span><h1>shgpy.plotter module<a class="headerlink" href="#module-shgpy.plotter" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="shgpy.plotter.easy_plot">
+<code class="sig-prename descclassname">shgpy.plotter.</code><code class="sig-name descname">easy_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">list_of_dats</span></em>, <em class="sig-param"><span class="n">list_of_param_dicts</span></em>, <em class="sig-param"><span class="n">pcs_to_include</span></em>, <em class="sig-param"><span class="n">show_plot</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">show_legend</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.plotter.easy_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>An easy linear plotting routine for SHG data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>list_of_dats</strong><span class="classifier">list of DataContainer</span></dt><dd><p>List of <a class="reference internal" href="shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a> instances to plot.</p>
+</dd>
+<dt><strong>list_of_param_dicts</strong><span class="classifier">list of dict</span></dt><dd><p>List of <cite>matplotlib</cite> parameter dictionaries, each corresponding to
+a particular <cite>DataContainer</cite>.</p>
+</dd>
+<dt><strong>pcs_to_include</strong><span class="classifier">list of str</span></dt><dd><p>List of polarization combinations to include in the plot.</p>
+</dd>
+<dt><strong>show_plot</strong><span class="classifier">bool</span></dt><dd><p>Defaults to True</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">str or NoneType</span></dt><dd><p>If <cite>None</cite>, no figure is saved. Otherwise, a figure is saved
+at the location specified by <cite>filename</cite>.</p>
+</dd>
+<dt><strong>show_legend</strong><span class="classifier">bool</span></dt><dd><p>Defaults to <cite>False</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.plotter.easy_polar_plot">
+<code class="sig-prename descclassname">shgpy.plotter.</code><code class="sig-name descname">easy_polar_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">list_of_dats</span></em>, <em class="sig-param"><span class="n">list_of_param_dicts</span></em>, <em class="sig-param"><span class="n">pcs_to_include</span></em>, <em class="sig-param"><span class="n">show_plot</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">show_legend</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.plotter.easy_polar_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>An easy polar plotting routine for SHG data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>list_of_dats</strong><span class="classifier">list of DataContainer</span></dt><dd><p>List of <a class="reference internal" href="shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a> instances to plot.</p>
+</dd>
+<dt><strong>list_of_param_dicts</strong><span class="classifier">list of dict</span></dt><dd><p>List of <cite>matplotlib</cite> parameter dictionaries, each corresponding to
+a particular <cite>DataContainer</cite>.</p>
+</dd>
+<dt><strong>pcs_to_include</strong><span class="classifier">list of str</span></dt><dd><p>List of polarization combinations to include in the plot.</p>
+</dd>
+<dt><strong>show_plot</strong><span class="classifier">bool</span></dt><dd><p>Defaults to True</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">str or NoneType</span></dt><dd><p>If <cite>None</cite>, no figure is saved. Otherwise, a figure is saved
+at the location specified by <cite>filename</cite>.</p>
+</dd>
+<dt><strong>show_legend</strong><span class="classifier">bool</span></dt><dd><p>Defaults to <cite>False</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Bryan Fichera.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/shgpy.plotter.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

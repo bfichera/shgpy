@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>shgpy.tensor_definitions module &#8212; ShgPy 0.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to contribute" href="../contribute.html" />
+    <link rel="prev" title="shgpy.shg_symbols module" href="shgpy.shg_symbols.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ShgPy</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=bfichera&repo=shgpy&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorials.html">Tutorials</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="shgpy.core.data_handler.html">shgpy.core.data_handler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.core.utilities.html">shgpy.core.utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.fformfit.html">shgpy.fformfit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.fformgen.html">shgpy.fformgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.formgen.html">shgpy.formgen module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.plotter.html">shgpy.plotter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shgpy.shg_symbols.html">shgpy.shg_symbols module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shgpy.tensor_definitions module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">How to contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../modules.html">Documentation</a><ul>
+      <li>Previous: <a href="shgpy.shg_symbols.html" title="previous chapter">shgpy.shg_symbols module</a></li>
+      <li>Next: <a href="../contribute.html" title="next chapter">How to contribute</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-shgpy.tensor_definitions">
+<span id="shgpy-tensor-definitions-module"></span><h1>shgpy.tensor_definitions module<a class="headerlink" href="#module-shgpy.tensor_definitions" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a collection of susceptibility tensors (both
+dipole and quadrupole) which have each been simplified using the
+symmetry constraints implied by different crystallographic point
+groups. The tensors are contained in dictionaries of numpy <cite>ndarray</cite> s,
+where the keys of the dictionaries are strings containing the name
+of the relevant point group. For example, to get the dipole tensor
+implied by the crystallographic point group C_4v, one would use</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shgpy.tensor_definitions</span> <span class="k">as</span> <span class="nn">td</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">td</span><span class="o">.</span><span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;C_4v&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In addition to the <cite>dipole</cite> dictionary, this module also provides
+a <cite>quadrupole</cite> dictionary with the rank-4 susceptibility tensors
+needed to compute quadrupole SHG, as well as a special <cite>surface</cite>
+dictionary (which is a duplicate of <cite>dipole</cite> but with the variables
+renamed e.g. from <cite>xxx</cite> -&gt; <cite>sxxx</cite>. This is useful when analyzing
+SHG signal involving both bulk and surface dipole sources.</p>
+<p>All of the variables defined in this module are sympy.Symbol objects
+and are defined in the <a class="reference internal" href="shgpy.shg_symbols.html#module-shgpy.shg_symbols" title="shgpy.shg_symbols"><code class="xref py py-class docutils literal notranslate"><span class="pre">shg_symbols</span></code></a> package.</p>
+<p>The crystallographic point groups which are defined in this module are</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'S_2'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_2h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_2h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_4h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_4h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'T_h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'O_h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'S_6'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_3d'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_6h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_6h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_2'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_1h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_2'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_2v'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_4'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'S_4'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_4'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_4v'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_2d'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'O'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'T_d'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'T'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_3'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_3'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_3v'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_6'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_3h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_6'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_6v'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'D_3h'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'C_1'</span></code></p></li>
+</ul>
+<p>In <cite>quadrupole</cite>, there is an additional key <code class="docutils literal notranslate"><span class="pre">'Isotropic'</span></code>.</p>
+<p>Please note that an additional constraint on typical SHG tensors which
+is not captured by the definitions in this module is that, since the
+SHG response function is symmetric in exchange of the electric field
+vectors, SHG tensors should be symmetric in their last two indices.
+This constraint is not captured in these definitions because one could
+imagine a broader use case in which this symmetry is not necessarily
+valid. In scripts, one should use <a class="reference internal" href="shgpy.core.utilities.html#shgpy.core.utilities.particularize" title="shgpy.core.utilities.particularize"><code class="xref py py-func docutils literal notranslate"><span class="pre">particularize()</span></code></a>
+to implement this constraint.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Bryan Fichera.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/shgpy.tensor_definitions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
