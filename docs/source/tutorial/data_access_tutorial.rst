@@ -1,5 +1,5 @@
-Getting started with ShgPy
-==========================
+Data access tutorial
+====================
 
 Introduction
 ------------
@@ -30,7 +30,9 @@ This gives us access to all of the routines located in the modules :mod:`shgpy.c
     - `shgpy/examples/Data/dataSP.csv`
     - `shgpy/examples/Data/dataSS.csv`   
 
-which contain RA-SHG data from the (110) surface of GaAs. Working in the `shgpy/examples` directory, let's create a filename dictionary
+which contain RA-SHG data from the (110) surface of GaAs. Take a look at these files to see an example of the type of syntax to use in your own `.csv` files.
+
+Working in the `shgpy/examples` directory, let's create a filename dictionary
 
 >>> data_filenames_dict = {
     'PP':'Data/dataPP.csv',

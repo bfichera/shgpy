@@ -34,7 +34,6 @@ release = '0.0.1'
 extensions = [
     'sphinx.ext.autodoc',
     'numpydoc',
-    'sphinxcontrib.fulltoc',
 ]
 
 numpydoc_show_class_members = False
@@ -59,11 +58,13 @@ html_theme_options = {
     "logo_name": True,
     "logo_text_align": "center",
     "description": "A collection of Python utilities for SHG data analysis",
-    "github_user": "bfichera",
-    "github_repo": "shgpy",
     # Wide enough that 80-col code snippets aren't truncated on default font
     # settings (at least for bitprophet's Chrome-on-OSX-Yosemite setup)
     "page_width": "1024px",
+    "sidebar_width":"275px",
+    "fixed_sidebar":True,
+    "sidebar_collapse":True,
+    "sidebar_includehidden":True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -71,4 +72,4 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_sidebars = {'**':['about.html', 'localtoc.html',  'relations.html', 'searchbox.html'] }
+html_sidebars = {'**':['about.html', 'navigation.html', 'relations.html', 'searchbox.html'] }

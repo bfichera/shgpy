@@ -19,7 +19,7 @@ Fitting RA-SHG data involves solving a complex global minimization problem with 
 What ShgPy is not
 =================
 
-Right now, ShgPy is narrowly suited for a particular RA-SHG geometry (i.e. `this one <https://arxiv.org/abs/1909.12850>`_). Other implementations of RA-SHG (e.g. where the angle of incidence can vary, etc.) are not currently supported. However, this software is always evolving and support may come in the future if there's enough interest (see :doc:`contribute`).
+Right now, ShgPy is narrowly suited for a particular RA-SHG geometry (i.e. `this one <https://arxiv.org/abs/1909.12850>`_). Other implementations of RA-SHG (e.g. where the angle of incidence can vary, etc.) are not currently supported. However, this software is always evolving and support may come in the future if there's enough interest (see :doc:`how to contribute <contribute>`).
 
 Installation
 ============
@@ -36,11 +36,10 @@ Getting started
 After installing ShgPy, familiarize yourself with the basic routines by reading the tutorials.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   tutorial/getting_started_tutorial
-   tutorial/tensor_tutorial
-   tutorial/fitting_tutorial
+   tutorial/tutorials
+
 
 Documentation
 =============
@@ -54,9 +53,25 @@ For further details, consult the auto-generated API documentation:
 How to contribute
 =================
 
+See :doc:`how to contribute <contribute>`.
+
 .. toctree::
+   :hidden:
 
    contribute
+
+Contact me
+==========
+
+Other questions or concerns? Please :doc:`contact me <contact>`!
+
+.. toctree::
+   :hidden:
+
+   contact
+
+   
+
 
 
 

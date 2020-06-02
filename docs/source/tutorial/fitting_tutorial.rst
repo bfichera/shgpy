@@ -1,5 +1,5 @@
-Introduction to fitting in ShgPy
-================================
+Fitting tutorial
+================
 
 Prerequisites
 -------------
@@ -100,7 +100,7 @@ This is by far the most difficult step (both conceptually and computationally) i
 The final step: fitting your first RA-SHG data
 ----------------------------------------------   
 
-All that's left now is to load the Fourier formula just generated (at 'T_d-None-None(110)-particularized.p') into ShgPy, load the data that we want to fit, and then fun one of the functions in :mod:`shgpy.fformfit`.
+All that's left now is to load the Fourier formula just generated (at ``'T_d-None-None(110)-particularized.p'``) into ShgPy, load the data that we want to fit, and then fun one of the functions in :mod:`shgpy.fformfit`.
 
 Before we begin, let's recall from :doc:`the first tutorial <getting_started_tutorial>` how we loaded RA-SHG data into ShgPy. In that tutorial, we loaded the data into an instance of the special class :class:`shgpy.core.data_handler.DataContainer`, and noted that other datatypes would be loaded into similar objects when it came to actually doing the fitting.
 
@@ -108,20 +108,50 @@ Let's review these other datatypes now. First, we consider the class :class:`shg
 
 To create an instance of :class:`shgpy.core.data_handler.fDataContainer`, one can load a dataset into a :class:`shgpy.core.data_handler.DataContainer` instance and then convert it using :func:`shgpy.core.data_handler.dat_to_fdat`, or use the function :func:`shgpy.core.data_handler.load_data_and_fourier_transform`, which does both at the same time:
 
+>>> data_filenames_dict = {
+    'PP':'Data/dataPP.csv',
+    'PS':'Data/dataPS.csv',
+    'SP':'Data/dataSP.csv',
+    'SS':'Data/dataSS.csv',
+}
 >>> dat, fdat = shgpy.load_data_and_fourier_transform(data_filenames_dict, 'degrees')
 
 Ultimately, it is the data contained in an :func:`shgpy.core.data_handler.fDataContainer` object that we are going to want to fit to.
 
-The fitting formula, on the other other hand, stored in a related object called :class:`shgpy.core.data_handler.fFormContainer`. To create an instance of :class:`shgpy.core.data_handler.fFormContainer`, simply load the Fourier formula we just created
+The fitting formula, on the other other hand, is stored in a related object called :class:`shgpy.core.data_handler.fFormContainer`. To create an instance of :class:`shgpy.core.data_handler.fFormContainer`, simply load the Fourier formula we just created
 
 >>> fform_filename = 'T_d-None-None(110)-particularized.p'
 >>> fform = shgpy.load_fform(fform_filename)
 
 This would be a good time to read the documentation provided in :mod:`shgpy.core.data_handler` to familiarize oneself with these functions. (You will find that there is a fourth object, :class:`shgpy.core.data_handler.FormContainer`, which is designed to contain `phi`-space formulas; see also :mod:`shgpy.formgen` and the documentation therein for more details.)
 
-Before moving on, we need to phase shift the formula by an arbitrary parameter, since we don't know how the 
+There is one more fitting parameter which is not captured by :func:`shgpy.fformgen.generate_contracted_fourier_transforms`, which is the relative phase shift between the data and the fitting formula. So let's phase shift the formula by an arbitrary angle.
 
+>>> from shgpy.shg_symbols import psi
+>>> fform.apply_phase_shift(psi)
 
+The fitting routines require an initial guess; let's just guess 1 for each parameter:
+
+>>> guess_dict = {}
+>>> for fs in fform.get_free_symbols():
+>>>     guess_dict[fs] = 1
+
+And now we're finally ready to run the fitting:
+
+>>> from shgpy.fformfit import least_squares_fit
+>>> ret = least_squares_fit(fform, fdat, guess_dict)
+
+Here, `ret` is an instance of the `scipy.optimize.OptimizeResult <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult>`_ class, see the documentation in that link for more information. The most important attribute of `ret` for us is the answer:
+
+>>> ret.xdict
+{psi: 1.5914701873213561, zyx: 1.2314580678986173}
+
+In addition to :func:`shgpy.fformfit.least_squares_fit`, there are a couple of other routines available for fitting RA-SHG data. The most useful one for most problems is actually :func:`shgpy.fformfit.basinhopping_fit` (and its cousins, see the :mod:`shgpy.fformfit` reference), which is based on the `scipy.optimize.basinhopping <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html#scipy.optimize.basinhopping>`_ function provided by SciPy. It is specifically designed to treat problems with many local minima and degrees of freedom. In the future, further fitting routines will be added, if there is interest (see :doc:`how to contribute <../contribute>`).
+
+Conclusion
+----------
+
+This concludes the ShgPy tutorials. For more information, I recommend looking through the :doc:`API <../modules>`; there are a lot of important functions there which we haven't covered here but may be useful for your application. And, as always, if you have questions please feel free to :doc:`contact me <../contact>`.
 
 
 
