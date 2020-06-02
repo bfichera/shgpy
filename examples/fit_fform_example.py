@@ -6,7 +6,7 @@ import shgpy.shg_symbols as S
 from shgpy.plotter import easy_plot
 from shgpy.fformfit import least_squares_fit_with_bounds
 
-logger = logging.getLogger(__name__)
+mylogger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 data_filenames_dict = {

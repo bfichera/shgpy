@@ -167,7 +167,7 @@ class DataContainer:
         self._check_angle_units(angle_units)
         if angle_units == 'degrees':
             angle = np.deg2rad(angle)
-        self._data_dict = {k:np.array([v[0]+angle, v[1]]) for k,v in self._data_dict.items()}
+        self._data_dict = {k:np.array([(v[0]+angle) % (2*np.pi), v[1]]) for k,v in self._data_dict.items()}
         self._phase_shift += angle
 
     def get_pc(self, pc, requested_angle_units):
@@ -916,7 +916,7 @@ def form_to_dat(form, subs_dict, num_points):
     `num_points` points.
 
     """
-    subs_array = [(k,subs_dict[k]) for k in fform.get_free_symbols()]
+    subs_array = [(k,subs_dict[k]) for k in subs_dict.keys()]
     new_form = deepcopy(form)
     new_form.subs(subs_array)
     if new_form.get_free_symbols() != [S.phi]:
@@ -1113,8 +1113,9 @@ def dat_to_fdat(dat, interp_kind='cubic', M=16):
         to a spline interpolation of zeroth, first, second or third order;
         ‘previous’ and ‘next’ simply return the previous or next value of
         the point) or as an integer specifying the order of the spline
-        interpolator to use. Default is ‘cubic’
-        Dict of `{sympy.Symbol : float}` pairs to perform the substitution.
+        interpolator to use. Default is ‘cubic’.
+    M : int, optional
+        Number of Fourier frequencies, defaults to `16`.
 
     Returns
     -------
