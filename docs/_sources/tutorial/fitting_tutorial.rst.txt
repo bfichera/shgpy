@@ -16,26 +16,26 @@ Fourier formula generation
 
 As alluded to previously, the central idea behind fitting in ShgPy is to fit in Fourier space. This provides a drastic simplification to the cost function. However, the problem is that computing a Fourier transform symbolically is difficult, and we have resort to some tricks to compute it efficiently (or at least, ahead of time).
 
-What do I mean by the last part? To begin, let's think about what the function is that we're trying to compute. Ultimately, we want to compute an intensity as a function of the azimuthal angle `phi` in the experiment. This is given by the square of the nonlinear polarization, i.e.::
+What do I mean by the last part? To begin, let's think about what the function is that we're trying to compute. Ultimately, we want to compute an intensity as a function of the azimuthal angle ``phi`` in the experiment. This is given by the square of the nonlinear polarization, i.e.::
 
     I = |P_i|**2 = |chi_ijk E_j E_k|**2
 
-What part of this formula depends on `phi`? In the experiment, the electric field changes as a function of `phi` like::
+What part of this formula depends on ``phi``? In the experiment, the electric field changes as a function of ``phi`` like::
 
     E_i(phi) = R_ij(phi) E_j
 
-And that's it -- no other part of the formula depends on `phi` (note: it's actually more complicated than this; in code we not only consider an additional quadrupole contribution, but also the fact that the component of the SHG signal along the direction of propogation is not measurable. However, these considerations do not affect the basic argument here; feel free to look through the source code of :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms` for more information).
+And that's it -- no other part of the formula depends on ``phi`` (note: it's actually more complicated than this; in code we not only consider an additional quadrupole contribution, but also the fact that the component of the SHG signal along the direction of propogation is not measurable. However, these considerations do not affect the basic argument here; feel free to look through the source code of :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms` for more information).
 
-In particular, the susceptibility tensor , which is the only part of the formula that will change from problem to problem, does not natively depend on `phi`. Therefore, to compute the Fourier transform of the intensity, we can compute the Fourier transform of everything not involving the susceptibility, and then do a (conceptually complicated, but not numerically difficult) contraction by `chi_ijk`. In ShgPy, we perform this two-step process by
+In particular, the susceptibility tensor , which is the only part of the formula that will change from problem to problem, does not natively depend on ``phi``. Therefore, to compute the Fourier transform of the intensity, we can compute the Fourier transform of everything not involving the susceptibility, and then do a (conceptually complicated, but not numerically difficult) contraction by ``chi_ijk``. In ShgPy, we perform this two-step process by
 
 1. Running :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`
 2. Running :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`
 
-Most importantly, since step 1 involves every part of the formula which doesn't depend on `chi`, it only needs to be run once. The result can then be cached and used every time you want to calculate a new Fourier formula (e.g. because you want to fit a new tensor). Step 2 is more specific, but only has to be run once for each tensor you want to try to fit. The result can then be saved and used later, having saved a lot of computation time.
+Most importantly, since step 1 involves every part of the formula which doesn't depend on ``chi``, it only needs to be run once. The result can then be cached and used every time you want to calculate a new Fourier formula (e.g. because you want to fit a new tensor). Step 2 is more specific, but only has to be run once for each tensor you want to try to fit. The result can then be saved and used later, having saved a lot of computation time.
 
 That all was pretty conceptual, but luckily, none of the details are really important in order to *use* ShgPy (note: if there's interest, I would be happy to expand more on this point; see :doc:`how to contribute <../contribute>`). For now, let's just see how it all works in practice.
 
-Remember that the goal is to generate a formula for the SHG intensity as a function of `phi` (or, since we're working in Fourier space, a Fourier formula for the SHG intensity as a function of the Fourier frequency `n`). We proceed according to steps 1 and 2 above.
+Remember that the goal is to generate a formula for the SHG intensity as a function of ``phi`` (or, since we're working in Fourier space, a Fourier formula for the SHG intensity as a function of the Fourier frequency ``n``). We proceed according to steps 1 and 2 above.
 
 To perform step 1, let's follow shgpy/examples/generate_uft_example.py. We start by importing the logging module, which provides a flexible event-logging system and is widely implemented in ShgPy.
 
@@ -63,11 +63,11 @@ Now we're ready to generated the uncontracted Fourier transforms. Simply run
 
 >>> shgpy.fformgen.generate_uncontracted_fourier_transforms(AOI, 'uft_filename_prefix')
 
-This calculation takes about five minutes on my machine. Note here that 'uft_filename_prefix' is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory `uft` and save the answers at `uft/uft10deg`. That means that :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`` will save four files: `uft/uft10deg_pp`, `uft/uft10deg_ps`, `uft/uft10deg_sp`, and `uft/uft10deg_ss`, each of which corresponds to a particular uncontracted Fourier transform.
+This calculation takes about five minutes on my machine. Note here that 'uft_filename_prefix' is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory ``uft`` and save the answers at ``uft/uft10deg``. That means that :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`` will save four files: ``uft/uft10deg_pp.p``, ``uft/uft10deg_ps.p``, ``uft/uft10deg_sp.p``, and ``uft/uft10deg_ss.p``, each of which corresponds to a particular uncontracted Fourier transform.
 
 Note that in the typical use case, the above should be the only time you have to run :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms``. The answers saved at ``'uft_filename_prefix'+...`` can be used for essentially any SHG fitting problem that you might encounter.
 
-Now let us turn to our specific use case. As an example, imagine that we are trying to fit the GaAs data available in `shgpy/examples/Data` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
+Now let us turn to our specific use case. As an example, imagine that we are trying to fit the GaAs data available in ``shgpy/examples/Data`` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
 
 >>> from shgpy.tensor_definitions import dipole
 >>> t_dipole = shgpy.particularize(dipole['T_d'])
@@ -93,7 +93,7 @@ Finally, we run
 
 >>> shgpy.fformgen.generate_contracted_fourier_transforms(save_filename, 'uft/uft10deg', t_dipole, t_quad, ndigits=4)
 
-On my machine, this takes about five to ten minutes, depending on the complexity of the susceptibility tensors. When it completes, the function will save a pickled Fourier formula object to the location specified by `save_filename`.
+On my machine, this takes about five to ten minutes, depending on the complexity of the susceptibility tensors. When it completes, the function will save a pickled Fourier formula object to the location specified by ``save_filename``.
 
 This is by far the most difficult step (both conceptually and computationally) in ShgPy, but it is easily worth it. By spending 10-15 minutes of computation time now, we have dramatically simplified the routines that we are about to run in the next section of this tutorial.
 
@@ -123,7 +123,7 @@ The fitting formula, on the other other hand, is stored in a related object call
 >>> fform_filename = 'T_d-None-None(110)-particularized.p'
 >>> fform = shgpy.load_fform(fform_filename)
 
-This would be a good time to read the documentation provided in :mod:`shgpy.core.data_handler` to familiarize oneself with these functions. (You will find that there is a fourth object, :class:`shgpy.core.data_handler.FormContainer`, which is designed to contain `phi`-space formulas; see also :mod:`shgpy.formgen` and the documentation therein for more details.)
+This would be a good time to read the documentation provided in :mod:`shgpy.core.data_handler` to familiarize oneself with these functions. (You will find that there is a fourth object, :class:`shgpy.core.data_handler.FormContainer`, which is designed to contain ``phi``-space formulas; see also :mod:`shgpy.formgen` and the documentation therein for more details.)
 
 There is one more fitting parameter which is not captured by :func:`shgpy.fformgen.generate_contracted_fourier_transforms`, which is the relative phase shift between the data and the fitting formula. So let's phase shift the formula by an arbitrary angle.
 
@@ -141,7 +141,7 @@ And now we're finally ready to run the fitting:
 >>> from shgpy.fformfit import least_squares_fit
 >>> ret = least_squares_fit(fform, fdat, guess_dict)
 
-Here, `ret` is an instance of the `scipy.optimize.OptimizeResult <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult>`_ class, see the documentation in that link for more information. The most important attribute of `ret` for us is the answer:
+Here, ``ret`` is an instance of the `scipy.optimize.OptimizeResult <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult>`_ class, see the documentation in that link for more information. The most important attribute of ``ret`` for us is the answer:
 
 >>> ret.xdict
 {psi: 1.5914701873213561, zyx: 1.2314580678986173}

@@ -12,18 +12,21 @@
 #
 import os
 import sys
+import datetime
 sys.path.insert(0, os.path.abspath('./../..'))
+import shgpy
 
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'ShgPy'
-copyright = '2020, Bryan Fichera'
+year = datetime.now().year
+copyright = f'{year}, Bryan Fichera'
 author = 'Bryan Fichera'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = shgpy.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -57,11 +60,12 @@ html_theme_options = {
     "logo": "logo.png",
     "logo_name": True,
     "logo_text_align": "center",
-    "description": "A collection of Python utilities for SHG data analysis",
+    "github_user":"bfichera",
+    "github_repo":"shgpy",
     # Wide enough that 80-col code snippets aren't truncated on default font
     # settings (at least for bitprophet's Chrome-on-OSX-Yosemite setup)
     "page_width": "1024px",
-    "sidebar_width":"275px",
+    "sidebar_width":"175px",
     "fixed_sidebar":True,
     "sidebar_collapse":True,
     "sidebar_includehidden":True,

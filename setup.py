@@ -1,11 +1,12 @@
 import setuptools
+import shgpy
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name='shgpy',
-    version='0.0.1',
+    version=shgpy.__version__,
     author='Bryan Fichera',
     author_email='bfichera@mit.edu',
     description='A collection of utilities for analyzing SHG data.',

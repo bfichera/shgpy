@@ -10,4 +10,4 @@ All of the major development of ShgPy happens on `GitHub <https://github.com/bfi
 Feature requests
 ================
 
-Feature requests are welcome and encouraged! If there's a particular feature you need of want (or if you're interested in contributing code), please submit an issue on GitHub, or `send me an email <mailto:bfichera@mit.edu>`_.
+Feature requests are welcome and encouraged! If there's a particular feature you need or want (or if you're interested in contributing code), please submit an issue on GitHub, or `send me an email <mailto:bfichera@mit.edu>`_.
