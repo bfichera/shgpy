@@ -11,13 +11,13 @@ setuptools.setup(
     description='A collection of utilities for analyzing SHG data.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/bfichera/shgpy',
+    url='https://bfichera.github.io/shgpy/',
     packages=setuptools.find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-    ]
+    ],
     python_requires='>=3.6',
 )
 
