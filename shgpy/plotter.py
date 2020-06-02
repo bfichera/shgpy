@@ -17,7 +17,7 @@ def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot=True,
     show_plot : bool
         Defaults to True
     filename : str or NoneType
-        If `None`, no figure is saved. Otherwose, a figure is saved
+        If `None`, no figure is saved. Otherwise, a figure is saved
         at the location specified by `filename`.
     show_legend : bool
         Defaults to `False`
@@ -57,7 +57,7 @@ def easy_polar_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot
     show_plot : bool
         Defaults to True
     filename : str or NoneType
-        If `None`, no figure is saved. Otherwose, a figure is saved
+        If `None`, no figure is saved. Otherwise, a figure is saved
         at the location specified by `filename`.
     show_legend : bool
         Defaults to `False`
