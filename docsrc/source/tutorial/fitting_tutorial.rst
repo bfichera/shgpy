@@ -37,7 +37,7 @@ That all was pretty conceptual, but luckily, none of the details are really impo
 
 Remember that the goal is to generate a formula for the SHG intensity as a function of ``phi`` (or, since we're working in Fourier space, a Fourier formula for the SHG intensity as a function of the Fourier frequency ``n``). We proceed according to steps 1 and 2 above.
 
-To perform step 1, let's follow shgpy/examples/generate_uft_example.py. We start by importing the logging module, which provides a flexible event-logging system and is widely implemented in ShgPy.
+To perform step 1, let's follow ``examples/generate_uft_example.py``. We start by importing the logging module, which provides a flexible event-logging system and is widely implemented in ShgPy.
 
 >>> import logging
 
@@ -63,11 +63,11 @@ Now we're ready to generated the uncontracted Fourier transforms. Simply run
 
 >>> shgpy.fformgen.generate_uncontracted_fourier_transforms(AOI, 'uft_filename_prefix')
 
-This calculation takes about five minutes on my machine. Note here that 'uft_filename_prefix' is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory ``uft`` and save the answers at ``uft/uft10deg``. That means that :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`` will save four files: ``uft/uft10deg_pp.p``, ``uft/uft10deg_ps.p``, ``uft/uft10deg_sp.p``, and ``uft/uft10deg_ss.p``, each of which corresponds to a particular uncontracted Fourier transform.
+This calculation takes about five minutes on my machine. Note here that 'uft_filename_prefix' is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory ``examples/uft`` and save the answers at ``examples/uft/uft10deg``. That means that :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`` will save four files: ``examples/uft/uft10deg_pp.p``, ``examples/uft/uft10deg_ps.p``, ``examples/uft/uft10deg_sp.p``, and ``examples/uft/uft10deg_ss.p``, each of which corresponds to a particular uncontracted Fourier transform.
 
 Note that in the typical use case, the above should be the only time you have to run :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms``. The answers saved at ``'uft_filename_prefix'+...`` can be used for essentially any SHG fitting problem that you might encounter.
 
-Now let us turn to our specific use case. As an example, imagine that we are trying to fit the GaAs data available in ``shgpy/examples/Data`` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
+Now let us turn to our specific use case. As an example, imagine that we are trying to fit the GaAs data available in ``examples/Data`` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
 
 >>> from shgpy.tensor_definitions import dipole
 >>> t_dipole = shgpy.particularize(dipole['T_d'])
@@ -152,19 +152,3 @@ Conclusion
 ----------
 
 This concludes the ShgPy tutorials. For more information, I recommend looking through the :doc:`API <../modules>`; there are a lot of important functions there which we haven't covered here but may be useful for your application. And, as always, if you have questions please feel free to :doc:`contact me <../contact>`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
