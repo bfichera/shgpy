@@ -79,6 +79,7 @@ For more information about the ``easy_plot`` function, feel free to scroll throu
 
 Now let's see what else we can do with our ``DataContainer`` object. For example, let's write
 
+>>> import numpy as np
 >>> dat.scale_data(scale_factor=100)
 >>> dat.phase_shift_data(np.pi/2, 'radians')
 

@@ -63,9 +63,9 @@ Now we're ready to generated the uncontracted Fourier transforms. Simply run
 
 >>> shgpy.fformgen.generate_uncontracted_fourier_transforms(AOI, 'uft_filename_prefix')
 
-This calculation takes about five minutes on my machine. Note here that 'uft_filename_prefix' is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory ``examples/uft`` and save the answers at ``examples/uft/uft10deg``. That means that :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`` will save four files: ``examples/uft/uft10deg_pp.p``, ``examples/uft/uft10deg_ps.p``, ``examples/uft/uft10deg_sp.p``, and ``examples/uft/uft10deg_ss.p``, each of which corresponds to a particular uncontracted Fourier transform.
+If you configured ``logging``, you should start to see a bunch of debug messages start to print out (they're mostly meaningless, but at least you know that something's going on). This calculation takes about five minutes on my machine. Note here that 'uft_filename_prefix' is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory ``examples/uft`` and save the answers at ``examples/uft/uft10deg``. That means that :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms` will save four files: ``examples/uft/uft10deg_pp.p``, ``examples/uft/uft10deg_ps.p``, ``examples/uft/uft10deg_sp.p``, and ``examples/uft/uft10deg_ss.p``, each of which corresponds to a particular uncontracted Fourier transform.
 
-Note that in the typical use case, the above should be the only time you have to run :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms``. The answers saved at ``'uft_filename_prefix'+...`` can be used for essentially any SHG fitting problem that you might encounter.
+Note that in the typical use case, the above should be the only time you have to run :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`. The answers saved at ``'uft_filename_prefix'+...`` can be used for essentially any SHG fitting problem that you might encounter.
 
 Now let us turn to our specific use case. As an example, imagine that we are trying to fit the GaAs data available in ``examples/Data`` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
 
@@ -95,7 +95,7 @@ Finally, we run
 
 On my machine, this takes about five to ten minutes, depending on the complexity of the susceptibility tensors. When it completes, the function will save a pickled Fourier formula object to the location specified by ``save_filename``.
 
-This is by far the most difficult step (both conceptually and computationally) in ShgPy, but it is easily worth it. By spending 10-15 minutes of computation time now, we have dramatically simplified the routines that we are about to run in the next section of this tutorial.
+What we've just done is by far the most difficult step (both conceptually and computationally) in ShgPy, but it is easily worth it. By spending 10-15 minutes of computation time now, we have dramatically simplified the routines that we are about to run in the next section of this tutorial.
 
 The final step: fitting your first RA-SHG data
 ----------------------------------------------   
