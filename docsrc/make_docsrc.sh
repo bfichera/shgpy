@@ -8,3 +8,4 @@ rm source/api/shgpy.rst
 rm source/api/shgpy.core.rst
 tar -czvf source/examples.tar.gz ../examples
 make html
+cp source/logo.png build/html/_static/logo.png
