@@ -70,7 +70,7 @@ If you use ShgPy in your project, please `let me know <contact>`! I'm interested
 
 To cite this software in a publication, use
 
-- Bryan Fichera. *ShgPy*. `<https://bfichera.github.io/shgpy/>`_, 2020. `<doi:10.5281/zenodo.3873755>`_
+- Bryan Fichera. *ShgPy*. `<https://bfichera.github.io/shgpy/>`_, 2020. `doi:10.5281/zenodo.3873755 <https://doi.org/10.5281/zenodo.3873755>`_
 
 Alternatively, use the following BibTex entry::
 
