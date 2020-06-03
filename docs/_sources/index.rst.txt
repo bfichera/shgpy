@@ -40,6 +40,12 @@ After installing ShgPy, familiarize yourself with the basic routines by reading 
 
    tutorial/tutorials
 
+To follow along, you'll want to download the :doc:`example files <examples>`.
+
+.. toctree::
+   :hidden:
+
+   examples
 
 Documentation
 =============
