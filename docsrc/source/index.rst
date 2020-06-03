@@ -66,7 +66,7 @@ See :doc:`how to contribute <contribute>`.
 Cite this software
 ==================
 
-If you use ShgPy in your project, please `let me know <contact>`! I'm interested to see who is using this software and in what form.
+If you use ShgPy in your project, please :doc:`let me know <contact>`! I'm interested to see who is using this software and in what form.
 
 To cite this software in a publication, use
 
