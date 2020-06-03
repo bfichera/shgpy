@@ -9,5 +9,6 @@ rm -r build
 rm -r dist
 rm -r shgpy.egg-info
 
-docsrc/make_docsrc.sh
-docsrc/make_ghpages.sh
+cd docsrc
+./make_docsrc.sh
+./make_ghpages.sh
