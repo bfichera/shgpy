@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Tensor tutorial &#8212; ShgPy 0.1.0 documentation</title>
+    <title>Tensor tutorial &#8212; ShgPy 0.1.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -142,18 +142,14 @@
 <span class="go">array([[[0, 0, 0],</span>
 <span class="go">        [0, 0, 0],</span>
 <span class="go">        [0, 0, 0]],</span>
+<span class="go">       [[0, 0, 0],</span>
+<span class="go">        [0, 0, 0],</span>
+<span class="go">        [0, 0, 0]],</span>
+<span class="go">       [[0, 0, 0],</span>
+<span class="go">        [0, 0, 0],</span>
+<span class="go">        [0, 0, 0]]], dtype=object)</span>
 </pre></div>
 </div>
-<blockquote>
-<div><dl class="simple">
-<dt>[[0, 0, 0],</dt><dd><p>[0, 0, 0],
-[0, 0, 0]],</p>
-</dd>
-<dt>[[0, 0, 0],</dt><dd><p>[0, 0, 0],
-[0, 0, 0]]], dtype=object)</p>
-</dd>
-</dl>
-</div></blockquote>
 <p>we see that it is a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> with zero for all entries. This makes sense because the point group <code class="docutils literal notranslate"><span class="pre">S_2</span></code> contains inversion symmetry. Let’s look at a more exciting point group:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;C_3v&#39;</span><span class="p">]</span>
 <span class="go">array([[[0, xyx, yyz],</span>
@@ -209,6 +205,7 @@
 <p>So far we’ve learned how to load predefined tensors into ShgPy. But sometimes we want to use a tensor not exactly how it’s written in <a class="reference internal" href="../api/shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.tensor_definitions</span></code></a>, but perhaps rotated by 90 degrees or inverted. In this section, we explore the basic means provided in ShgPy for doing just that.</p>
 <p>The most relevant function for transforming SHG tensors is <a class="reference internal" href="../api/shgpy.core.utilities.html#shgpy.core.utilities.transform" title="shgpy.core.utilities.transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.utilities.transform()</span></code></a>. Let’s see how this function works.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy</span> <span class="kn">import</span> <span class="n">transform</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;C_3v&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
@@ -225,7 +222,8 @@
 </div>
 <p>As expected. As another example, let’s transform our tensor by 3-fold rotation about the z-axis:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sympy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">rotation_matrix3symb</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="mi">2</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sghpy</span> <span class="kn">import</span> <span class="n">rotation_matrix3symb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">rotation_matrix3symb</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="mi">2</span><span class="o">*</span><span class="n">sympy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transform</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
 <span class="go">array([[[0, xyx, yyz],</span>
 <span class="go">        [xyx, 0, 0],</span>
