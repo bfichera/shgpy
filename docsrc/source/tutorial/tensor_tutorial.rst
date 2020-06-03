@@ -45,11 +45,9 @@ so the ``dipole`` dictionary contains one entry for each of the 32 crystallograp
 array([[[0, 0, 0],
         [0, 0, 0],
         [0, 0, 0]],
-
        [[0, 0, 0],
         [0, 0, 0],
         [0, 0, 0]],
-
        [[0, 0, 0],
         [0, 0, 0],
         [0, 0, 0]]], dtype=object)
@@ -117,6 +115,7 @@ So far we've learned how to load predefined tensors into ShgPy. But sometimes we
 The most relevant function for transforming SHG tensors is :func:`shgpy.core.utilities.transform`. Let's see how this function works.
 
 >>> from shgpy import transform
+>>> import numpy as np
 >>> t1 = dipole['C_3v']
 >>> i = -np.identity(3, dtype=int)
 >>> transform(t1, i)
@@ -133,7 +132,8 @@ array([[[0, -xyx, -yyz],
 As expected. As another example, let's transform our tensor by 3-fold rotation about the z-axis:
 
 >>> import sympy
->>> R = shgpy.rotation_matrix3symb(np.array([0, 0, 1]), 2*sp.pi/3)
+>>> from sghpy import rotation_matrix3symb
+>>> R = rotation_matrix3symb(np.array([0, 0, 1]), 2*sympy.pi/3)
 >>> transform(t1, R)
 array([[[0, xyx, yyz],
         [xyx, 0, 0],

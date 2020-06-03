@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Data access tutorial &#8212; ShgPy 0.1.0 documentation</title>
+    <title>Data access tutorial &#8212; ShgPy 0.1.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -171,7 +171,8 @@
 <p>If you have <code class="docutils literal notranslate"><span class="pre">matplolib</span></code> installed correctly, then you should see a (reasonably) nice plot of some RA-SHG data. It’s important to note that ShgPy isn’t a plotting utility – in fact, the user is encouraged to write their own routines for making even prettier plots than <code class="docutils literal notranslate"><span class="pre">easy_plot</span></code> (e.g. for publication-quality plots). For just checking data and fits however, the routines in <a class="reference internal" href="../api/shgpy.plotter.html#module-shgpy.plotter" title="shgpy.plotter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.plotter</span></code></a> should do just fine.</p>
 <p>For more information about the <code class="docutils literal notranslate"><span class="pre">easy_plot</span></code> function, feel free to scroll through the related documentation in <a class="reference internal" href="../api/shgpy.plotter.html#shgpy.plotter.easy_plot" title="shgpy.plotter.easy_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.plotter.easy_plot()</span></code></a>. You’ll find that we can also make a polar plot using <a class="reference internal" href="../api/shgpy.plotter.html#shgpy.plotter.easy_polar_plot" title="shgpy.plotter.easy_polar_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.plotter.easy_polar_plot()</span></code></a>.</p>
 <p>Now let’s see what else we can do with our <code class="docutils literal notranslate"><span class="pre">DataContainer</span></code> object. For example, let’s write</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dat</span><span class="o">.</span><span class="n">scale_data</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dat</span><span class="o">.</span><span class="n">scale_data</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dat</span><span class="o">.</span><span class="n">phase_shift_data</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;radians&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
