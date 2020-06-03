@@ -7,6 +7,9 @@
 Welcome to ShgPy!
 =================
 
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3873755.svg
+   :target: https://doi.org/10.5281/zenodo.3873755
+
 What is ShgPy?
 ==============
 
@@ -59,6 +62,26 @@ See :doc:`how to contribute <contribute>`.
    :hidden:
 
    contribute
+
+Cite this software
+==================
+
+If you use ShgPy in your project, please `let me know <contact>`! I'm interested to see who is using this software and in what form.
+
+To cite this software in a publication, use
+
+- Bryan Fichera. *ShgPy*. `<https://bfichera.github.io/shgpy/>`_, 2020. `<doi:10.5281/zenodo.3873755>`_
+
+Alternatively, use the following BibTex entry::
+
+    @misc{shgpy,
+        author = {Bryan Fichera},
+        title = {Shg{P}y},
+        year = {2020},
+        howpublished = {\url{https://bfichera.github.io/shgpy/}},
+        doi = {10.5281/zenodo.3873755}
+    }
+
 
 Contact me
 ==========
