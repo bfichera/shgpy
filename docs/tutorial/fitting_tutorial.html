@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Fitting tutorial &#8212; ShgPy 0.0.3 documentation</title>
+    <title>Fitting tutorial &#8212; ShgPy 0.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -55,14 +55,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="data_access_tutorial.html">Data access tutorial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tensor_tutorial.html">Tensor tutorial</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Fitting tutorial</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fourier-formula-generation">Fourier formula generation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-final-step-fitting-your-first-ra-shg-data">The final step: fitting your first RA-SHG data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#conclusion">Conclusion</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fitting tutorial</a></li>
 </ul>
 </li>
 </ul>
@@ -138,7 +131,7 @@
 <p>Most importantly, since step 1 involves every part of the formula which doesn’t depend on <code class="docutils literal notranslate"><span class="pre">chi</span></code>, it only needs to be run once. The result can then be cached and used every time you want to calculate a new Fourier formula (e.g. because you want to fit a new tensor). Step 2 is more specific, but only has to be run once for each tensor you want to try to fit. The result can then be saved and used later, having saved a lot of computation time.</p>
 <p>That all was pretty conceptual, but luckily, none of the details are really important in order to <em>use</em> ShgPy (note: if there’s interest, I would be happy to expand more on this point; see <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>). For now, let’s just see how it all works in practice.</p>
 <p>Remember that the goal is to generate a formula for the SHG intensity as a function of <code class="docutils literal notranslate"><span class="pre">phi</span></code> (or, since we’re working in Fourier space, a Fourier formula for the SHG intensity as a function of the Fourier frequency <code class="docutils literal notranslate"><span class="pre">n</span></code>). We proceed according to steps 1 and 2 above.</p>
-<p>To perform step 1, let’s follow shgpy/examples/generate_uft_example.py. We start by importing the logging module, which provides a flexible event-logging system and is widely implemented in ShgPy.</p>
+<p>To perform step 1, let’s follow <code class="docutils literal notranslate"><span class="pre">examples/generate_uft_example.py</span></code>. We start by importing the logging module, which provides a flexible event-logging system and is widely implemented in ShgPy.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">logging</span>
 </pre></div>
 </div>
@@ -162,9 +155,9 @@
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shgpy</span><span class="o">.</span><span class="n">fformgen</span><span class="o">.</span><span class="n">generate_uncontracted_fourier_transforms</span><span class="p">(</span><span class="n">AOI</span><span class="p">,</span> <span class="s1">&#39;uft_filename_prefix&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This calculation takes about five minutes on my machine. Note here that ‘uft_filename_prefix’ is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory <code class="docutils literal notranslate"><span class="pre">uft</span></code> and save the answers at <code class="docutils literal notranslate"><span class="pre">uft/uft10deg</span></code>. That means that <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms`()</span></code> will save four files: <code class="docutils literal notranslate"><span class="pre">uft/uft10deg_pp.p</span></code>, <code class="docutils literal notranslate"><span class="pre">uft/uft10deg_ps.p</span></code>, <code class="docutils literal notranslate"><span class="pre">uft/uft10deg_sp.p</span></code>, and <code class="docutils literal notranslate"><span class="pre">uft/uft10deg_ss.p</span></code>, each of which corresponds to a particular uncontracted Fourier transform.</p>
+<p>This calculation takes about five minutes on my machine. Note here that ‘uft_filename_prefix’ is a prefix to the paths where you want to save the cached answers. In the examples, we make a directory <code class="docutils literal notranslate"><span class="pre">examples/uft</span></code> and save the answers at <code class="docutils literal notranslate"><span class="pre">examples/uft/uft10deg</span></code>. That means that <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms`()</span></code> will save four files: <code class="docutils literal notranslate"><span class="pre">examples/uft/uft10deg_pp.p</span></code>, <code class="docutils literal notranslate"><span class="pre">examples/uft/uft10deg_ps.p</span></code>, <code class="docutils literal notranslate"><span class="pre">examples/uft/uft10deg_sp.p</span></code>, and <code class="docutils literal notranslate"><span class="pre">examples/uft/uft10deg_ss.p</span></code>, each of which corresponds to a particular uncontracted Fourier transform.</p>
 <p>Note that in the typical use case, the above should be the only time you have to run <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms`()</span></code>. The answers saved at <code class="docutils literal notranslate"><span class="pre">'uft_filename_prefix'+...</span></code> can be used for essentially any SHG fitting problem that you might encounter.</p>
-<p>Now let us turn to our specific use case. As an example, imagine that we are trying to fit the GaAs data available in <code class="docutils literal notranslate"><span class="pre">shgpy/examples/Data</span></code> to the tensor <code class="docutils literal notranslate"><span class="pre">shgpy.tensor_definitions.dipole['T_d']</span></code> oriented along the (110) direction. First, we define the fitting tensor</p>
+<p>Now let us turn to our specific use case. As an example, imagine that we are trying to fit the GaAs data available in <code class="docutils literal notranslate"><span class="pre">examples/Data</span></code> to the tensor <code class="docutils literal notranslate"><span class="pre">shgpy.tensor_definitions.dipole['T_d']</span></code> oriented along the (110) direction. First, we define the fitting tensor</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.tensor_definitions</span> <span class="kn">import</span> <span class="n">dipole</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t_dipole</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">particularize</span><span class="p">(</span><span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;T_d&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>

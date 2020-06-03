@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Data access tutorial &#8212; ShgPy 0.0.3 documentation</title>
+    <title>Data access tutorial &#8212; ShgPy 0.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -53,11 +53,7 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Data access tutorial</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#loading-ra-shg-data-into-shgpy">Loading RA-SHG data into ShgPy</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data access tutorial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tensor_tutorial.html">Tensor tutorial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting_tutorial.html">Fitting tutorial</a></li>
 </ul>
@@ -113,28 +109,28 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install shgpy
 </pre></div>
 </div>
-<p>at the terminal. You’ll also need to install <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy</span></code>, <code class="docutils literal notranslate"><span class="pre">sympy</span></code>, and, optionally, <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>; refer to the corresponding documentation for more information on these packages.</p>
+<p>at the terminal. You’ll also need to install <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy</span></code>, <code class="docutils literal notranslate"><span class="pre">sympy</span></code>, and, optionally, <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>; refer to the corresponding documentation for more information on these packages. If you want to follow along with these tutorials, it’s a good idea to download the <a class="reference internal" href="../examples.html"><span class="doc">example files</span></a>.</p>
 <p>The main functionality of ShgPy is to be able to fit RA-SHG data to specific fitting formulas, and ultimately to extract susceptibility tensor values from those fits. But before we get into the details, it’s useful to first familiarize ourselves with the basic routines for loading, manipulating, and plotting SHG data – without worrying yet about any internal computation.</p>
 </div>
 <div class="section" id="loading-ra-shg-data-into-shgpy">
 <h2>Loading RA-SHG data into ShgPy<a class="headerlink" href="#loading-ra-shg-data-into-shgpy" title="Permalink to this headline">¶</a></h2>
 <p>The first thing we’re going to try to do is just to load a collection of RA-SHG data into python. To do this, we’re going to make use of some routines in <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a>. Throughout this tutorial, feel free to reference the API documentation for further details about the functions and classes that we’re going to be using.</p>
-<p>By the way, this tutorial will be loosely following the example program located at shgpy/examples/data_plot_example.py, so you are welcome to follow along there (or else type these commands into a python terminal of your own).</p>
+<p>By the way, this tutorial will be loosely following the example program located at <code class="docutils literal notranslate"><span class="pre">examples/data_plot_example.py</span></code>, so you are welcome to follow along there (or else type these commands into a python terminal of your own).</p>
 <p>The first thing we need to do is to import <code class="docutils literal notranslate"><span class="pre">shgpy</span></code>:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shgpy</span>
 </pre></div>
 </div>
-<p>This gives us access to all of the routines located in the modules <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a> and <a class="reference internal" href="../api/shgpy.core.utilities.html#module-shgpy.core.utilities" title="shgpy.core.utilities"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.utilities</span></code></a>. The function we’re going to use right now is <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data" title="shgpy.core.data_handler.load_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data()</span></code></a>, which takes two parameters as input. The first is <code class="docutils literal notranslate"><span class="pre">data_filenames_dict</span></code>, which is a dictionary of filenames labelled by a <code class="docutils literal notranslate"><span class="pre">str</span></code> polarization combination. For example, the <code class="docutils literal notranslate"><span class="pre">shgpy/examples/Data</span></code> directory contains four <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files</p>
+<p>This gives us access to all of the routines located in the modules <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a> and <a class="reference internal" href="../api/shgpy.core.utilities.html#module-shgpy.core.utilities" title="shgpy.core.utilities"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.utilities</span></code></a>. The function we’re going to use right now is <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data" title="shgpy.core.data_handler.load_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data()</span></code></a>, which takes two parameters as input. The first is <code class="docutils literal notranslate"><span class="pre">data_filenames_dict</span></code>, which is a dictionary of filenames labelled by a <code class="docutils literal notranslate"><span class="pre">str</span></code> polarization combination. For example, the <code class="docutils literal notranslate"><span class="pre">examples/Data</span></code> directory contains four <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">shgpy/examples/Data/dataPP.csv</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">shgpy/examples/Data/dataPS.csv</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">shgpy/examples/Data/dataSP.csv</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">shgpy/examples/Data/dataSS.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/Data/dataPP.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/Data/dataPS.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/Data/dataSP.csv</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/Data/dataSS.csv</span></code></p></li>
 </ul>
 </div></blockquote>
 <p>which contain RA-SHG data from the (110) surface of GaAs. Take a look at these files to see an example of the type of syntax to use in your own <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files.</p>
-<p>Working in the <code class="docutils literal notranslate"><span class="pre">shgpy/examples</span></code> directory, let’s create a filename dictionary</p>
+<p>Working in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> directory, let’s create a filename dictionary</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data_filenames_dict</span> <span class="o">=</span> <span class="p">{</span>
 <span class="go">    &#39;PP&#39;:&#39;Data/dataPP.csv&#39;,</span>
 <span class="go">    &#39;PS&#39;:&#39;Data/dataPS.csv&#39;,</span>

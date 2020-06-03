@@ -39,6 +39,7 @@ Getting started
 After installing ShgPy, familiarize yourself with the basic routines by reading the tutorials.
 
 .. toctree::
+   :maxdepth: 2
 
    tutorial/tutorials
 

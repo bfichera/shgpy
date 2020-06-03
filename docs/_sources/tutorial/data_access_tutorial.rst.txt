@@ -8,7 +8,7 @@ Wecome to ShgPy! In this tutorial, we will go through the basic steps to underst
 
     $ pip install shgpy
 
-at the terminal. You'll also need to install ``numpy``, ``scipy``, ``sympy``, and, optionally, ``matplotlib``; refer to the corresponding documentation for more information on these packages.
+at the terminal. You'll also need to install ``numpy``, ``scipy``, ``sympy``, and, optionally, ``matplotlib``; refer to the corresponding documentation for more information on these packages. If you want to follow along with these tutorials, it's a good idea to download the :doc:`example files <../examples>`.
 
 The main functionality of ShgPy is to be able to fit RA-SHG data to specific fitting formulas, and ultimately to extract susceptibility tensor values from those fits. But before we get into the details, it's useful to first familiarize ourselves with the basic routines for loading, manipulating, and plotting SHG data -- without worrying yet about any internal computation.
 
@@ -17,22 +17,22 @@ Loading RA-SHG data into ShgPy
 
 The first thing we're going to try to do is just to load a collection of RA-SHG data into python. To do this, we're going to make use of some routines in :mod:`shgpy.core.data_handler`. Throughout this tutorial, feel free to reference the API documentation for further details about the functions and classes that we're going to be using.
 
-By the way, this tutorial will be loosely following the example program located at shgpy/examples/data_plot_example.py, so you are welcome to follow along there (or else type these commands into a python terminal of your own).
+By the way, this tutorial will be loosely following the example program located at ``examples/data_plot_example.py``, so you are welcome to follow along there (or else type these commands into a python terminal of your own).
 
 The first thing we need to do is to import ``shgpy``:
 
 >>> import shgpy
 
-This gives us access to all of the routines located in the modules :mod:`shgpy.core.data_handler` and :mod:`shgpy.core.utilities`. The function we're going to use right now is :func:`shgpy.core.data_handler.load_data`, which takes two parameters as input. The first is ``data_filenames_dict``, which is a dictionary of filenames labelled by a ``str`` polarization combination. For example, the ``shgpy/examples/Data`` directory contains four ``.csv`` files
+This gives us access to all of the routines located in the modules :mod:`shgpy.core.data_handler` and :mod:`shgpy.core.utilities`. The function we're going to use right now is :func:`shgpy.core.data_handler.load_data`, which takes two parameters as input. The first is ``data_filenames_dict``, which is a dictionary of filenames labelled by a ``str`` polarization combination. For example, the ``examples/Data`` directory contains four ``.csv`` files
 
-    - ``shgpy/examples/Data/dataPP.csv``
-    - ``shgpy/examples/Data/dataPS.csv``
-    - ``shgpy/examples/Data/dataSP.csv``
-    - ``shgpy/examples/Data/dataSS.csv``   
+    - ``examples/Data/dataPP.csv``
+    - ``examples/Data/dataPS.csv``
+    - ``examples/Data/dataSP.csv``
+    - ``examples/Data/dataSS.csv``   
 
 which contain RA-SHG data from the (110) surface of GaAs. Take a look at these files to see an example of the type of syntax to use in your own ``.csv`` files.
 
-Working in the ``shgpy/examples`` directory, let's create a filename dictionary
+Working in the ``examples`` directory, let's create a filename dictionary
 
 >>> data_filenames_dict = {
     'PP':'Data/dataPP.csv',
