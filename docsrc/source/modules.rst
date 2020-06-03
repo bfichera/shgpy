@@ -2,7 +2,6 @@ Documentation
 =============
 
 .. toctree::
-   :maxdepth: 4
 
    api/shgpy.core.data_handler
    api/shgpy.core.utilities

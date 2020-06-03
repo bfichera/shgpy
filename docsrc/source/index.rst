@@ -39,10 +39,15 @@ Getting started
 After installing ShgPy, familiarize yourself with the basic routines by reading the tutorials.
 
 .. toctree::
-   :maxdepth: 2
 
    tutorial/tutorials
 
+To follow along, you'll want to download the :doc:`example files <examples>`.
+
+.. toctree::
+   :hidden:
+
+   examples 
 
 Documentation
 =============
