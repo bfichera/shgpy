@@ -3,7 +3,7 @@
 echo $1 > .version
 
 python setup.py sdist bdist_wheel
-python -m twine upload dist/*
+pip install dist/shgpy-$1.tar.gz --upgrade
 
 rm -r build
 rm -r dist
