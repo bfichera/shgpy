@@ -40,7 +40,7 @@ class DataContainer:
         self._check_defining_iterable(iterable)
         self._input_angle_units = input_angle_units
         self._scale = 1
-        self._data_dict = dict(iterable)
+        self._data_dict = deepcopy(dict(iterable))
         self._phase_shift = 0
         self._offset = 0
         if input_angle_units == 'degrees':
@@ -298,7 +298,7 @@ class fDataContainer:
     def __init__(self, iterable, M=16):
         self._M = M
         self._check_defining_iterable(iterable)
-        self._fdata_dict = dict(iterable)
+        self._fdata_dict = deepcopy(dict(iterable))
         self._scale = 1
         self._phase_shift = 0
 
@@ -497,7 +497,7 @@ class fFormContainer:
     def __init__(self, iterable, M=16):
         self._M = M
         self._check_defining_iterable(iterable)
-        self._fform_dict = dict(iterable)
+        self._fform_dict = deepcopy(dict(iterable))
         self._sympify()
 
     def _check_defining_iterable(self, iterable):
@@ -645,7 +645,7 @@ class FormContainer:
 
     def __init__(self, iterable):
         self._check_defining_iterable
-        self._form_dict = dict(iterable)
+        self._form_dict = deepcopy(dict(iterable))
         self._sympify
 
     def get_free_symbols(self):
