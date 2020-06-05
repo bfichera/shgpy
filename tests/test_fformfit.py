@@ -15,7 +15,7 @@ from shgpy.plotter import easy_plot, easy_polar_plot
 import numpy as np
 import shgpy.shg_symbols as S
 
-logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 MANUAL = False
 
