@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>shgpy.core.data_handler module &#8212; ShgPy 0.1.1 documentation</title>
+    <title>shgpy.core.data_handler module &#8212; ShgPy 0.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -1141,6 +1141,47 @@ a true fFormContainer instance using this function.</p>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.core.data_handler.merge_containers">
+<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">merge_containers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">containers</span></em>, <em class="sig-param"><span class="n">mapping</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.merge_containers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge two contains with new keys according to <cite>mapping</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>containers</strong><span class="classifier">list of Container_like</span></dt><dd><p>List of Containers (DataContainer, fDataContainer,
+FormContainer, or fFormContainer). Must be the same type.</p>
+</dd>
+<dt><strong>mapping</strong><span class="classifier">function(key, index)</span></dt><dd><p>Function which maps <cite>key</cite> of Container and <cite>index</cite>
+of a Container in <cite>containers</cite> to <cite>str</cite>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>container</strong><span class="classifier">Container_like</span></dt><dd><p>Container object of type <code class="docutils literal notranslate"><span class="pre">type(containers[0])</span></code> with items
+((k1, v1), (k2, v2), …), where ki are the mapped keys of
+the containers and vi are the corresponding values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ydata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">xdata</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iterable</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;PP&#39;</span><span class="p">,</span> <span class="s1">&#39;PS&#39;</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dat1</span> <span class="o">=</span> <span class="n">DataContainer</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dat2</span> <span class="o">=</span> <span class="n">DataContainer</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">key</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dat3</span> <span class="o">=</span> <span class="n">merge_containers</span><span class="p">([</span><span class="n">dat1</span><span class="p">,</span> <span class="n">dat2</span><span class="p">],</span> <span class="n">mapping</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dat3</span><span class="o">.</span><span class="n">get_keys</span><span class="p">():</span>
+<span class="go">[&#39;PP0&#39;, &#39;PS0&#39;, &#39;PP1&#39;, &#39;PS2&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dat3</span><span class="o">.</span><span class="n">get_values</span><span class="p">():</span>
+<span class="go">[array([xdata, ydata]), array([xdata, ydata]), ...]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
