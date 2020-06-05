@@ -998,6 +998,67 @@ def form_to_fdat(form, subs_dict, M=16):
     return fform_to_fdat(form_to_fform(form, M), subs_dict)
 
 
+def merge_containers(containers, mapping):
+    """Merge two contains with new keys according to `mapping`.
+
+    Parameters
+    ----------
+    containers : list of Container_like
+        List of Containers (DataContainer, fDataContainer,
+        FormContainer, or fFormContainer). Must be the same type.
+    mapping : function(key, index)
+        Function which maps `key` of Container and `index`
+        of a Container in `containers` to `str`.
+
+    Returns
+    -------
+    container : Container_like
+        Container object of type ``type(containers[0])`` with items
+        ((k1, v1), (k2, v2), ...), where ki are the mapped keys of
+        the containers and vi are the corresponding values.
+
+    Examples
+    --------
+    >>> xdata = np.linspace(0, 2*np.pi, 1000)
+    >>> ydata = np.sin(xdata)**2
+    >>> iterable = {k:np.array([xdata, ydata]) for k in ['PP', 'PS']}
+    >>> dat1 = DataContainer(iterable)
+    >>> dat2 = DataContainer(iterable)
+    >>> def mapping(key, index):
+    >>>     return key+str(index)
+    >>> dat3 = merge_containers([dat1, dat2], mapping)
+    >>> dat3.get_keys():
+    ['PP0', 'PS0', 'PP1', 'PS2']
+    >>> dat3.get_values():
+    [array([xdata, ydata]), array([xdata, ydata]), ...]
+
+    """
+    iterable = {}
+    new_type = type(containers[0])
+    if new_type in [DataContainer, fDataContainer]:
+        type_d = True
+    else:
+        type_d = False
+    if new_type not in [DataContainer, fDataContainer, FormContainer, fFormContainer]:
+        raise TypeError('Containers must be dype DataContainer, fDataContainer, FormContainer, or fFormContainer')
+    for i,container in enumerate(containers):
+        if type_d:
+            items = container.get_items('radians')
+        else:
+            items = container.get_items()
+        for k,v in items:
+            new_k = mapping(k, i)
+            new_v = np.copy(v)
+            iterable[new_k] = new_v
+            if type(container) != new_type:
+                raise TypeError('Containers are of different types.')
+    
+    if type_d:
+        return new_type(iterable, 'radians')
+    else:
+        return new_type(iterable)
+
+
 def read_csv_file(filename, delimiter=','):
     """Read a csv file.
 
