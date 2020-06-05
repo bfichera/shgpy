@@ -1035,7 +1035,7 @@ def merge_containers(containers, mapping):
     """
     iterable = {}
     new_type = type(containers[0])
-    if new_type in [DataContainer, fDataContainer]:
+    if new_type == type(DataContainer):
         type_d = True
     else:
         type_d = False
