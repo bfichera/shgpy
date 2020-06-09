@@ -29,7 +29,7 @@ And that's it -- no other part of the formula depends on ``phi`` (note: it's act
 In particular, the susceptibility tensor , which is the only part of the formula that will change from problem to problem, does not natively depend on ``phi``. Therefore, to compute the Fourier transform of the intensity, we can compute the Fourier transform of everything not involving the susceptibility, and then do a (conceptually complicated, but not numerically difficult) contraction by ``chi_ijk``. In ShgPy, we perform this two-step process by
 
 1. Running :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`
-2. Running :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms`
+2. Running :func:`shgpy.fformgen.generate_contracted_fourier_transforms`
 
 Most importantly, since step 1 involves every part of the formula which doesn't depend on ``chi``, it only needs to be run once. The result can then be cached and used every time you want to calculate a new Fourier formula (e.g. because you want to fit a new tensor). Step 2 is more specific, but only has to be run once for each tensor you want to try to fit. The result can then be saved and used later, having saved a lot of computation time.
 

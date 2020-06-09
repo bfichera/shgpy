@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Fitting tutorial &#8212; ShgPy 0.2.3 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitting tutorial &#8212; ShgPy 0.2.4 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -126,7 +127,7 @@
 <p>In particular, the susceptibility tensor , which is the only part of the formula that will change from problem to problem, does not natively depend on <code class="docutils literal notranslate"><span class="pre">phi</span></code>. Therefore, to compute the Fourier transform of the intensity, we can compute the Fourier transform of everything not involving the susceptibility, and then do a (conceptually complicated, but not numerically difficult) contraction by <code class="docutils literal notranslate"><span class="pre">chi_ijk</span></code>. In ShgPy, we perform this two-step process by</p>
 <ol class="arabic simple">
 <li><p>Running <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms" title="shgpy.fformgen.generate_uncontracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms()</span></code></a></p></li>
-<li><p>Running <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms" title="shgpy.fformgen.generate_uncontracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms()</span></code></a></p></li>
+<li><p>Running <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_contracted_fourier_transforms()</span></code></a></p></li>
 </ol>
 <p>Most importantly, since step 1 involves every part of the formula which doesn’t depend on <code class="docutils literal notranslate"><span class="pre">chi</span></code>, it only needs to be run once. The result can then be cached and used every time you want to calculate a new Fourier formula (e.g. because you want to fit a new tensor). Step 2 is more specific, but only has to be run once for each tensor you want to try to fit. The result can then be saved and used later, having saved a lot of computation time.</p>
 <p>That all was pretty conceptual, but luckily, none of the details are really important in order to <em>use</em> ShgPy (note: if there’s interest, I would be happy to expand more on this point; see <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>). For now, let’s just see how it all works in practice.</p>
@@ -247,7 +248,7 @@
       &copy;2020, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
