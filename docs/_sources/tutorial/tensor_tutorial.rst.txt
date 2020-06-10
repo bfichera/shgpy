@@ -147,4 +147,4 @@ array([[[0, xyx, yyz],
 
 That's good, our tensor is actually invariant under 3-fold rotation as advertised.
 
-This ends our tutorial on tensors in ShgPy, but feel free to peruse through the relevant :doc:`documentation <../modules>` for more info before moving on to the :doc:`next tutorial <fitting_tutorial>`
+This ends our tutorial on tensors in ShgPy, but feel free to peruse through the relevant :doc:`documentation <../modules>` for more info before moving on to the :doc:`next tutorial <fitting_tutorial>`.

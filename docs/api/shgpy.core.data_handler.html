@@ -58,6 +58,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQs</a></li>
+</ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">shgpy.core.data_handler module</a></li>
@@ -111,7 +114,7 @@
 <span id="shgpy-core-data-handler-module"></span><h1>shgpy.core.data_handler module<a class="headerlink" href="#module-shgpy.core.data_handler" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="shgpy.core.data_handler.DataContainer">
-<em class="property">class </em><code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">DataContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iterable</span></em>, <em class="sig-param"><span class="n">input_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">DataContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iterable</span></em>, <em class="sig-param"><span class="n">input_angle_units</span></em>, <em class="sig-param"><span class="n">normal_to_oblique</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains SHG data in <cite>phi</cite>-space.</p>
 <dl class="field-list simple">
@@ -121,7 +124,13 @@
 <cite>{‘PP’:array([xdata, ydata]), ‘PS’:…}</cite>. Also accepts <cite>array_like</cite>
 of form <cite>((‘PP’:array([xdata, ydata])), (‘PS’, …), …)</cite>.</p>
 </dd>
-<dt><strong>angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite>.</p>
+<dt><strong>input_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite>.</p>
+</dd>
+<dt><strong>normal_to_oblique</strong><span class="classifier">bool, optional</span></dt><dd><p>Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, iterable should have only
+two elements: one with key ‘PP’ or ‘SS’, and one with key ‘PS’
+or ‘SP’. Then, upon initialization, compute the “missing”
+polarization components by rotating by 90 degrees. The final
+object has <code class="docutils literal notranslate"><span class="pre">dat.get_keys()</span> <span class="pre">=</span> <span class="pre">['PP',</span> <span class="pre">'PS',</span> <span class="pre">'SP',</span> <span class="pre">'SS']</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -428,6 +437,26 @@ in the form <cite>(pc, formula)</cite></p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pcs</strong><span class="classifier">list of str</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="shgpy.core.data_handler.FormContainer.get_pc">
+<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the formula for single polarization combination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pc</strong><span class="classifier">str</span></dt><dd><p>Polarization combination of interest.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>formula</strong><span class="classifier">sympy.Expr</span></dt><dd><p>Formula expression for polarization combination <cite>pc</cite>.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -1043,7 +1072,7 @@ class and performing a Fourier transform.</p>
 
 <dl class="py function">
 <dt id="shgpy.core.data_handler.load_data">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">angle_units</span></em>, <em class="sig-param"><span class="n">normal_to_oblique</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load RA-SHG data from a dict of filenames.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1051,6 +1080,8 @@ class and performing a Fourier transform.</p>
 <dt><strong>data_filenames_dict</strong><span class="classifier">dict of (str</span></dt><dd><p>dict of form (polarization combination : filename).</p>
 </dd>
 <dt><strong>data_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite></p>
+</dd>
+<dt><strong>normal_to_oblique</strong><span class="classifier">bool, optional</span></dt><dd><p>Defaults to False. See <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a>.</p>
 </dd>
 </dl>
 </dd>
@@ -1064,7 +1095,7 @@ class and performing a Fourier transform.</p>
 
 <dl class="py function">
 <dt id="shgpy.core.data_handler.load_data_and_dark_subtract">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data_and_dark_subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">data_angle_units</span></em>, <em class="sig-param"><span class="n">dark_filenames_dict</span></em>, <em class="sig-param"><span class="n">dark_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data_and_dark_subtract" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data_and_dark_subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">data_angle_units</span></em>, <em class="sig-param"><span class="n">dark_filenames_dict</span></em>, <em class="sig-param"><span class="n">dark_angle_units</span></em>, <em class="sig-param"><span class="n">normal_to_oblique</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data_and_dark_subtract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load RA-SHG data from a dict of filenames and dark subtract.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1076,6 +1107,8 @@ class and performing a Fourier transform.</p>
 <dt><strong>dark_filenames_dict</strong><span class="classifier">dict of (str</span></dt><dd><p>dict of form (polarization combination : filename).</p>
 </dd>
 <dt><strong>dark_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite> for the dark.</p>
+</dd>
+<dt><strong>normal_to_oblique</strong><span class="classifier">bool, optional</span></dt><dd><p>Defaults to False. See <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a>.</p>
 </dd>
 </dl>
 </dd>
@@ -1089,7 +1122,7 @@ class and performing a Fourier transform.</p>
 
 <dl class="py function">
 <dt id="shgpy.core.data_handler.load_data_and_fourier_transform">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data_and_fourier_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">data_angle_units</span></em>, <em class="sig-param"><span class="n">dark_filenames_dict</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dark_angle_units</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interp_kind</span><span class="o">=</span><span class="default_value">'cubic'</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em>, <em class="sig-param"><span class="n">min_subtract</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data_and_fourier_transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data_and_fourier_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">data_angle_units</span></em>, <em class="sig-param"><span class="n">dark_filenames_dict</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dark_angle_units</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interp_kind</span><span class="o">=</span><span class="default_value">'cubic'</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em>, <em class="sig-param"><span class="n">min_subtract</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">normal_to_oblique</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data_and_fourier_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load RA-SHG data from a dict of filenames and Fourier transform</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1115,6 +1148,8 @@ Dict of <cite>{sympy.Symbol : float}</cite> pairs to perform the substitution.</
 </dd>
 <dt><strong>min_subtract</strong><span class="classifier">bool</span></dt><dd><p>Whether to subtract the minimum before Fourier transforming.
 Default is False.</p>
+</dd>
+<dt><strong>normal_to_oblique</strong><span class="classifier">bool, optional</span></dt><dd><p>Defaults to False. See <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a>.</p>
 </dd>
 </dl>
 </dd>

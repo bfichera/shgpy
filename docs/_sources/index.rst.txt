@@ -36,7 +36,7 @@ You'll also need to install ``numpy``, ``scipy``, ``sympy``, and, optionally, ``
 Getting started
 ===============
 
-After installing ShgPy, familiarize yourself with the basic routines by reading the tutorials.
+After installing ShgPy, familiarize yourself with the basic routines by reading the :doc:`tutorials <tutorial/tutorials>` and :doc:`FAQs <faq>`.
 
 .. toctree::
    :maxdepth: 2
@@ -49,6 +49,11 @@ To follow along, you'll want to download the :doc:`example files <examples>`.
    :hidden:
 
    examples 
+
+.. toctree::
+   :hidden:
+
+   faq
 
 Documentation
 =============
