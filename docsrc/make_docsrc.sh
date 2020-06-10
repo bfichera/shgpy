@@ -2,6 +2,7 @@
 
 # This file is meant to be run in the docsrc directory.
 
+rm -r build
 rm -r source/api
 sphinx-apidoc -feT -o source/api ../shgpy
 rm source/api/shgpy.rst

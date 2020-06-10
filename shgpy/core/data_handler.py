@@ -5,8 +5,10 @@ import pickle
 from scipy.interpolate import interp1d
 from scipy.integrate import quad
 import logging
+import itertools
 from copy import deepcopy
 from .. import shg_symbols as S
+from warnings import warn
 
 _logger = logging.getLogger(__name__)
 
@@ -20,8 +22,14 @@ class DataContainer:
         dict which defines the data. Should be in form
         `{'PP':array([xdata, ydata]), 'PS':...}`. Also accepts `array_like`
         of form `(('PP':array([xdata, ydata])), ('PS', ...), ...)`.
-    angle_units : {'radians', 'degrees'}
+    input_angle_units : {'radians', 'degrees'}
         Units of `xdata`.
+    normal_to_oblique : bool, optional
+        Defaults to ``False``. If ``True``, iterable should have only
+        two elements: one with key 'PP' or 'SS', and one with key 'PS'
+        or 'SP'. Then, upon initialization, compute the "missing"
+        polarization components by rotating by 90 degrees. The final
+        object has ``dat.get_keys() = ['PP', 'PS', 'SP', 'SS']``.
 
     Notes
     -----
@@ -33,8 +41,9 @@ class DataContainer:
     allows one to keep track of whatever manipulations (scaling, offsetting) have
     been applied to the data, as well as other attributes like the units with
     which the data was defined.
+
     """
-    def __init__(self, iterable, input_angle_units):
+    def __init__(self, iterable, input_angle_units, normal_to_oblique=False):
         self._input_angle_units = input_angle_units.lower()
         self._check_angle_units(input_angle_units)
         self._check_defining_iterable(iterable)
@@ -45,22 +54,74 @@ class DataContainer:
         self._offset = 0
         if input_angle_units == 'degrees':
             self._convert_data_dict_to_radians()
+        if normal_to_oblique:
+            self._coerce_to_oblique_incidence()
+        self._remove_duplicates()
+        self._modulate_data_dict()
+        self._sort_data_dict()
 
     def _check_angle_units(self, angle_units):
         if angle_units not in ['radians', 'degrees']:
             raise ValueError('angle_units input must be one of \'radians\' or \'degrees\'.')
 
     def _check_defining_iterable(self, iterable):
-        def raise_error():
-            raise ValueError('Invalid Data input')
         try:
             bad_key = False in [type(k) == str for k in dict(iterable).keys()]
             bad_val = False in [type(v) == np.ndarray and v[0].shape == v[1].shape and v.dtype != object and v.ndim == 2 for v in dict(iterable).values()]
         except:
-            raise_error()
+            raise ValueError('Invalid data input')
         if bad_key or bad_val:
-            raise_error()
+            raise ValueError(f'Invalid data input: bad {"key" if bad_key else "value"}')
 
+    def _remove_duplicates(self):
+        for k,v in self._data_dict.items():
+            new_xdata = []
+            new_ydata = []
+            for x,y in zip(v[0], v[1]):
+                if not (x % (2*np.pi)) in new_xdata:
+                    new_xdata.append(x)
+                    new_ydata.append(y)
+            if len(new_xdata) != len(v[0]):
+                warn('Duplicate values encountered in data file.')
+            new_xydata = list(zip(*zip(new_xdata, new_ydata)))
+            self._data_dict[k] = np.array(new_xydata, dtype=v.dtype)
+
+    def _coerce_to_oblique_incidence(self): 
+        keys = set((k.upper()[:2] for k in self._data_dict.keys()))
+        if keys in [set(['PP', 'PS', 'SP', 'SS'])]:
+            key_type = 'oblique'
+        elif keys in [set(i) for i in itertools.product(['PP', 'SS'], ['PS', 'SP'])]:
+            key_type = 'normal'
+        else:
+            raise ValueError("Invalid input: keys must be 'PP', 'PS', 'SP', 'SS' or a nonparallel combination of two.")
+        
+        if key_type == 'oblique':
+            self._data_dict = {k.upper()[:2]:self._data_dict[k] for k in self._data_dict.keys()}
+        if key_type == 'normal':
+            self._data_dict = {k.upper()[:2]:self._data_dict[k] for k in self._data_dict.keys()}
+            leftover = ['PP', 'PS', 'SP', 'SS']
+            for k in self._data_dict.keys():
+                leftover.remove(k)
+            for k in leftover:
+                if k[0] == k[1]:
+                    copy_pc = {'P':'S', 'S':'P'}[k[0]]*2
+                else:
+                    copy_pc = k[1]+k[0]
+                self._data_dict[k] = deepcopy(self._data_dict[copy_pc])
+                for i,x in enumerate(self._data_dict[k][0]):
+                    self._data_dict[k][0][i] = (x + np.pi/2) % (2*np.pi)
+
+    def _sort_data_dict(self):
+        for k,v in self._data_dict.items():
+            new_v = np.array(list(zip(*sorted(zip(v[0], v[1]), key=lambda x:x[0]))))
+            self._data_dict[k] = new_v
+
+    def _modulate_data_dict(self):
+        for k,v in self._data_dict.items():
+            xdata, ydata = v
+            new_xdata = xdata % (2*np.pi)
+            self._data_dict[k] = np.array([new_xdata, ydata], dtype=v.dtype)
+                
     def _convert_data_dict_to_radians(self):
         self._data_dict = {k:np.array([np.deg2rad(v[0]), np.copy(v[1])]) for k,v in self._data_dict.items()}
 
@@ -169,6 +230,7 @@ class DataContainer:
             angle = np.deg2rad(angle)
         self._data_dict = {k:np.array([(v[0]+angle) % (2*np.pi), v[1]]) for k,v in self._data_dict.items()}
         self._phase_shift += angle
+        self._sort_data_dict()
 
     def get_pc(self, pc, requested_angle_units):
         """Get data for single polarization combination.
@@ -747,6 +809,21 @@ class FormContainer:
         """
         return list(self._form_dict.items())
 
+    def get_pc(self, pc):
+        """Get the formula for single polarization combination.
+
+        Parameters
+        ----------
+        pc : str
+            Polarization combination of interest.
+
+        Returns
+        -------
+        formula : sympy.Expr
+            Formula expression for polarization combination `pc`. 
+        """
+        return self._form_dict[pc]
+
 
 def n2i(n, M=16):
     """Convert between Fourier index and array index
@@ -814,7 +891,7 @@ def fdat_to_dat(fdat, num_points):
         for m in np.arange(-M, M+1):
             ydata += v[n2i(m, M)] * (np.cos(m * xdata) + 1j*np.sin(m * xdata))
         iterable[k] = np.array([xdata, ydata]).real.astype(float)
-    return DataContainer(iterable, 'radians')
+    return DataContainer(iterable, 'radians', normal_to_oblique=False)
 
 
 def fform_to_dat(fform, subs_dict, num_points):
@@ -927,7 +1004,7 @@ def form_to_dat(form, subs_dict, num_points):
         xdata = np.linspace(0, 2*np.pi, num_points, endpoint=False)
         ydata = np.array([f(x) for x in xdata])
         iterable[k] = np.array([xdata, ydata], dtype=complex).real
-    return DataContainer(iterable, 'radians')
+    return DataContainer(iterable, 'radians', normal_to_oblique=False)
 
 
 def _I_component(expr):
@@ -1113,10 +1190,10 @@ def dat_subtract(dat1, dat2):
             raise ValueError('DataContainers have different xdatas.')
         new_ydata = ydata2 - ydata1
         new_dict[k] = np.array([new_xdata, new_ydata])
-    return DataContainer(new_dict, 'radians')
+    return DataContainer(new_dict, 'radians', normal_to_oblique=False)
        
 
-def load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_filenames_dict, dark_angle_units):
+def load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_filenames_dict, dark_angle_units, normal_to_oblique=False):
     """Load RA-SHG data from a dict of filenames and dark subtract.
 
     Parameters
@@ -1129,6 +1206,8 @@ def load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_file
         dict of form (polarization combination : filename).
     dark_angle_units : {'radians', 'degrees'}
         Units of `xdata` for the dark.
+    normal_to_oblique : bool, optional
+        Defaults to False. See :class:`~shgpy.core.data_handler.DataContainer`.
 
     Returns
     -------
@@ -1137,12 +1216,12 @@ def load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_file
     """
     if set(data_filenames_dict.keys()) != set(dark_filenames_dict.keys()):
         raise ValueError('filename dicts have different keys.')
-    dat1 = DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, data_angle_units)
-    dat2 = DataContainer({k:read_csv_file(v) for k,v in dark_filenames_dict.items()}, dark_angle_units)
+    dat1 = DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, data_angle_units, normal_to_oblique=normal_to_oblique)
+    dat2 = DataContainer({k:read_csv_file(v) for k,v in dark_filenames_dict.items()}, dark_angle_units, normal_to_oblique=normal_to_oblique)
     return dat_subtract(dat1, dat2)
     
 
-def load_data(data_filenames_dict, angle_units):
+def load_data(data_filenames_dict, angle_units, normal_to_oblique=False):
     """Load RA-SHG data from a dict of filenames.
 
     Parameters
@@ -1151,13 +1230,15 @@ def load_data(data_filenames_dict, angle_units):
         dict of form (polarization combination : filename).
     data_angle_units : {'radians', 'degrees'}
         Units of `xdata`
+    normal_to_oblique : bool, optional
+        Defaults to False. See :class:`~shgpy.core.data_handler.DataContainer`.
 
     Returns
     -------
     dat : DataContainer
     
     """
-    return DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, angle_units)
+    return DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, angle_units, normal_to_oblique=normal_to_oblique)
 
 
 def dat_to_fdat(dat, interp_kind='cubic', M=16):
@@ -1197,7 +1278,7 @@ def dat_to_fdat(dat, interp_kind='cubic', M=16):
     for k in dat.get_keys():
         for m in np.arange(-M, M+1):
             xdata, ydata = dat.get_pc(k, 'radians')
-            interp_func = interp1d(xdata, ydata, kind=interp_kind)
+            interp_func = interp1d(xdata, ydata, kind=interp_kind, fill_value='extrapolate')
             interp_xdata = np.linspace(0, 2*np.pi, len(ydata), endpoint=False)
             interp_ydata = interp_func(interp_xdata)
             dx = interp_xdata[1] - interp_xdata[0]
@@ -1205,7 +1286,7 @@ def dat_to_fdat(dat, interp_kind='cubic', M=16):
     return fDataContainer(ans.items(), M=M)
 
 
-def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_filenames_dict=None, dark_angle_units=None, interp_kind='cubic', M=16, min_subtract=False, scale=1):
+def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_filenames_dict=None, dark_angle_units=None, interp_kind='cubic', M=16, min_subtract=False, scale=1, normal_to_oblique=False):
     """Load RA-SHG data from a dict of filenames and Fourier transform
 
     Parameters
@@ -1232,6 +1313,8 @@ def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_
     min_subtract : bool
         Whether to subtract the minimum before Fourier transforming.
         Default is False.
+    normal_to_oblique : bool, optional
+        Defaults to False. See :class:`~shgpy.core.data_handler.DataContainer`.
 
     Returns
     -------
@@ -1240,9 +1323,9 @@ def load_data_and_fourier_transform(data_filenames_dict, data_angle_units, dark_
     
     """
     if dark_filenames_dict is not None:
-        dat = load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_filenames_dict, dark_angle_units)
+        dat = load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_filenames_dict, dark_angle_units, normal_to_oblique=normal_to_oblique)
     else:
-        dat = load_data(data_filenames_dict, data_angle_units)
+        dat = load_data(data_filenames_dict, data_angle_units, normal_to_oblique=normal_to_oblique)
     if min_subtract:
         dat.subtract_min()
     fdat = dat_to_fdat(dat, interp_kind=interp_kind, M=M)
