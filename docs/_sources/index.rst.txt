@@ -51,6 +51,7 @@ To follow along, you'll want to download the :doc:`example files <examples>`.
    examples 
 
 .. toctree::
+   :maxdepth: 1
    :hidden:
 
    faq
