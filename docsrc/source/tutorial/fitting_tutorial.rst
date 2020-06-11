@@ -53,7 +53,7 @@ Let's configure the logger:
 
 (Note that while useful, the logging implementation is purely optional; it just let's us look into some of the debugging messages produced by the functions in :func:`shgpy.fformgen`).
 
-Although the angle of incidence can be left as a free variable in the Fourier formula generation (see :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms_symb`), it is a useless complication unless truly needed. So let's hardcode it:
+Although the angle of incidence can be left as a free variable in the Fourier formula generation (see :func:`shgpy.fformgen.generate_uncontracted_fourier_transforms_symb` and ``examples/generate_uft_symb_examples.py``), it is a useless complication unless truly needed. So let's hardcode it:
 
 >>> AOI = 0.1745  # 10 degrees, in radians
 
