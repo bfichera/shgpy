@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitting tutorial &#8212; ShgPy 0.3.0 documentation</title>
+    <title>Fitting tutorial &#8212; ShgPy 0.3.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -150,7 +150,7 @@
 </pre></div>
 </div>
 <p>(Note that while useful, the logging implementation is purely optional; it just let’s us look into some of the debugging messages produced by the functions in <a class="reference internal" href="../api/shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen()</span></code></a>).</p>
-<p>Although the angle of incidence can be left as a free variable in the Fourier formula generation (see <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms_symb" title="shgpy.fformgen.generate_uncontracted_fourier_transforms_symb"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms_symb()</span></code></a>), it is a useless complication unless truly needed. So let’s hardcode it:</p>
+<p>Although the angle of incidence can be left as a free variable in the Fourier formula generation (see <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms_symb" title="shgpy.fformgen.generate_uncontracted_fourier_transforms_symb"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_uncontracted_fourier_transforms_symb()</span></code></a> and <code class="docutils literal notranslate"><span class="pre">examples/generate_uft_symb_examples.py</span></code>), it is a useless complication unless truly needed. So let’s hardcode it:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AOI</span> <span class="o">=</span> <span class="mf">0.1745</span>  <span class="c1"># 10 degrees, in radians</span>
 </pre></div>
 </div>
