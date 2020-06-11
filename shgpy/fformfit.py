@@ -13,12 +13,32 @@ relevant `scipy` documentation for more info.
 import sympy as sp
 import numpy as np
 from .core import n2i
-from scipy.optimize import basinhopping
-from scipy.optimize import least_squares
+from scipy.optimize import (
+    basinhopping,
+    least_squares,
+    OptimizeResult,
+)
 import time
 import logging
+from warnings import warn
 
 _logger = logging.getLogger(__name__)
+
+
+def _check_fform(fform):
+    if not fform.get_free_symbols():
+        message = 'fFormContainer object has no free symbols to use as fitting parameters. Is your fitting formula actually zero?'
+        warn(message)
+        ret = OptimizeResult(
+            x=np.array([]),
+            xdict={},
+            success=False,
+            status=0,
+            message=message,
+        )
+        return ret
+    else:
+        return True
 
 
 def _I_component(expr):
@@ -106,6 +126,9 @@ def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
         a dictionary.
 
     """
+    check = _check_fform(fform)
+    if check:
+        return check
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -165,6 +188,9 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5
         a dictionary.
 
     """
+    check = _check_fform(fform)
+    if check:
+        return check
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -231,6 +257,9 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
         a dictionary.
 
     """
+    check = _check_fform(fform)
+    if check:
+        return check
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -304,7 +333,9 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize
     but can speed up the minimization algorithm.
 
     """
-    
+    check = _check_fform(fform)
+    if check:
+        return check
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
@@ -382,6 +413,9 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     but can speed up the minimization algorithm.
 
     """
+    check = _check_fform(fform)
+    if check:
+        return check
     free_symbols = fform.get_free_symbols()
     M = fform.get_M()
 
