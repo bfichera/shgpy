@@ -1,7 +1,7 @@
 import shgpy
 import sympy as sp
 
-fform_filename = 'fform/None-None-D_6h(001)-particularized.p'
+fform_filename = 'fform/T_d-S_2-S_2(110)-particularized.p'
 
 fform = shgpy.load_fform(fform_filename)
 
