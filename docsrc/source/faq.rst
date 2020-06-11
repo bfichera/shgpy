@@ -60,4 +60,4 @@ Once you've generated your fitting formula using :func:`shgpy.fformgen.generate_
 
 to convert it to a ``phi``-space formula and then :func:`shgpy.core.data_handler.FormContainer.get_pc` to view it.
 
-See the example file at ``examples/look_at_fformula_examples.py``.
+See the example file at ``examples/look_at_fformula_example.py``.
