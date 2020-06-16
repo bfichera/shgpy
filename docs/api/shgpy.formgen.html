@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shgpy.formgen module &#8212; ShgPy 0.4.0 documentation</title>
+    <title>shgpy.formgen module &#8212; ShgPy 0.4.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -234,7 +234,7 @@ of time-reversal symmetry).</p>
 <dl class="py function">
 <dt id="shgpy.formgen.gen_P_dipole_quadrupole">
 <code class="sig-prename descclassname">shgpy.formgen.</code><code class="sig-name descname">gen_P_dipole_quadrupole</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t1</span></em>, <em class="sig-param"><span class="n">t2</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.formgen.gen_P_dipole_quadrupole" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate P formula assuming dipole+quadrupole SHG with real coefficients.</p>
+<dd><p>Generate P formula assuming dipole+quadrupole SHG.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -260,7 +260,7 @@ of time-reversal symmetry).</p>
 <dl class="py function">
 <dt id="shgpy.formgen.gen_P_just_dipole">
 <code class="sig-prename descclassname">shgpy.formgen.</code><code class="sig-name descname">gen_P_just_dipole</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t1</span></em>, <em class="sig-param"><span class="n">theta</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.formgen.gen_P_just_dipole" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate P formula assuming dipole SHG with complex coefficients.</p>
+<dd><p>Generate P formula assuming dipole SHG.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -276,6 +276,33 @@ of time-reversal symmetry).</p>
 </dd>
 <dt><strong>Ps</strong><span class="classifier">array_like of sympy.Expr</span></dt><dd><p>The 2omega polarization assuming S-polarized input</p>
 </dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.formgen.make_form_from_P_and_Q">
+<code class="sig-prename descclassname">shgpy.formgen.</code><code class="sig-name descname">make_form_from_P_and_Q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Pp</span></em>, <em class="sig-param"><span class="n">Ps</span></em>, <em class="sig-param"><span class="n">Qp</span></em>, <em class="sig-param"><span class="n">Qs</span></em>, <em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.formgen.make_form_from_P_and_Q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a dipole and quadrupole moment, return the SHG signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Pp</strong><span class="classifier">sympy.Expr</span></dt><dd><p>2omega dipole component if the input is P polarized</p>
+</dd>
+<dt><strong>Ps</strong><span class="classifier">sympy.Expr</span></dt><dd><p>2omega dipole component if the input is S polarized</p>
+</dd>
+<dt><strong>Qp</strong><span class="classifier">sympy.Expr</span></dt><dd><p>2omega quadrupole component if the input is P polarized</p>
+</dd>
+<dt><strong>Qs</strong><span class="classifier">sympy.Expr</span></dt><dd><p>2omega quadrupole component if the input is S polarized</p>
+</dd>
+<dt><strong>mode</strong><span class="classifier">{‘real’, ‘complex’}</span></dt><dd><p>Whether to treat the sympy.Symbols as real or complex.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>form</strong><span class="classifier">FormContainer</span></dt><dd></dd>
 </dl>
 </dd>
 </dl>

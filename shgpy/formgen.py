@@ -24,8 +24,53 @@ from . import shg_symbols as S
 # Make all the functions here use gen_P_...
 
 
+def make_form_from_P_and_Q(Pp, Ps, Qp, Qs, mode):
+    """Given a dipole and quadrupole moment, return the SHG signal.
+
+    Parameters
+    ----------
+    Pp : sympy.Expr
+        2\\omega dipole component if the input is P polarized
+    Ps : sympy.Expr
+        2\\omega dipole component if the input is S polarized
+    Qp : sympy.Expr
+        2\\omega quadrupole component if the input is P polarized
+    Qs : sympy.Expr
+        2\\omega quadrupole component if the input is S polarized
+    mode : {'real', 'complex'}
+        Whether to treat the sympy.Symbols as real or complex.
+
+    Returns
+    -------
+    form : FormContainer
+
+    """
+    if mode == 'complex':
+
+        Sp = Pp + sp.I*Qp
+        Ss = Ps + sp.I*Qs
+
+        PP = Sp[0]*sp.conjugate(Sp[0])+Sp[2]*sp.conjugate(Sp[2])
+        PS = Sp[1]*sp.conjugate(Sp[1])
+        SP = Ss[0]*sp.conjugate(Ss[0])+Ss[2]*sp.conjugate(Ss[2])
+        SS = Ss[1]*sp.conjugate(Ss[1])
+
+    elif mode == 'real':
+
+        PP = Pp[0]**2+Pp[2]**2+Qp[0]**2+Qp[2]**2
+        PS = Pp[1]**2+Qp[1]**2
+        SP = Ps[0]**2+Ps[2]**2+Qs[0]**2+Qs[2]**2
+        SS = Ps[1]**2+Qs[1]**2
+
+    else:
+
+        raise ValueError('mode must be either \'real\' or \'complex\'')
+
+    return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
+
+
 def gen_P_just_dipole(t1, theta):
-    """Generate P formula assuming dipole SHG with complex coefficients.
+    """Generate P formula assuming dipole SHG.
 
     Parameters
     ----------
@@ -54,11 +99,11 @@ def gen_P_just_dipole(t1, theta):
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
 
-    return Pp, Ps
+    return Pp, Ps, 0, 0
 
 
 def gen_P_dipole_quadrupole(t1, t2, theta):
-    """Generate P formula assuming dipole+quadrupole SHG with real coefficients.
+    """Generate P formula assuming dipole+quadrupole SHG.
 
     Parameters
     ----------
@@ -94,7 +139,7 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
     Pp -= np.dot(kout, Pp)*kout
     Qs -= np.dot(kout, Qs)*kout
     Qp -= np.dot(kout, Qp)*kout
-    return Pp+sp.I*Qp, Ps+sp.I*Qs
+    return Pp, Ps, Qp, Qs
 
 
 def formgen_just_dipole_complex(t1, theta):
