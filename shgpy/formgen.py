@@ -20,6 +20,10 @@ from .core import (
 from . import shg_symbols as S
 
 
+# TODO
+# Make all the functions here use gen_P_...
+
+
 def gen_P_just_dipole(t1, theta):
     """Generate P formula assuming dipole SHG with complex coefficients.
 
@@ -33,9 +37,9 @@ def gen_P_just_dipole(t1, theta):
     Returns
     -------
     Pp : array_like of sympy.Expr
-        The 2\omega polarization assuming P-polarized input
+        The 2\\omega polarization assuming P-polarized input
     Ps : array_like of sympy.Expr
-        The 2\omega polarization assuming S-polarized input
+        The 2\\omega polarization assuming S-polarized input
 
     """
     c = sp.cos(theta)
@@ -54,7 +58,7 @@ def gen_P_just_dipole(t1, theta):
 
 
 def gen_P_dipole_quadrupole(t1, t2, theta):
-    """Generate S formula assuming dipole+quadrupole SHG with real coefficients.
+    """Generate P formula assuming dipole+quadrupole SHG with real coefficients.
 
     Parameters
     ----------
@@ -67,10 +71,10 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
 
     Returns
     -------
-    Sp : array_like of sympy.Expr
-        The 2\omega effective polarization assuming P-polarized input
-    Ss : array_like of sympy.Expr
-        The 2\omega effective polarization assuming S-polarized input
+    Pp_eff : array_like of sympy.Expr
+        The 2\\omega effective polarization assuming P-polarized input
+    Ps_eff : array_like of sympy.Expr
+        The 2\\omega effective polarization assuming S-polarized input
     
     """
     c = sp.cos(theta)
