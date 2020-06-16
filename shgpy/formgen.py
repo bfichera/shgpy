@@ -20,6 +20,79 @@ from .core import (
 from . import shg_symbols as S
 
 
+def gen_P_just_dipole(t1, theta):
+    """Generate P formula assuming dipole SHG with complex coefficients.
+
+    Parameters
+    ----------
+    t1 : ndarray of sympy.Expr
+        SHG susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+    theta : float or sympy.Symbol
+        Angle of incidence
+
+    Returns
+    -------
+    Pp : array_like of sympy.Expr
+        The 2\omega polarization assuming P-polarized input
+    Ps : array_like of sympy.Expr
+        The 2\omega polarization assuming S-polarized input
+
+    """
+    c = sp.cos(theta)
+    s = sp.sin(theta)
+    kout = np.array([s, 0, -c], dtype=object)
+    Fp = np.array([-c, 0, s], dtype=object)
+    Fs = np.array([0, 1, 0], dtype=object)
+    R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
+    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
+    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
+    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
+    Ps -= np.dot(kout, Ps)*kout
+    Pp -= np.dot(kout, Pp)*kout
+
+    return Pp, Ps
+
+
+def gen_P_dipole_quadrupole(t1, t2, theta):
+    """Generate S formula assuming dipole+quadrupole SHG with real coefficients.
+
+    Parameters
+    ----------
+    t1 : ndarray of sympy.Expr
+        SHG dipole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+    t2 : ndarray of sympy.Expr
+        SHG quadrupole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+    theta : float or sympy.Symbol
+        Angle of incidence
+
+    Returns
+    -------
+    Sp : array_like of sympy.Expr
+        The 2\omega effective polarization assuming P-polarized input
+    Ss : array_like of sympy.Expr
+        The 2\omega effective polarization assuming S-polarized input
+    
+    """
+    c = sp.cos(theta)
+    s = sp.sin(theta)
+    kin = np.array([s, 0, c], dtype=object)
+    kout = np.array([s, 0, -c], dtype=object)
+    Fp = np.array([-c, 0, s], dtype=object)
+    Fs = np.array([0, 1, 0], dtype=object)
+    R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
+    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
+    rotated_qtensor = tensor_contract(tensor_product(R, R, R, R, t2), [[1, 8], [3, 9], [5, 10], [7, 11]])
+    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
+    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
+    Qs = tensor_contract(tensor_product(rotated_qtensor, kin, Fs, Fs), [[1, 4], [2, 5], [3, 6]])
+    Qp = tensor_contract(tensor_product(rotated_qtensor, kin, Fp, Fp), [[1, 4], [2, 5], [3, 6]])
+    Ps -= np.dot(kout, Ps)*kout
+    Pp -= np.dot(kout, Pp)*kout
+    Qs -= np.dot(kout, Qs)*kout
+    Qp -= np.dot(kout, Qp)*kout
+    return Pp+sp.I*Qp, Ps+sp.I*Qs
+
+
 def formgen_just_dipole_complex(t1, theta):
     """Generate formula assuming dipole SHG with complex coefficients.
 
