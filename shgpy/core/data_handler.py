@@ -137,8 +137,8 @@ class DataContainer:
 
     def subtract_min(self):
         """Subtract the minimum from the data."""
-        minval = self.get_minval()
-        for k,v in self.get_items('radian'):
+        minval = self.get_minval()[1]
+        for k,v in self.get_items('radians'):
             self._data_dict[k] = np.array([v[0], v[1]-minval])
         self._offset -= minval
 
