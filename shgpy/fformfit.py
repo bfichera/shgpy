@@ -37,8 +37,6 @@ def _check_fform(fform):
             message=message,
         )
         return ret
-    else:
-        return True
 
 
 def _I_component(expr):
