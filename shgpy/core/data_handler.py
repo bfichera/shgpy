@@ -1186,7 +1186,7 @@ def dat_subtract(dat1, dat2):
     for k in dat1.get_keys():
         new_xdata, ydata1 = dat1.get_pc(k, 'radians')
         _, ydata2 = dat2.get_pc(k, 'radians')
-        if not np.array_equal(new_xdata, _):
+        if False in np.isclose(new_xdata.flatten(), _.flatten()):
             raise ValueError('DataContainers have different xdatas.')
         new_ydata = ydata2 - ydata1
         new_dict[k] = np.array([new_xdata, new_ydata])
