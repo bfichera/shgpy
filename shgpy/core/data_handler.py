@@ -559,8 +559,15 @@ class fFormContainer:
     def __init__(self, iterable, M=16):
         self._M = M
         self._check_defining_iterable(iterable)
-        self._fform_dict = deepcopy(dict(iterable))
+        self._fform_dict = self._copy_iterable(iterable)
         self._sympify()
+
+    def _copy_iterable(self, iterable):
+        _fform_dict = {
+            k:np.array([s for s in v])
+            for k,v in dict(iterable).items()
+        }
+        return _fform_dict
 
     def _check_defining_iterable(self, iterable):
         def raise_error():
@@ -706,9 +713,15 @@ class FormContainer:
     """
 
     def __init__(self, iterable):
-        self._check_defining_iterable
-        self._form_dict = deepcopy(dict(iterable))
-        self._sympify
+        self._check_defining_iterable(iterable)
+        self._form_dict = self._copy_iterable(iterable)
+        self._sympify()
+
+    def _copy_iterable(self, iterable):
+        _form_dict = {
+            k:v for k,v in dict(iterable).items()
+        }
+        return _form_dict
 
     def get_free_symbols(self):
         """Return a sorted list of the free symbols in the Fourier formula."""
@@ -856,7 +869,7 @@ def fform_to_fdat(fform, subs_dict):
 
     """
     subs_array = [(k,subs_dict[k]) for k in fform.get_free_symbols()]
-    new_fform = deepcopy(fform)
+    new_fform = fFormContainer(fform.get_items())
     new_fform.subs(subs_array)
     iterable = {k:v.astype(complex) for k,v in new_fform.get_items()}
     return fDataContainer(iterable, new_fform.get_M())
@@ -994,7 +1007,7 @@ def form_to_dat(form, subs_dict, num_points):
 
     """
     subs_array = [(k,subs_dict[k]) for k in subs_dict.keys()]
-    new_form = deepcopy(form)
+    new_form = FormContainer(form.get_items())
     new_form.subs(subs_array)
     if new_form.get_free_symbols() != [S.phi]:
         raise ValueError('Only one variable allowed in conversion from form to dat. Is subs_array correct?')
