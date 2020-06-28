@@ -129,11 +129,13 @@ def _load_pickle(filename):
 
 
 def _save_fform_dict(filename, _fform_dict):
-    pickle.dump(_fform_dict, open(filename, 'wb'))
+    with open(filename, 'wb') as fh:
+        pickle.dump(_fform_dict, fh)
 
 
 def _load_fform_dict(filename):
-    return pickle.load(open(filename, 'rb'))
+    with open(filename, 'rb') as fh:
+        return pickle.load(fh)
 
 
 def generate_uncontracted_fourier_transforms(aoi, uncontracted_filename_prefix, M=16):
