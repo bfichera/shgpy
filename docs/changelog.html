@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Module Index &#8212; ShgPy 0.5.1 documentation</title>
+    <title>Changelog &#8212; ShgPy 0.5.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -15,14 +15,13 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-
+    <link rel="next" title="How to contribute" href="contribute.html" />
+    <link rel="prev" title="shgpy.tensor_definitions module" href="api/shgpy.tensor_definitions.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-
 
   </head><body>
   <div class="document">
@@ -65,8 +64,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Documentation</a></li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contribute.html">How to contribute</a></li>
@@ -79,6 +78,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="api/shgpy.tensor_definitions.html" title="previous chapter">shgpy.tensor_definitions module</a></li>
+      <li>Next: <a href="contribute.html" title="next chapter">How to contribute</a></li>
   </ul></li>
 </ul>
 </div>
@@ -100,64 +101,14 @@
 
           <div class="body" role="main">
             
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-s"><strong>s</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-s"><td></td><td>
-       <strong>s</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <code class="xref">shgpy</code></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="api/shgpy.core.data_handler.html#module-shgpy.core.data_handler"><code class="xref">shgpy.core.data_handler</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="api/shgpy.core.utilities.html#module-shgpy.core.utilities"><code class="xref">shgpy.core.utilities</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="api/shgpy.fformfit.html#module-shgpy.fformfit"><code class="xref">shgpy.fformfit</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="api/shgpy.fformgen.html#module-shgpy.fformgen"><code class="xref">shgpy.fformgen</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="api/shgpy.formgen.html#module-shgpy.formgen"><code class="xref">shgpy.formgen</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="api/shgpy.plotter.html#module-shgpy.plotter"><code class="xref">shgpy.plotter</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="api/shgpy.shg_symbols.html#module-shgpy.shg_symbols"><code class="xref">shgpy.shg_symbols</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="api/shgpy.tensor_definitions.html#module-shgpy.tensor_definitions"><code class="xref">shgpy.tensor_definitions</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v0-5-0">
+<h2>v0.5.0<a class="headerlink" href="#v0-5-0" title="Permalink to this headline">¶</a></h2>
+<p>In <code class="docutils literal notranslate"><span class="pre">.p</span></code> file handling, switched from pickling pure <code class="docutils literal notranslate"><span class="pre">sympy</span></code> expressions in <a class="reference internal" href="api/shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformgen</span></code></a> to pickling string represetations of those expressions generated using <code class="docutils literal notranslate"><span class="pre">sympy.srepr</span></code>. This is a workaround to a <code class="docutils literal notranslate"><span class="pre">sympy</span></code> / <code class="docutils literal notranslate"><span class="pre">pickle</span></code> bug in which unpickling <code class="docutils literal notranslate"><span class="pre">sympy</span></code> expressions will cause <code class="docutils literal notranslate"><span class="pre">sympy</span></code> to conflate objects like <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x')</span></code> with <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x',</span> <span class="pre">real=True)</span></code>.</p>
+<p>To use v0.5.0, you will have to remake your <code class="docutils literal notranslate"><span class="pre">.p</span></code> files.</p>
+</div>
+</div>
 
 
           </div>
@@ -173,6 +124,9 @@
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
+      |
+      <a href="_sources/changelog.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
 
     
