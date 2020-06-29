@@ -1361,6 +1361,10 @@ def load_fform(fform_filename):
     fform_filename : str or file object
 
     """
-    with open(fform_filename, 'rb') as f:
-        fform_dict = pickle.load(f)
-    return fFormContainer(fform_dict)
+    with open(fform_filename, 'rb') as fh:
+        str_fform_dict = pickle.load(fh)
+    _fform_dict = {
+        k:np.array([sp.sympify(s) for s in v])
+        for k,v in str_fform_dict.items()
+    }
+    return fFormContainer(_fform_dict)
