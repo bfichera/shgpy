@@ -65,6 +65,12 @@ For further details, consult the auto-generated API documentation:
 
    modules
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   changelog
+
 How to contribute
 =================
 
