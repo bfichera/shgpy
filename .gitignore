@@ -1,6 +1,7 @@
 #Other files
 examples/uft/*
 examples/fform/*
+test.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
