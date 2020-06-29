@@ -103,6 +103,10 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v0-5-1">
+<h2>v0.5.1<a class="headerlink" href="#v0-5-1" title="Permalink to this headline">¶</a></h2>
+<p>Fixed a bug related to the change in v0.5.0 in which <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.load_fform()</span></code> wasn’t compatible with the new pickling scheme.</p>
+</div>
 <div class="section" id="v0-5-0">
 <h2>v0.5.0<a class="headerlink" href="#v0-5-0" title="Permalink to this headline">¶</a></h2>
 <p>In <code class="docutils literal notranslate"><span class="pre">.p</span></code> file handling, switched from pickling pure <code class="docutils literal notranslate"><span class="pre">sympy</span></code> expressions in <a class="reference internal" href="api/shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformgen</span></code></a> to pickling string represetations of those expressions generated using <code class="docutils literal notranslate"><span class="pre">sympy.srepr</span></code>. This is a workaround to a <code class="docutils literal notranslate"><span class="pre">sympy</span></code> / <code class="docutils literal notranslate"><span class="pre">pickle</span></code> bug in which unpickling <code class="docutils literal notranslate"><span class="pre">sympy</span></code> expressions will cause <code class="docutils literal notranslate"><span class="pre">sympy</span></code> to conflate objects like <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x')</span></code> with <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x',</span> <span class="pre">real=True)</span></code>.</p>
