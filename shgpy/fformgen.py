@@ -47,6 +47,7 @@ import pickle
 import sys
 import logging
 import time
+from warnings import warn
 
 _logger = logging.getLogger(__name__)
 
@@ -129,13 +130,22 @@ def _load_pickle(filename):
 
 
 def _save_fform_dict(filename, _fform_dict):
+    str_fform_dict = {
+        k:np.array([sp.srepr(s) for s in v])
+        for k,v in _fform_dict.items()
+    }
     with open(filename, 'wb') as fh:
-        pickle.dump(_fform_dict, fh)
+        pickle.dump(str_fform_dict, fh)
 
 
 def _load_fform_dict(filename):
     with open(filename, 'rb') as fh:
-        return pickle.load(fh)
+        str_fform_dict = pickle.load(fh)
+    _fform_dict = {
+        k:np.array([sp.sympify(s) for s in v])
+        for k,v in str_fform_dict.items()
+    }
+    return _fform_dict
 
 
 def generate_uncontracted_fourier_transforms(aoi, uncontracted_filename_prefix, M=16):
