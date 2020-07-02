@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shgpy.fformfit module &#8212; ShgPy 0.5.1 documentation</title>
+    <title>shgpy.fformfit module &#8212; ShgPy 0.6.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -126,7 +126,7 @@ functions with many fitting parameters and local minima. See the
 relevant <cite>scipy</cite> documentation for more info.</p>
 <dl class="py function">
 <dt id="shgpy.fformfit.basinhopping_fit">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'BFGS'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'BFGS'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basinhopping fit of RA-SHG data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -146,6 +146,9 @@ documentation for more information.</p>
 </dd>
 <dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Basinhopping stepsize, defaults to <cite>0.5</cite>. See scipy documentation
 for more information.</p>
+</dd>
+<dt><strong>basinhopping_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Other options to pass to the basinhopping routine. See scipy
+documentation for more information.</p>
 </dd>
 </dl>
 </dd>
@@ -164,7 +167,7 @@ a dictionary.</p>
 
 <dl class="py function">
 <dt id="shgpy.fformfit.basinhopping_fit_jac">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_jac</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'BFGS'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_jac" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_jac</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'BFGS'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_jac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basinhopping fit of RA-SHG data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -184,6 +187,9 @@ documentation for more information.</p>
 </dd>
 <dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Basinhopping stepsize, defaults to <cite>0.5</cite>. See scipy documentation
 for more information.</p>
+</dd>
+<dt><strong>basinhopping_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Other options to pass to the basinhopping routine. See scipy
+documentation for more information.</p>
 </dd>
 </dl>
 </dd>
@@ -206,7 +212,7 @@ but can speed up the minimization algorithm.</p>
 
 <dl class="py function">
 <dt id="shgpy.fformfit.basinhopping_fit_jac_with_bounds">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_jac_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'L-BFGS-B'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_jac_with_bounds" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_jac_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'L-BFGS-B'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_jac_with_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basinhopping fit of RA-SHG data with bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -229,6 +235,9 @@ documentation for more information.</p>
 </dd>
 <dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Basinhopping stepsize, defaults to <cite>0.5</cite>. See scipy documentation
 for more information.</p>
+</dd>
+<dt><strong>basinhopping_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Other options to pass to the basinhopping routine. See scipy
+documentation for more information.</p>
 </dd>
 </dl>
 </dd>
@@ -251,7 +260,7 @@ but can speed up the minimization algorithm.</p>
 
 <dl class="py function">
 <dt id="shgpy.fformfit.basinhopping_fit_with_bounds">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'L-BFGS-B'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_with_bounds" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'L-BFGS-B'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_with_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basinhopping fit of RA-SHG data with bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -274,6 +283,9 @@ documentation for more information.</p>
 </dd>
 <dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Basinhopping stepsize, defaults to <cite>0.5</cite>. See scipy documentation
 for more information.</p>
+</dd>
+<dt><strong>basinhopping_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Other options to pass to the basinhopping routine. See scipy
+documentation for more information.</p>
 </dd>
 </dl>
 </dd>
