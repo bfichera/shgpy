@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v0.6.1
+------
+Added the ability to optionally send arguments to the ``scipy.optimize.basinhopping`` function. This is useful e.g. for debugging -- use
+
+>>> basinhopping_kwargs = {'disp':True}
+
+to send ``disp=True`` to ``scipy.optimize.basinhopping``, which initializes verbose output.
+
 v0.5.1
 ------
 Fixed a bug related to the change in v0.5.0 in which :func:`shgpy.load_fform` wasn't compatible with the new pickling scheme.
