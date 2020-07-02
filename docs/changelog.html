@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Changelog &#8212; ShgPy 0.5.1 documentation</title>
+    <title>Changelog &#8212; ShgPy 0.6.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -103,6 +103,14 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v0-6-1">
+<h2>v0.6.1<a class="headerlink" href="#v0-6-1" title="Permalink to this headline">¶</a></h2>
+<p>Added the ability to optionally send arguments to the <code class="docutils literal notranslate"><span class="pre">scipy.optimize.basinhopping</span></code> function. This is useful e.g. for debugging – use</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">basinhopping_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;disp&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>to send <code class="docutils literal notranslate"><span class="pre">disp=True</span></code> to <code class="docutils literal notranslate"><span class="pre">scipy.optimize.basinhopping</span></code>, which initializes verbose output.</p>
+</div>
 <div class="section" id="v0-5-1">
 <h2>v0.5.1<a class="headerlink" href="#v0-5-1" title="Permalink to this headline">¶</a></h2>
 <p>Fixed a bug related to the change in v0.5.0 in which <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.load_fform()</span></code> wasn’t compatible with the new pickling scheme.</p>
