@@ -154,7 +154,7 @@ def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
     return ret
 
 
-def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5, basinhopping_kwargs={}):
+def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), stepsize=0.5, basinhopping_kwargs={}):
     """Basinhopping fit of RA-SHG data.
 
     Parameters
@@ -172,6 +172,8 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5
     method : str, optional
         Minimization method to use, defaults to `'BFGS'`. See scipy
         documentation for more information.
+    args : tuple, optional
+        Additional arguments to give to the minimizer.
     stepsize : float, optional
         Basinhopping stepsize, defaults to `0.5`. See scipy documentation
         for more information.
@@ -212,7 +214,9 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
-    minimizer_kwargs = {'method':method}
+
+    minimizer_kwargs = {'method':method, 'args':args}
+
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
     ret = basinhopping(f_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize, **basinhopping_kwargs)
@@ -223,7 +227,7 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5
     return ret
 
 
-def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', stepsize=0.5, basinhopping_kwargs={}):
+def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', args=(), stepsize=0.5, basinhopping_kwargs={}):
     """Basinhopping fit of RA-SHG data with bounds.
 
     Parameters
@@ -244,6 +248,8 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     method : str, optional
         Minimization method to use, defaults to `'L-BFGS-B'`. See scipy
         documentation for more information.
+    args : tuple, optional
+        Additional arguments to give to the minimizer.
     stepsize : float, optional
         Basinhopping stepsize, defaults to `0.5`. See scipy documentation
         for more information.
@@ -288,7 +294,9 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
         bounds = [bounds_dict[k] for k in free_symbols]
     if bounds_dict is None:
         bounds = None
-    minimizer_kwargs = {'method':method, 'bounds':bounds}
+
+    minimizer_kwargs = {'method':method, 'bounds':bounds, 'args':args}
+
     start = time.time()
     _logger.info('Starting basinhopping minimization.')
     ret = basinhopping(f_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize, **basinhopping_kwargs)
@@ -299,7 +307,7 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     return ret
 
 
-def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize=0.5, basinhopping_kwargs={}):
+def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(), stepsize=0.5, basinhopping_kwargs={}):
     """Basinhopping fit of RA-SHG data.
 
     Parameters
@@ -317,6 +325,8 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize
     method : str, optional
         Minimization method to use, defaults to `'BFGS'`. See scipy
         documentation for more information.
+    args : tuple, optional
+        Additional arguments to give to the minimizer.
     stepsize : float, optional
         Basinhopping stepsize, defaults to `0.5`. See scipy documentation
         for more information.
@@ -368,7 +378,9 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
-    minimizer_kwargs = {'method':method, 'jac':True}
+
+    minimizer_kwargs = {'method':method, 'jac':True, 'args':args}
+
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
     ret = basinhopping(fdf_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize, **basinhopping_kwargs)
@@ -379,7 +391,7 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', stepsize
     return ret
 
 
-def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', stepsize=0.5, basinhopping_kwargs={}):
+def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', args=(), stepsize=0.5, basinhopping_kwargs={}):
     """Basinhopping fit of RA-SHG data with bounds.
 
     Parameters
@@ -400,6 +412,8 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     method : str, optional
         Minimization method to use, defaults to `'L-BFGS-B'`. See scipy
         documentation for more information.
+    args : tuple, optional
+        Additional arguments to give to the minimizer.
     stepsize : float, optional
         Basinhopping stepsize, defaults to `0.5`. See scipy documentation
         for more information.
@@ -455,7 +469,9 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
         bounds = [bounds_dict[k] for k in free_symbols]
     if bounds_dict is None:
         bounds = None
-    minimizer_kwargs = {'method':method, 'jac':True, 'bounds':bounds}
+
+    minimizer_kwargs = {'method':method, 'jac':True, 'bounds':bounds, 'args':args}
+
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
     ret = basinhopping(fdf_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize, **basinhopping_kwargs)
