@@ -16,6 +16,7 @@ from .core import n2i
 from scipy.optimize import (
     basinhopping,
     least_squares,
+    dual_annealing,
     OptimizeResult,
 )
 import time
@@ -478,5 +479,133 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
     _logger.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+
+    return ret
+
+
+def dual_annealing_fit_with_bounds(
+    fform,
+    fdat,
+    guess_dict,
+    bounds_dict,
+    maxiter=1000,
+    local_search_options={},
+    initial_temp=5230,restart_temp_ratio=2e-5,
+    visit=2.62,
+    accept=-5.0,
+    maxfun=1e7,
+    seed=None,
+    no_local_search=True,
+    callback=None
+):
+    """Simulated annealing fit of RA-SHG data with bounds.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
+        This is the (Fourier-transformed) fitting formula.
+    fdat : fDataContainer
+        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
+        This is the (Fourier-transformed) data to fit.
+    guess_dict : dict
+        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
+    bounds_dict : dict
+        Dict of form ``{sympy.Symbol:tuple}``. `tuple` should be of form
+        ``(lower_bound, upper_bound)``.
+    maxiter : int
+        Maximum number of global search iterations.
+    local_search_options : dict, optional
+        Extra keyword arguments to be passed to the local minimizer.
+    initial_temp : float, optional
+        Initial temperature. Default is 5230.
+    restart_temp_ratio : float, optional
+        When the temperature reaches ``initial_temp * restart_temp_ratio``,
+        the reannealing process is triggered. Default value is 2e-5. Range
+        is (0,1).
+    visit : float, optional
+        Parameter for visiting distribution. Default value is 2.62.
+    accept : float, optional
+        Parameter for acceptance distribution. Default is -5.0.
+    maxfun : int, optional
+        Soft limit for the number of objective function calls. Default
+        is 1e7.
+    seed : {int, RandomState, Generator}, optional
+        The random seed to use.
+    no_local_search : bool, optional
+        If True, perform traditional generalized simulated annealing with
+        no local search.
+    callback : callable, optional
+        A callback function with signature ``callback(x, f, context)``
+        which will be called for all minima found.
+    x0 : ndarray, shape(n,), optional
+        Initial guess.
+
+    Returns
+    -------
+    ret : scipy.optimize.OptimizeResult
+        Instance of class :class:`~scipy.optimize.OptimizeResult`.
+        See `scipy` documentation for further description. Includes
+        additional attribute ``ret.xdict`` which is a `dict` of 
+        ``{sympy.Symbol:float}`` indicating the final answer as
+        a dictionary.
+
+    Notes
+    -----
+    See the ``scipy.optimize.dual_annealing`` documentation for more info.
+
+    """
+    check = _check_fform(fform)
+    if check:
+        return check
+    free_symbols = fform.get_free_symbols()
+    M = fform.get_M()
+
+    _logger.info('Starting energy function generation.')
+    start = time.time()
+    energy_expr_list = []
+    for k in fform.get_keys():
+        for m in np.arange(-M, M+1):
+            expr1 = _no_I_component(
+                fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)]
+            )
+            expr2 = _I_component(
+                fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)]
+            )
+            energy_expr_list.append(expr1**2)
+            energy_expr_list.append(expr2**2)
+
+    energy_expr = sum(energy_expr_list)
+
+    pre_f_energy = sp.lambdify(free_symbols, energy_expr)
+    f_energy = lambda x:pre_f_energy(*x)
+    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+
+    x0 = [guess_dict[k] for k in free_symbols]
+    if bounds_dict is not None:
+        bounds = [bounds_dict[k] for k in free_symbols]
+    if bounds_dict is None:
+        bounds = None
+
+    start = time.time()
+    _logger.info('Starting simulated annealing.')
+    ret = dual_annealing(
+        f_energy,
+        bounds,
+        maxiter=maxiter,
+        local_search_options=local_search_options,
+        initial_temp=initial_temp,
+        restart_temp_ratio=restart_temp_ratio,
+        visit=visit,
+        accept=accept,
+        maxfun=maxfun,
+        seed=seed,
+        no_local_search=no_local_search,
+        callback=callback,
+        x0=x0,
+    )
+    ret.time = time.time()-start
+    ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
+    _logger.info(f'Done with simulated annealing. It took {ret.time} seconds.')
 
     return ret
