@@ -15,6 +15,7 @@ from shgpy.fformfit import (
 from shgpy.plotter import easy_plot, easy_polar_plot
 import numpy as np
 import shgpy.shg_symbols as S
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,7 @@ class TestFit(unittest.TestCase):
 
     def test_annealing(self):
         maxiter = 100
+        start = time.time()
         ret1 = dual_annealing_fit_with_bounds(
             self.fform,
             self.fdat,
@@ -67,6 +69,7 @@ class TestFit(unittest.TestCase):
             self.bounds_dict,
             maxiter,
         )
+        logger.debug(str(time.time() - start))
         for ret in [ret1]:
             self.assertAlmostEqual(abs(ret.xdict[S.psi]), 1.59, delta=0.1)
             self.assertAlmostEqual(abs(ret.xdict[S.zyx]), 1.23, delta=0.1)

@@ -11,6 +11,7 @@ relevant `scipy` documentation for more info.
 
 """
 import sympy as sp
+from sympy.utilities.autowrap import autowrap
 import numpy as np
 from .core import n2i
 from scipy.optimize import (
@@ -53,8 +54,12 @@ def _make_energy_expr(fform, fdat):
     energy_expr_list = []
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
-            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr1 = _no_I_component(
+                fform.get_pc(k)[n2i(m, M)] - fdat.get_pc(k)[n2i(m, M)]
+            )
+            expr2 = _I_component(
+                fform.get_pc(k)[n2i(m, M)] - fdat.get_pc(k)[n2i(m, M)]
+            )
             energy_expr_list.append(expr1**2)
             energy_expr_list.append(expr2**2)
 
@@ -67,18 +72,25 @@ def _make_denergy_expr(free_symbols, energy_expr):
     return gradient(energy_expr, free_symbols)
 
 
-# TODO
-# Replace these with autowrap variants
 def _make_energy_func(free_symbols, energy_expr):
-    pre_f_energy = sp.lambdify(free_symbols, energy_expr)
-    f_energy = lambda x:pre_f_energy(*x)
-    return f_energy
+    xs = sp.MatrixSymbol('xs', len(free_symbols), 1)
+    mapping = {fs:xs[i] for i, fs in enumerate(free_symbols)}
+    easy_energy_expr = energy_expr.xreplace(mapping)
+    return autowrap(easy_energy_expr, backend='f2py')
+
+
+def _make_denergy_func(free_symbols, denergy_expr):
+    xs = sp.MatrixSymbol('xs', len(free_symbols), 1)
+    mapping = {fs:xs[i] for i, fs in enumerate(free_symbols)}
+    easy_denergy_expr = np.array([expr.xreplace(mapping) for expr in denergy_expr])
+    funcs = [autowrap(expr, backend='f2py') for expr in easy_denergy_expr]
+    return lambda x: np.array([func(x) for func in funcs])
 
 
 def _make_energy_and_denergy_func(free_symbols, energy_expr, denergy_expr):
     f_energy = _make_energy_func(free_symbols, energy_expr)
-    pre_df_energy = sp.lambdify(free_symbols, denergy_expr)
-    fdf_energy = lambda x:(f_energy(x),np.array(pre_df_energy(*x)))
+    df_energy = _make_denergy_func(free_symbols, denergy_expr)
+    fdf_energy = lambda x:(f_energy(x), df_energy(x))
     return fdf_energy
 
 
