@@ -69,7 +69,6 @@ class TestFit(unittest.TestCase):
             self.bounds_dict,
             maxiter,
         )
-        logger.debug(str(time.time() - start))
         for ret in [ret1]:
             self.assertAlmostEqual(abs(ret.xdict[S.psi]), 1.59, delta=0.1)
             self.assertAlmostEqual(abs(ret.xdict[S.zyx]), 1.23, delta=0.1)
