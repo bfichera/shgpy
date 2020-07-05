@@ -48,6 +48,42 @@ def _no_I_component(expr):
     return expr.subs(sp.I, 0)
 
 
+def _make_energy_expr(fform, fdat):
+    M = fform.get_M()
+    energy_expr_list = []
+    for k in fform.get_keys():
+        for m in np.arange(-M, M+1):
+            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
+            energy_expr_list.append(expr1**2)
+            energy_expr_list.append(expr2**2)
+
+    return sum(energy_expr_list)
+
+
+def _make_denergy_expr(free_symbols, energy_expr):
+    def gradient(expr, free_symbols):
+        return np.array([sp.diff(expr, fs) for fs in free_symbols])
+    return gradient(energy_expr, free_symbols)
+
+
+# TODO
+# Replace these with autowrap variants
+def _make_energy_func(free_symbols, energy_expr):
+    pre_f_energy = sp.lambdify(free_symbols, energy_expr)
+    f_energy = lambda x:pre_f_energy(*x)
+    return f_energy
+
+
+def _make_energy_and_denergy_func(free_symbols, energy_expr, denergy_expr):
+    f_energy = _make_energy_func(free_symbols, energy_expr)
+    pre_df_energy = sp.lambdify(free_symbols, denergy_expr)
+    fdf_energy = lambda x:(f_energy(x),np.array(pre_df_energy(*x)))
+    return fdf_energy
+
+
+# TODO
+# Apply all the autowrap stuff to the residuals here.
 def least_squares_fit(fform, fdat, guess_dict):
     """Least-squares fit of RA-SHG data.
 
@@ -98,6 +134,8 @@ def least_squares_fit(fform, fdat, guess_dict):
     return ret
 
 
+# TODO
+# Apply all the autowrap stuff to the residuals here.
 def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
     """Least-squares fit of RA-SHG data with bounds.
 
@@ -196,22 +234,13 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
     if check:
         return check
     free_symbols = fform.get_free_symbols()
-    M = fform.get_M()
 
     _logger.info('Starting energy function generation.')
     start = time.time()
-    energy_expr_list = []
-    for k in fform.get_keys():
-        for m in np.arange(-M, M+1):
-            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            energy_expr_list.append(expr1**2)
-            energy_expr_list.append(expr2**2)
 
-    energy_expr = sum(energy_expr_list)
+    energy_expr = _make_energy_expr(fform, fdat)
+    f_energy = _make_energy_func(free_symbols, energy_expr)
 
-    pre_f_energy = sp.lambdify(free_symbols, energy_expr)
-    f_energy = lambda x:pre_f_energy(*x)
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
@@ -272,22 +301,13 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     if check:
         return check
     free_symbols = fform.get_free_symbols()
-    M = fform.get_M()
 
     _logger.info('Starting energy function generation.')
     start = time.time()
-    energy_expr_list = []
-    for k in fform.get_keys():
-        for m in np.arange(-M, M+1):
-            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            energy_expr_list.append(expr1**2)
-            energy_expr_list.append(expr2**2)
+ 
+    energy_expr = _make_energy_expr(fform, fdat)
+    f_energy = _make_energy_func(free_symbols, energy_expr)
 
-    energy_expr = sum(energy_expr_list)
-
-    pre_f_energy = sp.lambdify(free_symbols, energy_expr)
-    f_energy = lambda x:pre_f_energy(*x)
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
@@ -355,27 +375,14 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
     if check:
         return check
     free_symbols = fform.get_free_symbols()
-    M = fform.get_M()
 
     _logger.info('Starting energy function generation.')
     start = time.time()
-    energy_expr_list = []
-    for k in fform.get_keys():
-        for m in np.arange(-M, M+1):
-            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            energy_expr_list.append(expr1**2)
-            energy_expr_list.append(expr2**2)
 
-    def gradient(expr, free_symbols):
-        return np.array([sp.diff(expr, fs) for fs in free_symbols])
+    energy_expr = _make_energy_expr(fform, fdat)
+    denergy_expr = _make_denergy_expr(free_symbols, energy_expr)
 
-    energy_expr = sum(energy_expr_list)
-    denergy_expr = gradient(energy_expr, free_symbols)
-
-    pre_f_energy = sp.lambdify(free_symbols, energy_expr)
-    pre_df_energy = sp.lambdify(free_symbols, denergy_expr)
-    fdf_energy = lambda x:(pre_f_energy(*x),np.array(pre_df_energy(*x)))
+    fdf_energy = _make_energy_and_denergy_func(free_symbols, energy_expr, denergy_expr)
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
@@ -442,27 +449,13 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     if check:
         return check
     free_symbols = fform.get_free_symbols()
-    M = fform.get_M()
 
     _logger.info('Starting energy function generation.')
     start = time.time()
-    energy_expr_list = []
-    for k in fform.get_keys():
-        for m in np.arange(-M, M+1):
-            expr1 = _no_I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            expr2 = _I_component(fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)])
-            energy_expr_list.append(expr1**2)
-            energy_expr_list.append(expr2**2)
+    energy_expr = _make_energy_expr(fform, fdat)
+    denergy_expr = _make_denergy_expr(free_symbols, energy_expr)
 
-    def gradient(expr, free_symbols):
-        return np.array([sp.diff(expr, fs) for fs in free_symbols])
-
-    energy_expr = sum(energy_expr_list)
-    denergy_expr = gradient(energy_expr, free_symbols)
-
-    pre_f_energy = sp.lambdify(free_symbols, energy_expr)
-    pre_df_energy = sp.lambdify(free_symbols, denergy_expr)
-    fdf_energy = lambda x:(pre_f_energy(*x),np.array(pre_df_energy(*x)))
+    fdf_energy = _make_energy_and_denergy_func(free_symbols, energy_expr, denergy_expr)
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
@@ -560,26 +553,12 @@ def dual_annealing_fit_with_bounds(
     if check:
         return check
     free_symbols = fform.get_free_symbols()
-    M = fform.get_M()
 
     _logger.info('Starting energy function generation.')
     start = time.time()
-    energy_expr_list = []
-    for k in fform.get_keys():
-        for m in np.arange(-M, M+1):
-            expr1 = _no_I_component(
-                fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)]
-            )
-            expr2 = _I_component(
-                fform.get_pc(k)[n2i(m, M)]-fdat.get_pc(k)[n2i(m, M)]
-            )
-            energy_expr_list.append(expr1**2)
-            energy_expr_list.append(expr2**2)
+    energy_expr = _make_energy_expr(fform, fdat)
 
-    energy_expr = sum(energy_expr_list)
-
-    pre_f_energy = sp.lambdify(free_symbols, energy_expr)
-    f_energy = lambda x:pre_f_energy(*x)
+    f_energy = _make_energy_func(free_symbols, energy_expr)
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
