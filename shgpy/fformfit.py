@@ -258,6 +258,10 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
     x0 = [guess_dict[k] for k in free_symbols]
 
     minimizer_kwargs = {'method':method, 'args':args}
+    if 'minimizer_kwargs' in basinhopping_kwargs.keys():
+        minimizer_kwargs.update(
+            basinhopping_kwargs.pop('minimizer_kwargs')
+        )
 
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
@@ -329,6 +333,10 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
         bounds = None
 
     minimizer_kwargs = {'method':method, 'bounds':bounds, 'args':args}
+    if 'minimizer_kwargs' in basinhopping_kwargs.keys():
+        minimizer_kwargs.update(
+            basinhopping_kwargs.pop('minimizer_kwargs')
+        )
 
     start = time.time()
     _logger.info('Starting basinhopping minimization.')
@@ -400,6 +408,10 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
     x0 = [guess_dict[k] for k in free_symbols]
 
     minimizer_kwargs = {'method':method, 'jac':True, 'args':args}
+    if 'minimizer_kwargs' in basinhopping_kwargs.keys():
+        minimizer_kwargs.update(
+            basinhopping_kwargs.pop('minimizer_kwargs')
+        )
 
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
@@ -477,6 +489,10 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
         bounds = None
 
     minimizer_kwargs = {'method':method, 'jac':True, 'bounds':bounds, 'args':args}
+    if 'minimizer_kwargs' in basinhopping_kwargs.keys():
+        minimizer_kwargs.update(
+            basinhopping_kwargs.pop('minimizer_kwargs')
+        )
 
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
