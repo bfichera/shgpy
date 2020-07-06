@@ -41,25 +41,25 @@ def _check_fform(fform):
         return ret
 
 
-def _I_component(expr):
-    return (expr-expr.subs(sp.I, 0)).subs(sp.I, 1)
-
-
-def _no_I_component(expr):
-    return expr.subs(sp.I, 0)
-
-
+# TODO
+# Should find a way to not have to run expand() in this function.
 def _make_energy_expr(fform, fdat):
+
+    def _I_component(expr):
+        return (expr-expr.subs(sp.I, 0)).subs(sp.I, 1)
+
+    def _no_I_component(expr):
+        return expr.subs(sp.I, 0)
+
     M = fform.get_M()
     energy_expr_list = []
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
-            expr1 = _no_I_component(
+            expr0 = sp.expand(
                 fform.get_pc(k)[n2i(m, M)] - fdat.get_pc(k)[n2i(m, M)]
             )
-            expr2 = _I_component(
-                fform.get_pc(k)[n2i(m, M)] - fdat.get_pc(k)[n2i(m, M)]
-            )
+            expr1 = _no_I_component(expr0)
+            expr2 = _I_component(expr0)
             energy_expr_list.append(expr1**2)
             energy_expr_list.append(expr2**2)
 
