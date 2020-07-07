@@ -41,31 +41,40 @@ def _check_fform(fform):
         return ret
 
 
-def _make_energy_expr(fform, fdat):
+def _make_energy_expr(fform, fdat, free_symbols=None):
+
+    if free_symbols is None:
+        free_symbols = fform.get_free_symbols()
 
     M = fform.get_M()
     energy_expr = 0
+    xs = sp.MatrixSymbol('xs', len(free_symbols), 1)
+    mapping = {fs:xs[i] for i, fs in enumerate(free_symbols)}
+    start = time.time()
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
+            _logger.debug(f'Computing cost function term pc={k} m={m}')
             expr0 = fform.get_pc(k)[n2i(m, M)] - fdat.get_pc(k)[n2i(m, M)]
-            energy_expr += expr0*sp.conjugate(expr0)
+            energy_expr += (expr0*sp.conjugate(expr0)).xreplace(mapping)
+    _logger.debug('Cost expression evaluation took'
+                   f' {time.time()-start} seconds.')
 
     return energy_expr
 
 
+# TODO Make this function use xreplace.
 def _make_denergy_expr(free_symbols, energy_expr):
     def gradient(expr, free_symbols):
         return np.array([sp.diff(expr, fs) for fs in free_symbols])
     return gradient(energy_expr, free_symbols)
 
 
-def _make_energy_func(free_symbols, energy_expr):
-    xs = sp.MatrixSymbol('xs', len(free_symbols), 1)
-    mapping = {fs:xs[i] for i, fs in enumerate(free_symbols)}
-    easy_energy_expr = energy_expr.xreplace(mapping)
-    return autowrap(easy_energy_expr, backend='f2py')
+# TODO recast callers of this function
+def _make_energy_func(energy_expr):
+    return autowrap(energy_expr, backend='f2py')
 
 
+# TODO Make this function not use xreplace.
 def _make_denergy_func(free_symbols, denergy_expr):
     xs = sp.MatrixSymbol('xs', len(free_symbols), 1)
     mapping = {fs:xs[i] for i, fs in enumerate(free_symbols)}
@@ -237,8 +246,8 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
     _logger.info('Starting energy function generation.')
     start = time.time()
 
-    energy_expr = _make_energy_expr(fform, fdat)
-    f_energy = _make_energy_func(free_symbols, energy_expr)
+    energy_expr = _make_energy_expr(fform, fdat, free_symbols)
+    f_energy = _make_energy_func(energy_expr)
 
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
@@ -308,8 +317,8 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     _logger.info('Starting energy function generation.')
     start = time.time()
  
-    energy_expr = _make_energy_expr(fform, fdat)
-    f_energy = _make_energy_func(free_symbols, energy_expr)
+    energy_expr = _make_energy_expr(fform, fdat, free_symbols)
+    f_energy = _make_energy_func(energy_expr)
 
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
@@ -386,6 +395,7 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
     _logger.info('Starting energy function generation.')
     start = time.time()
 
+    # TODO Recast this chunk
     energy_expr = _make_energy_expr(fform, fdat)
     denergy_expr = _make_denergy_expr(free_symbols, energy_expr)
 
@@ -463,6 +473,7 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
 
     _logger.info('Starting energy function generation.')
     start = time.time()
+    # TODO recast this chunk
     energy_expr = _make_energy_expr(fform, fdat)
     denergy_expr = _make_denergy_expr(free_symbols, energy_expr)
 
@@ -571,9 +582,10 @@ def dual_annealing_fit_with_bounds(
 
     _logger.info('Starting energy function generation.')
     start = time.time()
-    energy_expr = _make_energy_expr(fform, fdat)
 
-    f_energy = _make_energy_func(free_symbols, energy_expr)
+    energy_expr = _make_energy_expr(fform, fdat, free_symbols)
+    f_energy = _make_energy_func(energy_expr)
+
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
