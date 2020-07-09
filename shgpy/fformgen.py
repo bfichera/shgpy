@@ -512,6 +512,17 @@ def generate_contracted_fourier_transforms(save_filename, uncontracted_filename_
 
     """
     ##
+    ## First we check if all the parameters in 
+    ## chi_dipole and chi_quadrupole are real.
+    ## If not, raise an error.
+    ##
+    for chi in [chi_dipole, chi_quadrupole]:
+        free_symbols = _free_symbols_of_array(chi)
+        for fs in free_symbols:
+            if fs.is_real is not True:
+                raise ValueError('Parameters of chi must all be real: %s' % str(fs))
+
+    ##
     ## Now I build a useful set of arrays
     ## which we will use later to reduce
     ## the number of lines in this program
