@@ -182,13 +182,3 @@ class TestPathologicalData(unittest.TestCase):
         self.assertNotEqual(fdat.get_maxval()[1], 0)
         dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
         self.assertEqual(fdat.get_maxval()[1], 0)
-        
-
-
-
-
-
-
-
-
-

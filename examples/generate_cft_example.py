@@ -16,6 +16,7 @@ R = shgpy.rotation_matrix_from_two_vectors(
 )
 
 t_dipole = shgpy.particularize(td.dipole['T_d'])
+t_dipole = shgpy.make_tensor_real(t_dipole)
 t_dipole = shgpy.transform(t_dipole, R)
 
 t_quad = np.zeros(shape=(3,3,3,3), dtype=sp.Expr)

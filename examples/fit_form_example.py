@@ -5,7 +5,7 @@ import random
 
 import shgpy
 import shgpy.tensor_definitions as td
-from shgpy.formgen import formgen_just_dipole_real
+from shgpy.formgen import formgen_just_dipole
 from shgpy.plotter import easy_plot
 import shgpy.shg_symbols as S
 
@@ -18,11 +18,12 @@ R = shgpy.rotation_matrix_from_two_vectors(
 )
 
 t_dipole = shgpy.particularize(td.dipole['T_d'])
+t_dipole = shgpy.make_tensor_real(t_dipole)
 t_dipole = shgpy.transform(t_dipole, R)
 
 t_quad = np.zeros(shape=(3,3,3,3), dtype=sp.Expr)
 
-form = formgen_just_dipole_real(t_dipole, 0.1745)
+form = formgen_just_dipole(t_dipole, 0.1745)
 
 subs_dict = {}
 for fs in form.get_free_symbols():

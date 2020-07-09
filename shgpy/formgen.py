@@ -18,16 +18,16 @@ from .core import (
     tensor_product,
 )
 from . import shg_symbols as S
+from .core.utilities import _assert_real_params
 
 
 # TODO
 # Make all the functions here use gen_P_...
 
 
-def make_form_from_P_and_Q(Pp, Ps, Qp, Qs, mode):
+def make_form_from_P_and_Q(Pp, Ps, Qp, Qs):
     """Given a dipole and quadrupole moment, return the SHG signal.
 
-    Parameters
     ----------
     Pp : sympy.Expr
         2\\omega dipole component if the input is P polarized
@@ -37,36 +37,37 @@ def make_form_from_P_and_Q(Pp, Ps, Qp, Qs, mode):
         2\\omega quadrupole component if the input is P polarized
     Qs : sympy.Expr
         2\\omega quadrupole component if the input is S polarized
-    mode : {'real', 'complex'}
-        Whether to treat the sympy.Symbols as real or complex.
 
     Returns
     -------
     form : FormContainer
 
     """
-    if mode == 'complex':
 
-        Sp = Pp + sp.I*Qp
-        Ss = Ps + sp.I*Qs
+    _assert_real_params(Pp)
+    _assert_real_params(Ps)
+    _assert_real_params(Qp)
+    _assert_real_params(Qs)
 
-        PP = Sp[0]*sp.conjugate(Sp[0])+Sp[2]*sp.conjugate(Sp[2])
-        PS = Sp[1]*sp.conjugate(Sp[1])
-        SP = Ss[0]*sp.conjugate(Ss[0])+Ss[2]*sp.conjugate(Ss[2])
-        SS = Ss[1]*sp.conjugate(Ss[1])
+    Sp = Pp + sp.I*Qp
+    Ss = Ps + sp.I*Qs
 
-    elif mode == 'real':
-
-        PP = Pp[0]**2+Pp[2]**2+Qp[0]**2+Qp[2]**2
-        PS = Pp[1]**2+Qp[1]**2
-        SP = Ps[0]**2+Ps[2]**2+Qs[0]**2+Qs[2]**2
-        SS = Ps[1]**2+Qs[1]**2
-
-    else:
-
-        raise ValueError('mode must be either \'real\' or \'complex\'')
+    PP = Sp[0]*sp.conjugate(Sp[0])+Sp[2]*sp.conjugate(Sp[2])
+    PS = Sp[1]*sp.conjugate(Sp[1])
+    SP = Ss[0]*sp.conjugate(Ss[0])+Ss[2]*sp.conjugate(Ss[2])
+    SS = Ss[1]*sp.conjugate(Ss[1])
 
     return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
+
+
+# TODO Remove deprecation error
+def gen_P_just_dipole_real(*args, **kwargs):
+    raise NotImplementedError('gen_P_just_dipole_real was deprecated in version 0.7.0. Use gen_P_just_dipole instead.')
+
+
+# TODO Remove deprecation error
+def gen_P_just_dipole_complex(*args, **kwargs):
+    raise NotImplementedError('gen_P_just_dipole_complex was deprecated in version 0.7.0. Use gen_P_just_dipole instead.')
 
 
 def gen_P_just_dipole(t1, theta):
@@ -87,6 +88,8 @@ def gen_P_just_dipole(t1, theta):
         The 2\\omega polarization assuming S-polarized input
 
     """
+
+    _assert_real_params(t1)
     c = sp.cos(theta)
     s = sp.sin(theta)
     kout = np.array([s, 0, -c], dtype=object)
@@ -100,6 +103,16 @@ def gen_P_just_dipole(t1, theta):
     Pp -= np.dot(kout, Pp)*kout
 
     return Pp, Ps, 0, 0
+
+
+# TODO Remove deprecation error
+def gen_P_just_dipole_complex(*args, **kwargs):
+    raise NotImplementedError('gen_P_dipole_quadrupole_complex was deprecated in version 0.7.0. Use gen_P_dipole_quadrupole instead.')
+
+
+# TODO Remove deprecation error
+def gen_P_just_dipole_real(*args, **kwargs):
+    raise NotImplementedError('gen_P_dipole_quadrupole_real was deprecated in version 0.7.0. Use gen_P_dipole_real instead.')
 
 
 def gen_P_dipole_quadrupole(t1, t2, theta):
@@ -122,6 +135,9 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
         The 2\\omega effective polarization assuming S-polarized input
     
     """
+    _assert_real_params(t1)
+    _assert_real_params(t2)
+
     c = sp.cos(theta)
     s = sp.sin(theta)
     kin = np.array([s, 0, c], dtype=object)
@@ -142,8 +158,18 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
     return Pp, Ps, Qp, Qs
 
 
-def formgen_just_dipole_complex(t1, theta):
-    """Generate formula assuming dipole SHG with complex coefficients.
+# TODO Remove deprecation error
+def formgen_just_dipole_real(*args, **kwargs):
+    raise NotImplementedError('formgen_just_dipole_real was deprecated in version 0.7.0. Use formgen_just_dipole instead.')
+
+
+# TODO Remove deprecation error
+def formgen_just_dipole_complex(*args, **kwargs):
+    raise NotImplementedError('formgen_just_dipole_complex was deprecated in version 0.7.0. Use formgen_just_dipole instead.')
+
+
+def formgen_just_dipole(t1, theta):
+    """Generate formula assuming dipole SHG.
 
     Parameters
     ----------
@@ -167,6 +193,8 @@ def formgen_just_dipole_complex(t1, theta):
     and the tutorial.
 
     """
+    _assert_real_params(t1)
+
     c = sp.cos(theta)
     s = sp.sin(theta)
     kout = np.array([s, 0, -c], dtype=object)
@@ -185,52 +213,18 @@ def formgen_just_dipole_complex(t1, theta):
     return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
 
 
-def formgen_just_dipole_real(t1, theta):
-    """Generate formula assuming dipole SHG with real coefficients.
-
-    Parameters
-    ----------
-    t1 : ndarray of sympy.Expr
-        SHG susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
-    theta : float or sympy.Symbol
-        Angle of incidence
-
-    Returns
-    -------
-    fform : FormContainer
-        Instance of :class:`~shgpy.core.data_handler.FormContainer`.
-
-    Notes
-    -----
-    This routine differs from :func:`~shgpy.formgen.formgen_just_dipole_complex` 
-    only in the sense that the computed intensity function is computed by
-    computing ``**2`` (rather than the modulus squared) of the polarization.
-    This is usually easier as long as you're not worrying about the imaginary
-    component of the susceptibility (valid away from resonance in the presence
-    of time-reversal symmetry).
-    
-
-    """
-    c = sp.cos(theta)
-    s = sp.sin(theta)
-    kout = np.array([s, 0, -c], dtype=object)
-    Fp = np.array([-c, 0, s], dtype=object)
-    Fs = np.array([0, 1, 0], dtype=object)
-    R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
-    Ps -= np.dot(kout, Ps)*kout
-    Pp -= np.dot(kout, Pp)*kout
-    PP = Pp[0]**2+Pp[2]**2
-    PS = Pp[1]**2
-    SP = Ps[0]**2+Ps[2]**2
-    SS = Ps[1]**2
-    return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
+# TODO Remove deprecation error
+def formgen_dipole_quadrupole_real(*args, **kwargs):
+    raise NotImplementedError('formgen_dipole_quadrupole_real was deprecated in version 0.7.0. Use formgen_dipole_quadrupole instead.')
 
 
-def formgen_dipole_quadrupole_real(t1, t2, theta):
-    """Generate formula assuming dipole+quadrupole SHG with real coefficients.
+# TODO Remove deprecation error
+def formgen_dipole_quadrupole_complex(*args, **kwargs):
+    raise NotImplementedError('formgen_dipole_quadrupole_complex was deprecated in version 0.7.0. Use formgen_dipole_quadrupole instead.')
+
+
+def formgen_dipole_quadrupole(t1, t2, theta):
+    """Generate formula assuming dipole+quadrupole SHG.
 
     Parameters
     ----------
@@ -245,58 +239,11 @@ def formgen_dipole_quadrupole_real(t1, t2, theta):
     -------
     fform : FormContainer
         Instance of :class:`~shgpy.core.data_handler.FormContainer`.
-
-    Notes
-    -----
-    See note in :func:`~shgpy.formgen.formgen_just_dipole_real`.
     
     """
-    c = sp.cos(theta)
-    s = sp.sin(theta)
-    kin = np.array([s, 0, c], dtype=object)
-    kout = np.array([s, 0, -c], dtype=object)
-    Fp = np.array([-c, 0, s], dtype=object)
-    Fs = np.array([0, 1, 0], dtype=object)
-    R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    rotated_qtensor = tensor_contract(tensor_product(R, R, R, R, t2), [[1, 8], [3, 9], [5, 10], [7, 11]])
-    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
-    Qs = tensor_contract(tensor_product(rotated_qtensor, kin, Fs, Fs), [[1, 4], [2, 5], [3, 6]])
-    Qp = tensor_contract(tensor_product(rotated_qtensor, kin, Fp, Fp), [[1, 4], [2, 5], [3, 6]])
-    Ps -= np.dot(kout, Ps)*kout
-    Pp -= np.dot(kout, Pp)*kout
-    Qs -= np.dot(kout, Qs)*kout
-    Qp -= np.dot(kout, Qp)*kout
-    PP = Pp[0]**2+Pp[2]**2+Qp[0]**2+Qp[2]**2
-    PS = Pp[1]**2+Qp[1]**2
-    SP = Ps[0]**2+Ps[2]**2+Qs[0]**2+Qs[2]**2
-    SS = Ps[1]**2+Qs[1]**2
-    return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
+    _assert_real_params(t1)
+    _assert_real_params(t2)
 
-
-def formgen_dipole_quadrupole_complex(t1, t2, theta):
-    """Generate formula assuming dipole+quadrupole SHG with complex coefficients.
-
-    Parameters
-    ----------
-    t1 : ndarray of sympy.Expr
-        SHG dipole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
-    t2 : ndarray of sympy.Expr
-        SHG quadrupole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
-    theta : float or sympy.Symbol
-        Angle of incidence
-
-    Returns
-    -------
-    fform : FormContainer
-        Instance of :class:`~shgpy.core.data_handler.FormContainer`.
-
-    Notes
-    -----
-    See note in :func:`~shgpy.formgen.formgen_just_dipole_complex`.
-    
-    """
     theta = sp.sympify(theta)
     if not theta.is_real:
         raise ValueError('theta must be a real variable (did you forget real=True in sympy.symbols?)')

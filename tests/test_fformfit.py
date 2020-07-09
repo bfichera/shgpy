@@ -42,7 +42,7 @@ class TestFit(unittest.TestCase):
         ret2 = least_squares_fit_with_bounds(self.fform, self.fdat, self.guess_dict, self.bounds_dict)
         for ret in [ret1, ret2]:
             self.assertAlmostEqual(abs(ret.xdict[S.psi]), 1.59, delta=0.1)
-            self.assertAlmostEqual(abs(ret.xdict[S.zyx]), 1.23, delta=0.1)
+            self.assertAlmostEqual(abs(ret.xdict[shgpy.map_to_real(S.zyx)]), 1.23, delta=0.1)
 
         fit_dat = shgpy.fform_to_dat(self.fform, ret1.xdict, 1000)
         if MANUAL:
@@ -57,7 +57,7 @@ class TestFit(unittest.TestCase):
         ret4 = basinhopping_fit_jac_with_bounds(self.fform, self.fdat, self.guess_dict, self.bounds_dict, niter)
         for ret in [ret1, ret2, ret3, ret4]:
             self.assertAlmostEqual(abs(ret.xdict[S.psi]), 1.59, delta=0.1)
-            self.assertAlmostEqual(abs(ret.xdict[S.zyx]), 1.23, delta=0.1)
+            self.assertAlmostEqual(abs(ret.xdict[shgpy.map_to_real(S.zyx)]), 1.23, delta=0.1)
 
     def test_annealing(self):
         maxiter = 100
@@ -71,4 +71,4 @@ class TestFit(unittest.TestCase):
         )
         for ret in [ret1]:
             self.assertAlmostEqual(abs(ret.xdict[S.psi]), 1.59, delta=0.1)
-            self.assertAlmostEqual(abs(ret.xdict[S.zyx]), 1.23, delta=0.1)
+            self.assertAlmostEqual(abs(ret.xdict[shgpy.map_to_real(S.zyx)]), 1.23, delta=0.1)

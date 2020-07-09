@@ -11,7 +11,6 @@ relevant `scipy` documentation for more info.
 
 """
 import sympy as sp
-from sympy.utilities.autowrap import autowrap
 from sympy.utilities.codegen import CCodeGen
 import numpy as np
 from .core import n2i
@@ -56,6 +55,7 @@ def _make_energy_expr(fform, fdat, free_symbols=None):
     energy_expr = 0
     xs = sp.MatrixSymbol('xs', len(free_symbols), 1)
     mapping = {fs:xs[i] for i, fs in enumerate(free_symbols)}
+    mapping[sp.I] = 1j
     start = time.time()
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
@@ -77,6 +77,7 @@ def _make_energy_expr_list(fform, fdat, free_symbols=None):
     energy_expr_list = []
     xs = sp.MatrixSymbol('xs', len(free_symbols), 1)
     mapping = {fs:xs[i] for i, fs in enumerate(free_symbols)}
+    mapping[sp.I] = 1j
     start = time.time()
     for k in fform.get_keys():
         for m in np.arange(-M, M+1):
@@ -90,8 +91,63 @@ def _make_energy_expr_list(fform, fdat, free_symbols=None):
 
 
 def _make_denergy_expr(energy_expr):
-    xs = energy_expr.free_symbols[0]
-    return np.array([sp.diff(energy_expr, xs[i]) for i in range(len(xs))])
+    xs = list(energy_expr.free_symbols)[0]
+    n = xs.shape[0]
+    return np.array([sp.diff(energy_expr, xs[i]) for i in range(n)])
+
+
+def _fixed_autowrap(energy_expr, prefix, save_filename=None):
+
+    codegen = CCodeGen()
+
+    routines = []
+    _logger.debug('Writing code for energy_expr')
+    routines.append(
+        codegen.routine('autofunc', energy_expr)
+    )
+    [(c_name, bad_c_code), (h_name, h_code)] = codegen.write(
+        routines,
+        prefix,
+    )
+    c_code = '#include <complex.h>\n'
+    c_code += bad_c_code
+
+    write_directory = Path(tempfile.mkdtemp()).absolute()
+
+    c_path = write_directory / Path(prefix + '.c')
+    h_path = write_directory / Path(prefix + '.h')
+    o_path = write_directory / Path(prefix + '.o')
+    so_path = write_directory / Path(prefix + '.so')
+
+    with open(c_path, 'w') as fh:
+        fh.write(c_code)
+        fh.write('\n')
+    with open(h_path, 'w') as fh:
+        fh.write(h_code)
+        fh.write('\n')
+
+    start = time.time()
+    _logger.debug('Start compiling code.')
+    os.system(f'gcc -c -lm {c_path} -o {o_path}')
+    os.system(f'gcc -shared {o_path} -o {so_path}')
+    _logger.debug(f'Compiling code took {time.time()-start} seconds.')
+
+    if save_filename is not None:
+        shutil.copy(so_path, save_filename)
+
+    start = time.time()
+    c_lib = ctypes.CDLL(so_path)
+    c_lib.autofunc.restype = ctypes.c_double
+    _logger.debug(f'Importing shared library took'
+                   f' {time.time()-start} seconds.')
+
+    def cost_func(x):
+        c_x = x.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+        return c_lib.autofunc(c_x)
+
+    shutil.rmtree(write_directory)
+
+    return cost_func
 
 
 def _make_energy_func_chunked(energy_expr_list, prefix, save_filename=None):
@@ -104,10 +160,12 @@ def _make_energy_func_chunked(energy_expr_list, prefix, save_filename=None):
         routines.append(
             codegen.routine('expr'+str(i), expr)
         )
-    [(c_name, c_code), (h_name, h_code)] = codegen.write(
+    [(c_name, bad_c_code), (h_name, h_code)] = codegen.write(
         routines,
         prefix,
     )
+    c_code = '#include <complex.h>\n'
+    c_code += bad_c_code
     c_code += """
 double autofunc(double *xs){
 
@@ -145,8 +203,6 @@ double autofunc(double *xs){
     if save_filename is not None:
         shutil.copy(so_path, save_filename)
 
-    shutil.rmtree(write_directory)
-        
     start = time.time()
     c_lib = ctypes.CDLL(so_path)
     c_lib.autofunc.restype = ctypes.c_double
@@ -157,23 +213,13 @@ double autofunc(double *xs){
         c_x = x.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
         return c_lib.autofunc(c_x)
 
+    shutil.rmtree(write_directory)
+
     return cost_func
 
 
 def _make_energy_func_auto(energy_expr, save_filename=None):
-    write_directory = tempfile.mkdtemp()
-    energy_func = autowrap(energy_expr, tempdir=write_directory,
-                           backend='cython')
-    if save_filename is not None:
-        c_path = Path(write_directory) / Path('wrapped_code_0.c')
-        o_path = Path(write_directory) / Path('wrapped_code_0.o')
-        so_path = Path(write_directory) / Path('wrapped_code_0.so')
-        start = time.time()
-        _logger.debug('Start compiling code.')
-        os.system(f'gcc -c -lm {c_path} -o {o_path}')
-        os.system(f'gcc -shared {o_path} -o {so_path}')
-        _logger.debug(f'Compiling code took {time.time()-start} seconds.')
-        shutil.copy(so_path, save_filename)
+    energy_func = _fixed_autowrap(energy_expr, 'SHGPY_COST_FUNC', save_filename)
 
     return energy_func
 
@@ -224,7 +270,11 @@ def _make_denergy_func_auto(denergy_expr, save_filename_prefix=None):
     funcs = []
     for i, expr in enumerate(denergy_expr):
         write_directory = tempfile.mkdtemp()
-        new_func = autowrap(expr, tempdir=write_directory, backend='cython')
+        if save_filename_prefix is None:
+            new_func = _fixed_autowrap(expr, 'SHGPY_COST_FUNC')
+        else:
+            new_func = _fixed_autowrap(expr, 'SHGPY_COST_FUNC',
+                            Path(save_filename_prefix+str(i)+'.so'))
         funcs.append(new_func)
         if save_filename_prefix is not None:
             c_path = Path(write_directory) / Path('wrapped_code_0.c')
