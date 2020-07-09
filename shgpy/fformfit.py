@@ -12,6 +12,7 @@ relevant `scipy` documentation for more info.
 """
 import sympy as sp
 from sympy.utilities.autowrap import autowrap
+from sympy.utilities.codegen import CCodeGen
 import numpy as np
 from .core import n2i
 from scipy.optimize import (
@@ -23,6 +24,11 @@ from scipy.optimize import (
 import time
 import logging
 from warnings import warn
+import os
+import tempfile
+import shutil
+from pathlib import Path
+import ctypes
 
 _logger = logging.getLogger(__name__)
 
@@ -62,31 +68,215 @@ def _make_energy_expr(fform, fdat, free_symbols=None):
     return energy_expr
 
 
-# TODO Make this function use xreplace.
-def _make_denergy_expr(free_symbols, energy_expr):
-    def gradient(expr, free_symbols):
-        return np.array([sp.diff(expr, fs) for fs in free_symbols])
-    return gradient(energy_expr, free_symbols)
+def _make_energy_expr_list(fform, fdat, free_symbols=None):
 
+    if free_symbols is None:
+        free_symbols = fform.get_free_symbols()
 
-# TODO recast callers of this function
-def _make_energy_func(energy_expr):
-    return autowrap(energy_expr, backend='f2py')
-
-
-# TODO Make this function not use xreplace.
-def _make_denergy_func(free_symbols, denergy_expr):
+    M = fform.get_M()
+    energy_expr_list = []
     xs = sp.MatrixSymbol('xs', len(free_symbols), 1)
     mapping = {fs:xs[i] for i, fs in enumerate(free_symbols)}
-    easy_denergy_expr = np.array([expr.xreplace(mapping) for expr in denergy_expr])
-    funcs = [autowrap(expr, backend='f2py') for expr in easy_denergy_expr]
+    start = time.time()
+    for k in fform.get_keys():
+        for m in np.arange(-M, M+1):
+            _logger.debug(f'Computing cost function term pc={k} m={m}')
+            expr0 = fform.get_pc(k)[n2i(m, M)] - fdat.get_pc(k)[n2i(m, M)]
+            energy_expr_list.append((expr0*sp.conjugate(expr0)).xreplace(mapping))
+    _logger.debug('Cost expression evaluation took'
+                   f' {time.time()-start} seconds.')
+
+    return energy_expr_list
+
+
+def _make_denergy_expr(energy_expr):
+    xs = energy_expr.free_symbols[0]
+    return np.array([sp.diff(energy_expr, xs[i]) for i in range(len(xs))])
+
+
+def _make_energy_func_chunked(energy_expr_list, prefix, save_filename=None):
+
+    codegen = CCodeGen()
+
+    routines = []
+    for i, expr in enumerate(energy_expr_list):
+        _logger.debug(f'Writing code for expr {i} of {len(energy_expr_list)}')
+        routines.append(
+            codegen.routine('expr'+str(i), expr)
+        )
+    [(c_name, c_code), (h_name, h_code)] = codegen.write(
+        routines,
+        prefix,
+    )
+    c_code += """
+double autofunc(double *xs){
+
+    double autofunc_result;
+    autofunc_result = {'+'.join(['expr'+str(i)+'(xs)' for i in range(len(energy_expr_list))])};
+    return autofunc_result;
+
+}
+"""
+    h_code = h_code.replace('\n#endif', """double autofunc(double *xs);
+
+#endif
+""")
+
+    write_directory = Path(tempfile.mkdtemp()).absolute()
+
+    c_path = write_directory / Path(prefix + '.c')
+    h_path = write_directory / Path(prefix + '.h')
+    o_path = write_directory / Path(prefix + '.o')
+    so_path = write_directory / Path(prefix + '.so')
+
+    with open(c_path, 'w') as fh:
+        fh.write(c_code)
+        fh.write('\n')
+    with open(h_path, 'w') as fh:
+        fh.write(h_code)
+        fh.write('\n')
+
+    start = time.time()
+    _logger.debug('Start compiling code.')
+    os.system(f'gcc -c -lm {c_path} -o {o_path}')
+    os.system(f'gcc -shared {o_path} -o {so_path}')
+    _logger.debug(f'Compiling code took {time.time()-start} seconds.')
+
+    if save_filename is not None:
+        shutil.copy(so_path, save_filename)
+
+    shutil.rmtree(write_directory)
+        
+    start = time.time()
+    c_lib = ctypes.CDLL(so_path)
+    c_lib.autofunc.restype = ctypes.c_double
+    _logger.debug(f'Importing shared library took'
+                   f' {time.time()-start} seconds.')
+
+    def cost_func(x):
+        c_x = x.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+        return c_lib.autofunc(c_x)
+
+    return cost_func
+
+
+def _make_energy_func_auto(energy_expr, save_filename=None):
+    write_directory = tempfile.mkdtemp()
+    energy_func = autowrap(energy_expr, tempdir=write_directory,
+                           backend='cython')
+    if save_filename is not None:
+        c_path = Path(write_directory) / Path('wrapped_code_0.c')
+        o_path = Path(write_directory) / Path('wrapped_code_0.o')
+        so_path = Path(write_directory) / Path('wrapped_code_0.so')
+        start = time.time()
+        _logger.debug('Start compiling code.')
+        os.system(f'gcc -c -lm {c_path} -o {o_path}')
+        os.system(f'gcc -shared {o_path} -o {so_path}')
+        _logger.debug(f'Compiling code took {time.time()-start} seconds.')
+        shutil.copy(so_path, save_filename)
+
+    return energy_func
+
+
+def _load_func(load_cost_func_filename):
+    start = time.time()
+    c_lib = ctypes.CDLL(load_cost_func_filename)
+    c_lib.autofunc.restype = ctypes.c_double
+    _logger.debug(f'Importing shared library took'
+                   f' {time.time()-start} seconds.')
+
+    def cost_func(x):
+        c_x = x.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+        return c_lib.autofunc(c_x)
+
+    return cost_func
+
+
+def _make_energy_func_wrapper(fform, fdat, free_symbols=None, chunk=False, save_filename=None):
+
+    if chunk:
+        energy_expr_list = _make_energy_expr_list(
+            fform,
+            fdat,
+            free_symbols,
+        )
+        energy_func = _make_energy_func_chunked(
+            energy_expr_list,
+            'SHGPY_COST_FUNC',
+            save_filename,
+        )
+        return energy_func
+
+    else:
+        energy_expr = _make_energy_expr(
+            fform,
+            fdat,
+            free_symbols,
+        )
+        energy_func = _make_energy_func_auto(
+            energy_expr,
+            save_filename,
+        ) 
+        return energy_func
+
+
+def _make_denergy_func_auto(denergy_expr, save_filename_prefix=None):
+    funcs = []
+    for i, expr in enumerate(denergy_expr):
+        write_directory = tempfile.mkdtemp()
+        new_func = autowrap(expr, tempdir=write_directory, backend='cython')
+        funcs.append(new_func)
+        if save_filename_prefix is not None:
+            c_path = Path(write_directory) / Path('wrapped_code_0.c')
+            o_path = Path(write_directory) / Path('wrapped_code_0.o')
+            so_path = Path(write_directory) / Path('wrapped_code_0.so')
+            start = time.time()
+            _logger.debug('Start compiling code.')
+            os.system(f'gcc -c -lm {c_path} -o {o_path}')
+            os.system(f'gcc -shared {o_path} -o {so_path}')
+            _logger.debug(f'Compiling code took {time.time()-start} seconds.')
+            shutil.copy(so_path, Path(save_filename_prefix+str(i)+'.so'))
+        shutil.rmtree(write_directory)
     return lambda x: np.array([func(x) for func in funcs])
 
 
-def _make_energy_and_denergy_func(free_symbols, energy_expr, denergy_expr):
-    f_energy = _make_energy_func(free_symbols, energy_expr)
-    df_energy = _make_denergy_func(free_symbols, denergy_expr)
-    fdf_energy = lambda x:(f_energy(x), df_energy(x))
+def _make_energy_and_denergy_func_wrapper(fform, fdat, free_symbols=None,
+                                           chunk=False, save_filename=None,
+                                           grad_save_filename_prefix=None):
+
+    if chunk:
+        raise NotImplementedError('Chunking the gradient function is not'
+                                  ' implemented yet.')
+    else:
+        energy_expr = _make_energy_expr(fform, fdat, free_symbols)
+        denergy_expr = _make_denergy_expr(energy_expr)
+        f_energy = _make_energy_func_auto(
+            energy_expr,
+            save_filename,
+        )
+        df_energy = _make_denergy_func_auto(
+            denergy_expr,
+            grad_save_filename_prefix,
+        )
+        fdf_energy = lambda x: (f_energy(x), df_energy(x))
+
+    return fdf_energy
+
+
+def _load_energy_and_denergy_func(load_cost_func_filename, load_grad_cost_func_filename_prefix):
+    f_energy = _load_func(load_cost_func_filename)
+    funcs = []
+    i = 0
+    while True:
+        new_filename = load_grad_cost_func_filename_prefix+str(i)+'.so'
+        if Path(new_filename).exists():
+            funcs.append(_load_func(load_grad_cost_func_filename_prefix+str(i)+'.so'))
+            i += 1
+        else:
+            _logger.debug('Loaded {i} gradient functions.')
+            break
+    df_energy = lambda x: np.array([func(x) for func in funcs])
+    fdf_energy = lambda x: (f_energy(x), df_energy(x))
     return fdf_energy
 
 
@@ -201,7 +391,7 @@ def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
     return ret
 
 
-def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), stepsize=0.5, basinhopping_kwargs={}):
+def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), stepsize=0.5, basinhopping_kwargs={}, chunk_cost_func=False, save_cost_func_filename=None, load_cost_func_filename=None):
     """Basinhopping fit of RA-SHG data.
 
     Parameters
@@ -227,6 +417,14 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
     basinhopping_kwargs : dict, optional
         Other options to pass to the basinhopping routine. See scipy
         documentation for more information.
+    chunk_cost_fun : bool, optional
+        Whether to chunk the cost function generation into multiple parts.
+        Default is False.
+    save_cost_func_filename : path-like, optional
+        If provided, save the cost function (as a shared library) at this
+        location.
+    load_cost_func_filename : path-like, optional
+        If provided, load the cost function at this location.
 
     Returns
     -------
@@ -246,8 +444,16 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
     _logger.info('Starting energy function generation.')
     start = time.time()
 
-    energy_expr = _make_energy_expr(fform, fdat, free_symbols)
-    f_energy = _make_energy_func(energy_expr)
+    if load_cost_func_filename is not None:
+        f_energy = _load_func(load_cost_func_filename)
+    else:
+        f_energy = _make_energy_func_wrapper(
+            fform,
+            fdat,
+            free_symbols,
+            chunk_cost_func,
+            save_cost_func_filename,
+        )
 
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
@@ -269,7 +475,7 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
     return ret
 
 
-def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', args=(), stepsize=0.5, basinhopping_kwargs={}):
+def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', args=(), stepsize=0.5, basinhopping_kwargs={}, chunk_cost_func=False, save_cost_func_filename=None, load_cost_func_filename=None):
     """Basinhopping fit of RA-SHG data with bounds.
 
     Parameters
@@ -298,6 +504,14 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     basinhopping_kwargs : dict, optional
         Other options to pass to the basinhopping routine. See scipy
         documentation for more information.
+    chunk_cost_fun : bool, optional
+        Whether to chunk the cost function generation into multiple parts.
+        Default is False.
+    save_cost_func_filename : path-like, optional
+        If provided, save the cost function (as a shared library) at this
+        location.
+    load_cost_func_filename : path-like, optional
+        If provided, load the cost function at this location.
 
     Returns
     -------
@@ -317,8 +531,16 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     _logger.info('Starting energy function generation.')
     start = time.time()
  
-    energy_expr = _make_energy_expr(fform, fdat, free_symbols)
-    f_energy = _make_energy_func(energy_expr)
+    if load_cost_func_filename is not None:
+        f_energy = _load_func(load_cost_func_filename)
+    else:
+        f_energy = _make_energy_func_wrapper(
+            fform,
+            fdat,
+            free_symbols,
+            chunk_cost_func,
+            save_cost_func_filename,
+        )
 
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
@@ -344,7 +566,7 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     return ret
 
 
-def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(), stepsize=0.5, basinhopping_kwargs={}):
+def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(), stepsize=0.5, basinhopping_kwargs={}, chunk_cost_func=False, save_cost_func_filename=None, grad_save_cost_func_filename_prefix=None, load_cost_func_filename=None, load_grad_cost_func_filename_prefix=None):
     """Basinhopping fit of RA-SHG data.
 
     Parameters
@@ -370,6 +592,21 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
     basinhopping_kwargs : dict, optional
         Other options to pass to the basinhopping routine. See scipy
         documentation for more information.
+    chunk_cost_fun : bool, optional
+        Whether to chunk the cost function generation into multiple parts.
+        Default is False.
+    save_cost_func_filename : path-like, optional
+        If provided, save the cost function (as a shared library) at this
+        location.
+    grad_save_cos_func_filename : path-like, optional
+        If provided, save the gradient cost functions as shared libraries
+        at the locations defined by ``...0.so``, ``...1.so``, etc.
+    load_cost_func_filename : path-like, optional
+        If provided, load the cost function at this location.
+        Must be used in tandem with ``load_grad_cost_func_filename_prefix``.
+    load_grad_cost_func_filename_prefix : path-like, optional
+        If provided, load the gradient functions defined by this prefix.
+        Must be used in tandem with ``load_cost_func_filename``.
 
     Returns
     -------
@@ -395,11 +632,18 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
     _logger.info('Starting energy function generation.')
     start = time.time()
 
-    # TODO Recast this chunk
-    energy_expr = _make_energy_expr(fform, fdat)
-    denergy_expr = _make_denergy_expr(free_symbols, energy_expr)
-
-    fdf_energy = _make_energy_and_denergy_func(free_symbols, energy_expr, denergy_expr)
+    if load_cost_func_filename is not None and load_grad_cost_func_filename_prefix is not None:
+        fdf_energy = _load_energy_and_denergy_func(load_cost_func_filename, load_grad_cost_func_filename_prefix)
+            
+    else:
+        fdf_energy = _make_energy_and_denergy_func_wrapper(
+            fform,
+            fdat,
+            free_symbols,
+            chunk_cost_func,
+            save_cost_func_filename,
+            grad_save_cost_func_filename_prefix,
+        )
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
@@ -420,7 +664,7 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
     return ret
 
 
-def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', args=(), stepsize=0.5, basinhopping_kwargs={}):
+def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', args=(), stepsize=0.5, basinhopping_kwargs={}, chunk_cost_func=False, save_cost_func_filename=None, grad_save_cost_func_filename_prefix=None, load_cost_func_filename=None, load_grad_cost_func_filename_prefix=None):
     """Basinhopping fit of RA-SHG data with bounds.
 
     Parameters
@@ -449,6 +693,21 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     basinhopping_kwargs : dict, optional
         Other options to pass to the basinhopping routine. See scipy
         documentation for more information.
+    chunk_cost_fun : bool, optional
+        Whether to chunk the cost function generation into multiple parts.
+        Default is False.
+    save_cost_func_filename : path-like, optional
+        If provided, save the cost function (as a shared library) at this
+        location.
+    grad_save_cost_func_filename_prefix : path-like, optional
+        If provided, save the gradient cost functions as shared libraries
+        at the locations defined by ``...0.so``, ``...1.so``, etc.
+    load_cost_func_filename : path-like, optional
+        If provided, load the cost function at this location.
+        Must be used in tandem with ``load_grad_cost_func_filename_prefix``.
+    load_grad_cost_func_filename_prefix : path-like, optional
+        If provided, load the gradient functions defined by this prefix.
+        Must be used in tandem with ``load_cost_func_filename``.
 
     Returns
     -------
@@ -473,11 +732,19 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
 
     _logger.info('Starting energy function generation.')
     start = time.time()
-    # TODO recast this chunk
-    energy_expr = _make_energy_expr(fform, fdat)
-    denergy_expr = _make_denergy_expr(free_symbols, energy_expr)
 
-    fdf_energy = _make_energy_and_denergy_func(free_symbols, energy_expr, denergy_expr)
+    if load_cost_func_filename is not None and load_grad_cost_func_filename_prefix is not None:
+        fdf_energy = _load_energy_and_denergy_func(load_cost_func_filename, load_grad_cost_func_filename_prefix)
+
+    else:
+        fdf_energy = _make_energy_and_denergy_func_wrapper(
+            fform,
+            fdat,
+            free_symbols,
+            chunk_cost_func,
+            save_cost_func_filename,
+            grad_save_cost_func_filename_prefix,
+        )
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
@@ -516,7 +783,10 @@ def dual_annealing_fit_with_bounds(
     maxfun=1e7,
     seed=None,
     no_local_search=True,
-    callback=None
+    callback=None,
+    chunk_cost_func=False,
+    save_cost_func_filename=None,
+    load_cost_func_filename=None,
 ):
     """Simulated annealing fit of RA-SHG data with bounds.
 
@@ -560,6 +830,14 @@ def dual_annealing_fit_with_bounds(
         which will be called for all minima found.
     x0 : ndarray, shape(n,), optional
         Initial guess.
+    chunk_cost_fun : bool, optional
+        Whether to chunk the cost function generation into multiple parts.
+        Default is False.
+    save_cost_func_filename : path-like, optional
+        If provided, save the cost function (as a shared library) at this
+        location.
+    load_cost_func_filename : path-like, optional
+        If provided, load the cost function at this location.
 
     Returns
     -------
@@ -583,8 +861,17 @@ def dual_annealing_fit_with_bounds(
     _logger.info('Starting energy function generation.')
     start = time.time()
 
-    energy_expr = _make_energy_expr(fform, fdat, free_symbols)
-    f_energy = _make_energy_func(energy_expr)
+    if load_cost_func_filename is not None:
+        f_energy = _load_func(load_cost_func_filename)
+
+    else:
+        f_energy = _make_energy_func_wrapper(
+            fform,
+            fdat,
+            free_symbols,
+            chunk_cost_func,
+            save_cost_func_filename,
+        )
 
     _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
 
