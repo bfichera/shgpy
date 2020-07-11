@@ -20,16 +20,17 @@ from scipy.optimize import (
     dual_annealing,
     OptimizeResult,
 )
+import tempfile
 import time
 import logging
 from warnings import warn
 import os
-import tempfile
 import shutil
 from pathlib import Path
 import ctypes
 
 _logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 
 def _check_fform(fform):
@@ -135,15 +136,7 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None):
     if save_filename is not None:
         shutil.copy(so_path, save_filename)
 
-    start = time.time()
-    c_lib = ctypes.CDLL(so_path)
-    c_lib.autofunc.restype = ctypes.c_double
-    _logger.debug(f'Importing shared library took'
-                   f' {time.time()-start} seconds.')
-
-    def cost_func(x):
-        c_x = x.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-        return c_lib.autofunc(c_x)
+    cost_func = _load_func(so_path)
 
     shutil.rmtree(write_directory)
 
@@ -170,11 +163,11 @@ def _make_energy_func_chunked(energy_expr_list, prefix, save_filename=None):
 double autofunc(double *xs){
 
     double autofunc_result;
-    autofunc_result = {'+'.join(['expr'+str(i)+'(xs)' for i in range(len(energy_expr_list))])};
+    autofunc_result = %s;
     return autofunc_result;
 
 }
-"""
+""" % ('+'.join(['expr'+str(i)+'(xs)' for i in range(len(energy_expr_list))]))
     h_code = h_code.replace('\n#endif', """double autofunc(double *xs);
 
 #endif
@@ -203,15 +196,7 @@ double autofunc(double *xs){
     if save_filename is not None:
         shutil.copy(so_path, save_filename)
 
-    start = time.time()
-    c_lib = ctypes.CDLL(so_path)
-    c_lib.autofunc.restype = ctypes.c_double
-    _logger.debug(f'Importing shared library took'
-                   f' {time.time()-start} seconds.')
-
-    def cost_func(x):
-        c_x = x.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
-        return c_lib.autofunc(c_x)
+    cost_func = _load_func(so_path)
 
     shutil.rmtree(write_directory)
 
@@ -269,24 +254,12 @@ def _make_energy_func_wrapper(fform, fdat, free_symbols=None, chunk=False, save_
 def _make_denergy_func_auto(denergy_expr, save_filename_prefix=None):
     funcs = []
     for i, expr in enumerate(denergy_expr):
-        write_directory = tempfile.mkdtemp()
         if save_filename_prefix is None:
             new_func = _fixed_autowrap(expr, 'SHGPY_COST_FUNC')
         else:
             new_func = _fixed_autowrap(expr, 'SHGPY_COST_FUNC',
                             Path(save_filename_prefix+str(i)+'.so'))
         funcs.append(new_func)
-        if save_filename_prefix is not None:
-            c_path = Path(write_directory) / Path('wrapped_code_0.c')
-            o_path = Path(write_directory) / Path('wrapped_code_0.o')
-            so_path = Path(write_directory) / Path('wrapped_code_0.so')
-            start = time.time()
-            _logger.debug('Start compiling code.')
-            os.system(f'gcc -c -lm {c_path} -o {o_path}')
-            os.system(f'gcc -shared {o_path} -o {so_path}')
-            _logger.debug(f'Compiling code took {time.time()-start} seconds.')
-            shutil.copy(so_path, Path(save_filename_prefix+str(i)+'.so'))
-        shutil.rmtree(write_directory)
     return lambda x: np.array([func(x) for func in funcs])
 
 
@@ -378,7 +351,7 @@ def least_squares_fit(fform, fdat, guess_dict):
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
     _logger.info(f'Finished least squares minimization. It took {time.time()-start} seconds.')
-    
+
     return ret
 
 
@@ -437,7 +410,7 @@ def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
     _logger.info(f'Finished least squares minimization. It took {time.time()-start} seconds.')
-    
+
     return ret
 
 
@@ -467,7 +440,7 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
     basinhopping_kwargs : dict, optional
         Other options to pass to the basinhopping routine. See scipy
         documentation for more information.
-    chunk_cost_fun : bool, optional
+    chunk_cost_func : bool, optional
         Whether to chunk the cost function generation into multiple parts.
         Default is False.
     save_cost_func_filename : path-like, optional
@@ -554,7 +527,7 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
     basinhopping_kwargs : dict, optional
         Other options to pass to the basinhopping routine. See scipy
         documentation for more information.
-    chunk_cost_fun : bool, optional
+    chunk_cost_func : bool, optional
         Whether to chunk the cost function generation into multiple parts.
         Default is False.
     save_cost_func_filename : path-like, optional
@@ -642,7 +615,7 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
     basinhopping_kwargs : dict, optional
         Other options to pass to the basinhopping routine. See scipy
         documentation for more information.
-    chunk_cost_fun : bool, optional
+    chunk_cost_func : bool, optional
         Whether to chunk the cost function generation into multiple parts.
         Default is False.
     save_cost_func_filename : path-like, optional
@@ -743,7 +716,7 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     basinhopping_kwargs : dict, optional
         Other options to pass to the basinhopping routine. See scipy
         documentation for more information.
-    chunk_cost_fun : bool, optional
+    chunk_cost_func : bool, optional
         Whether to chunk the cost function generation into multiple parts.
         Default is False.
     save_cost_func_filename : path-like, optional
@@ -880,7 +853,7 @@ def dual_annealing_fit_with_bounds(
         which will be called for all minima found.
     x0 : ndarray, shape(n,), optional
         Initial guess.
-    chunk_cost_fun : bool, optional
+    chunk_cost_func : bool, optional
         Whether to chunk the cost function generation into multiple parts.
         Default is False.
     save_cost_func_filename : path-like, optional
