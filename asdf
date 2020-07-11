@@ -1,7 +1,0 @@
-/home/bfichera/data/projects/shgpy/shgpy/core/data_handler.py:85: UserWarning: Duplicate values encountered in data file.
-  warn('Duplicate values encountered in data file.')
-...
-----------------------------------------------------------------------
-Ran 3 tests in 15.907s
-
-OK
