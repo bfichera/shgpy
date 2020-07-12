@@ -100,7 +100,6 @@ class TestFit(unittest.TestCase):
             load_cost_func_filename='tests/Data/costfunc.so',
         )
 
-        os.remove('tests/Data/costfunc.so')
         ret3 = basinhopping_fit_jac_with_bounds(self.fform, self.fdat, self.guess_dict, self.bounds_dict, 100, save_cost_func_filename='tests/Data/costfunc.so', grad_save_cost_func_filename_prefix='tests/Data/grad_costfunc')
         ret4 = basinhopping_fit_jac_with_bounds(self.fform, self.fdat, self.guess_dict, self.bounds_dict, 100, load_cost_func_filename='tests/Data/costfunc.so', load_grad_cost_func_filename_prefix='tests/Data/grad_costfunc')
 

@@ -134,6 +134,8 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None):
     _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
     if save_filename is not None:
+        if Path(save_filename).exists():
+            Path(save_filename).unlink()
         shutil.copy(so_path, save_filename)
 
     cost_func = _load_func(so_path)
@@ -194,6 +196,8 @@ double autofunc(double *xs){
     _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
     if save_filename is not None:
+        if Path(save_filename).exists():
+            Path(save_filename).unlink()
         shutil.copy(so_path, save_filename)
 
     cost_func = _load_func(so_path)
@@ -279,8 +283,6 @@ def gen_cost_func(fform, fdat, argument_list=None, chunk=False, save_filename=No
                               chunk=chunk, save_filename=save_filename)
         
         
-
-
 def _make_denergy_func_auto(denergy_expr, save_filename_prefix=None):
     funcs = []
     for i, expr in enumerate(denergy_expr):
@@ -333,10 +335,8 @@ def _load_energy_and_denergy_func(load_cost_func_filename, load_grad_cost_func_f
     return fdf_energy
 
 
-# TODO
-# Apply all the autowrap stuff to the residuals here.
-def least_squares_fit(fform, fdat, guess_dict):
-    """Least-squares fit of RA-SHG data.
+def least_squares_fit(fform, fdat, guess_dict, chunk_cost_func=False, save_cost_func_filename=None, load_cost_func_filename=None, least_sq_kwargs={}):
+    """No nonsense least-squares fit of RA-SHG data.
 
     Parameters
     ----------
@@ -348,61 +348,17 @@ def least_squares_fit(fform, fdat, guess_dict):
         This is the (Fourier-transformed) data to fit.
     guess_dict : dict
         Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
-
-    Returns
-    -------
-    ret : scipy.optimize.OptimizeResult
-        Instance of class :class:`~scipy.optimize.OptimizeResult`.
-        See `scipy` documentation for further description. Includes
-        additional attribute ``ret.xdict`` which is a `dict` of 
-        ``{sympy.Symbol:float}`` indicating the final answer as
-        a dictionary.
-
-    """
-    free_symbols = fform.get_free_symbols()
-    M = fform.get_M()
-
-    expr_residual_list = []
-    for pc in fform.get_keys():
-        for m in np.arange(-M, M+1):
-            expr_residual_list.append(fform.get_pc(pc)[n2i(m, M)] - fdat.get_pc(pc)[n2i(m, M)])
-
-    _logger.info('Starting residual function generation.')
-    start = time.time()
-    pre_residual = sp.lambdify(free_symbols, expr_residual_list)
-    residual = lambda x:np.array(pre_residual(*x)).view(np.double)
-    _logger.info(f'Done with residual function generation. It took {time.time()-start} seconds.')
-
-    guess = [guess_dict[k] for k in free_symbols]
-
-    _logger.info('Starting least squares minimizations.')
-    start = time.time()
-    ret = least_squares(residual, guess)
-    ret.time = time.time()-start
-    ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    _logger.info(f'Finished least squares minimization. It took {time.time()-start} seconds.')
-
-    return ret
-
-
-# TODO
-# Apply all the autowrap stuff to the residuals here.
-def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
-    """Least-squares fit of RA-SHG data with bounds.
-
-    Parameters
-    ----------
-    fform : fFormContainer
-        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
-        This is the (Fourier-transformed) fitting formula.
-    fdat : fDataContainer
-        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
-        This is the (Fourier-transformed) data to fit.
-    guess_dict : dict
-        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
-    bounds_dict : dict
-        Dict of form ``{sympy.Symbol:tuple}``. `tuple` should be of form
-        ``(lower_bound, upper_bound)``.
+    chunk_cost_func : bool, optional
+        Whether to chunk the cost function generation into multiple parts.
+        Default is False.
+    save_cost_func_filename : path-like, optional
+        If provided, save the cost function (as a shared library) at this
+        location.
+    load_cost_func_filename : path-like, optional
+        If provided, load the cost function at this location.
+    least_sq_kwargs : dict, optional
+        Dictionary of additional options to pass to
+        scipy.optimize.least_squares. Default is ``{}``.
 
     Returns
     -------
@@ -418,28 +374,107 @@ def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict):
     if check:
         return check
     free_symbols = fform.get_free_symbols()
-    M = fform.get_M()
 
-    expr_residual_list = []
-    for pc in fform.get_keys():
-        for m in np.arange(-M, M+1):
-            expr_residual_list.append(fform.get_pc(pc)[n2i(m, M)] - fdat.get_pc(pc)[n2i(m, M)])
-
-    _logger.info('Starting residual function generation.')
+    _logger.info('Starting energy function generation.')
     start = time.time()
-    pre_residual = sp.lambdify(free_symbols, expr_residual_list)
-    residual = lambda x:np.array(pre_residual(*x)).view(np.double)
-    _logger.info(f'Done with residual function generation. It took {time.time()-start} seconds.')
 
-    guess = [guess_dict[k] for k in free_symbols]
-    bounds = [[bounds_dict[k][0] for k in free_symbols], [bounds_dict[k][1] for k in free_symbols]]
+    if load_cost_func_filename is not None:
+        pre_f_energy = _load_func(load_cost_func_filename)
+        f_energy = lambda x: np.sqrt(pre_f_energy(x))
+    else:
+        pre_f_energy = _make_energy_func_wrapper(
+            fform,
+            fdat,
+            free_symbols,
+            chunk_cost_func,
+            save_cost_func_filename,
+        )
+        f_energy = lambda x: np.sqrt(pre_f_energy(x))
 
-    _logger.info('Starting least squares minimizations.')
+    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+
+    x0 = [guess_dict[k] for k in free_symbols]
+
+    _logger.info('Starting least squares minimization.')
     start = time.time()
-    ret = least_squares(residual, guess, bounds=bounds)
+    ret = least_squares(f_energy, x0, **least_sq_kwargs)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    _logger.info(f'Finished least squares minimization. It took {time.time()-start} seconds.')
+    _logger.info(f'Done with least squares minimization. It took {ret.time} seconds.')
+
+    return ret
+
+
+def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, chunk_cost_func=False, save_cost_func_filename=None, load_cost_func_filename=None, least_sq_kwargs={}):
+    """No nonsense least-squares fit of RA-SHG data.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of class :class:`~shgpy.core.data_handler.fFormContainer`.
+        This is the (Fourier-transformed) fitting formula.
+    fdat : fDataContainer
+        Instance of class :class:`~shgpy.core.data_handler.fDataContainer`.
+        This is the (Fourier-transformed) data to fit.
+    guess_dict : dict
+        Dict of form ``{sympy.Symbol:float}``. This is the initial guess.
+    bounds_dict : dict
+        Dict of form ``{sympy.Symbol:tuple}``. `tuple` should be of form
+        ``(lower_bound, upper_bound)``.
+    chunk_cost_func : bool, optional
+        Whether to chunk the cost function generation into multiple parts.
+        Default is False.
+    save_cost_func_filename : path-like, optional
+        If provided, save the cost function (as a shared library) at this
+        location.
+    load_cost_func_filename : path-like, optional
+        If provided, load the cost function at this location.
+    least_sq_kwargs : dict, optional
+        Dictionary of additional options to pass to
+        scipy.optimize.least_squares. Default is ``{}``.
+
+    Returns
+    -------
+    ret : scipy.optimize.OptimizeResult
+        Instance of class :class:`~scipy.optimize.OptimizeResult`.
+        See `scipy` documentation for further description. Includes
+        additional attribute ``ret.xdict`` which is a `dict` of 
+        ``{sympy.Symbol:float}`` indicating the final answer as
+        a dictionary.
+
+    """
+    check = _check_fform(fform)
+    if check:
+        return check
+    free_symbols = fform.get_free_symbols()
+
+    _logger.info('Starting energy function generation.')
+    start = time.time()
+
+    if load_cost_func_filename is not None:
+        pre_f_energy = _load_func(load_cost_func_filename)
+        f_energy = lambda x: np.sqrt(pre_f_energy(x))
+    else:
+        pre_f_energy = _make_energy_func_wrapper(
+            fform,
+            fdat,
+            free_symbols,
+            chunk_cost_func,
+            save_cost_func_filename,
+        )
+        f_energy = lambda x: np.sqrt(pre_f_energy(x))
+
+    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+
+    x0 = [guess_dict[k] for k in free_symbols]
+    bounds = [[bounds_dict[k][0] for k in free_symbols], [bounds_dict[k][1] for k in free_symbols]]
+
+    _logger.info('Starting least squares minimization.')
+    start = time.time()
+    ret = least_squares(f_energy, x0, bounds=bounds, **least_sq_kwargs)
+    ret.time = time.time()-start
+    ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
+    _logger.info(f'Done with least squares minimization. It took {ret.time} seconds.')
 
     return ret
 
