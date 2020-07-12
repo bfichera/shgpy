@@ -30,7 +30,6 @@ from pathlib import Path
 import ctypes
 
 _logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 
 def _check_fform(fform):
