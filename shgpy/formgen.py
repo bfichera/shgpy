@@ -28,6 +28,7 @@ from .core.utilities import _assert_real_params
 def make_form_from_P_and_Q(Pp, Ps, Qp, Qs):
     """Given a dipole and quadrupole moment, return the SHG signal.
 
+    Parameters
     ----------
     Pp : sympy.Expr
         2\\omega dipole component if the input is P polarized

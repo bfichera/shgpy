@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shgpy.formgen module &#8212; ShgPy 0.7.0 documentation</title>
+    <title>shgpy.formgen module &#8212; ShgPy 0.7.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -275,19 +275,21 @@ see <a class="reference internal" href="shgpy.tensor_definitions.html#module-shg
 <dt id="shgpy.formgen.make_form_from_P_and_Q">
 <code class="sig-prename descclassname">shgpy.formgen.</code><code class="sig-name descname">make_form_from_P_and_Q</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Pp</span></em>, <em class="sig-param"><span class="n">Ps</span></em>, <em class="sig-param"><span class="n">Qp</span></em>, <em class="sig-param"><span class="n">Qs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.formgen.make_form_from_P_and_Q" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a dipole and quadrupole moment, return the SHG signal.</p>
-<dl class="simple">
-<dt>Pp<span class="classifier">sympy.Expr</span></dt><dd><p>2omega dipole component if the input is P polarized</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Pp</strong><span class="classifier">sympy.Expr</span></dt><dd><p>2omega dipole component if the input is P polarized</p>
 </dd>
-<dt>Ps<span class="classifier">sympy.Expr</span></dt><dd><p>2omega dipole component if the input is S polarized</p>
+<dt><strong>Ps</strong><span class="classifier">sympy.Expr</span></dt><dd><p>2omega dipole component if the input is S polarized</p>
 </dd>
-<dt>Qp<span class="classifier">sympy.Expr</span></dt><dd><p>2omega quadrupole component if the input is P polarized</p>
+<dt><strong>Qp</strong><span class="classifier">sympy.Expr</span></dt><dd><p>2omega quadrupole component if the input is P polarized</p>
 </dd>
-<dt>Qs<span class="classifier">sympy.Expr</span></dt><dd><p>2omega quadrupole component if the input is S polarized</p>
+<dt><strong>Qs</strong><span class="classifier">sympy.Expr</span></dt><dd><p>2omega quadrupole component if the input is S polarized</p>
 </dd>
 </dl>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><dl class="simple">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>form</strong><span class="classifier">FormContainer</span></dt><dd></dd>
 </dl>
 </dd>
