@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tensor tutorial &#8212; ShgPy 0.6.1 documentation</title>
+    <title>Tensor tutorial &#8212; ShgPy 0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -244,6 +244,25 @@
 </pre></div>
 </div>
 <p>That’s good, our tensor is actually invariant under 3-fold rotation as advertised.</p>
+<p>Before we end this tutorial, there’s one more important issue we need to discuss. When you initialize a <code class="docutils literal notranslate"><span class="pre">Symbol</span></code> in <code class="docutils literal notranslate"><span class="pre">sympy</span></code> (as in <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">sympy.symbols('x')</span></code>), there are no assumptions on that symbol except that it is commutative. In particular, the symbol is allowed to be complex. However, in <code class="docutils literal notranslate"><span class="pre">shgpy</span></code> it’s much easier if we know exactly whether the symbol is real or imaginary. For this reason, <strong>shgpy only accepts tensors for which all symbols are fully real</strong>. To make sure that <code class="docutils literal notranslate"><span class="pre">shgpy</span></code> knows about this assumption, use</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t1_real</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">make_tensor_real</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Inspecting the elements of <code class="docutils literal notranslate"><span class="pre">t1_real</span></code> using <code class="docutils literal notranslate"><span class="pre">sympy.Symbol.assumptions0</span></code> shows us that <code class="docutils literal notranslate"><span class="pre">make_tensor_real</span></code> has the reality of the symbols baked in explicitly.</p>
+<p>Of course this assumption isn’t quite realistic – for real materials, the susceptibility elements can take on any complex value, not just fully real. In those cases, we can simply decompose each symbol into its real and imaginary parts – both of which are fully real numbers. The easy way to do this is to use <code class="docutils literal notranslate"><span class="pre">shgpy.make_tensor_complex</span></code>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shgpy</span><span class="o">.</span><span class="n">make_tensor_complex</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+<span class="go">array([[[0, I*imag_xyx + real_xyx, I*imag_yyz + real_yyz],</span>
+<span class="go">    [I*imag_xyx + real_xyx, 0, 0],</span>
+<span class="go">    [I*imag_yzy + real_yzy, 0, 0]],</span>
+<span class="go">   [[I*imag_xyx + real_xyx, 0, 0],</span>
+<span class="go">    [0, -I*imag_xyx - real_xyx, I*imag_yyz + real_yyz],</span>
+<span class="go">    [0, I*imag_yzy + real_yzy, 0]],</span>
+<span class="go">   [[I*imag_zyy + real_zyy, 0, 0],</span>
+<span class="go">    [0, I*imag_zyy + real_zyy, 0],</span>
+<span class="go">    [0, 0, I*imag_zzz + real_zzz]]], dtype=object)</span>
+</pre></div>
+</div>
+<p>Using <code class="docutils literal notranslate"><span class="pre">sympy.Symbol.assumptions0</span></code> you can again inspect <code class="docutils literal notranslate"><span class="pre">real_...</span></code> and <code class="docutils literal notranslate"><span class="pre">imag_...</span></code> to prove that they are explicitly real numbers. Now your tensor is safe to start trying to fit data, as described in the next section.</p>
 <p>This ends our tutorial on tensors in ShgPy, but feel free to peruse through the relevant <a class="reference internal" href="../modules.html"><span class="doc">documentation</span></a> for more info before moving on to the <a class="reference internal" href="fitting_tutorial.html"><span class="doc">next tutorial</span></a>.</p>
 </div>
 </div>
@@ -259,7 +278,7 @@
       &copy;2020, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitting tutorial &#8212; ShgPy 0.6.1 documentation</title>
+    <title>Fitting tutorial &#8212; ShgPy 0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -173,6 +173,7 @@
 <span class="go">    np.array([0, 0, 1]),</span>
 <span class="go">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t_dipole</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">t_dipole</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t_dipole</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">make_tensor_real</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We’re not going to add any quadrupole contribution, so we can set the quadrupole tensor to zero:</p>
@@ -236,6 +237,9 @@
 </pre></div>
 </div>
 <p>In addition to <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.least_squares_fit" title="shgpy.fformfit.least_squares_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.least_squares_fit()</span></code></a>, there are a couple of other routines available for fitting RA-SHG data. The most useful one for most problems is actually <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.basinhopping_fit" title="shgpy.fformfit.basinhopping_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.basinhopping_fit()</span></code></a> (and its cousins, see the <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> reference), which is based on the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html#scipy.optimize.basinhopping">scipy.optimize.basinhopping</a> function provided by SciPy. It is specifically designed to treat problems with many local minima and degrees of freedom. In the future, further fitting routines will be added, if there is interest (see <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>).</p>
+<p>A variant of the basinhopping algorithm which is also included in <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> is <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.dual_annealing_fit()</span></code>. See the API documentation for more information.</p>
+<p>Before concluding this tutorial, let me add one more comment about one important capability of this software. Once the fitting routine has finished generating the appropriate energy cost expression using <code class="docutils literal notranslate"><span class="pre">fform</span></code> and <code class="docutils literal notranslate"><span class="pre">fdat</span></code>, it turns it into C code using <code class="docutils literal notranslate"><span class="pre">sympy.utilities.codegen</span></code> and compiles a shared object file, which it runs using <code class="docutils literal notranslate"><span class="pre">ctypes</span></code> during the fitting process. This drastically reduces computation time for complicated fitting functions, for which I’ve found <code class="docutils literal notranslate"><span class="pre">sympy.lambdify</span></code> to be extremely slow. As a result, if you want to save the generated shared object file and then load it for the next simulation, you can use the <code class="docutils literal notranslate"><span class="pre">save_cost_func_filename</span></code> and <code class="docutils literal notranslate"><span class="pre">load_cost_func_filename</span></code> options (and those related to them) in the fitting routines of <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a>.</p>
+<p>If you’d like to generate the cost function without running the fitting routine directly afterwards (as opposed to running them in series, which, for backwards-compatibility, is what the aforementioned <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> routines do), use <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.gen_cost_func" title="shgpy.fformfit.gen_cost_func"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.gen_cost_func()</span></code></a>.</p>
 </div>
 <div class="section" id="conclusion">
 <h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
@@ -254,7 +258,7 @@
       &copy;2020, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
