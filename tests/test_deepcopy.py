@@ -21,7 +21,10 @@ class TestDeepCopyfForm(unittest.TestCase):
                 iterable[k][i] = x**2
         fform = shgpy.fFormContainer(iterable)
         self.assertNotEqual(fform.get_pc('SS')[16].subs(sp.symbols('x'), 1), 1)
-        self.assertEqual(fform.get_pc('SS')[16].subs(sp.symbols('x', real=True), 1), 1)
+        self.assertEqual(
+            fform.get_pc('SS')[16].subs(sp.symbols('x', real=True), 1),
+            1,
+        )
         self.assertEqual(iterable['SS'][16], x**2)
 
 
@@ -34,5 +37,8 @@ class TestDeepCopyForm(unittest.TestCase):
             iterable[k] = x**2
         form = shgpy.FormContainer(iterable)
         self.assertNotEqual(form.get_pc('SS').subs(sp.symbols('x'), 1), 1)
-        self.assertEqual(form.get_pc('SS').subs(sp.symbols('x', real=True), 1), 1)
+        self.assertEqual(
+            form.get_pc('SS').subs(sp.symbols('x', real=True), 1),
+            1,
+        )
         self.assertEqual(iterable['SS'], x**2)

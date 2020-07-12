@@ -59,13 +59,21 @@ def _make_parameters_in_expr_complex(expr, prefix=('real_', 'imag_'), suffix=(''
     return expr
 
 
+def _make_parameters_in_expr_real(expr):
+    free_symbols = expr.free_symbols
+    for fs in free_symbols:
+        if fs.is_real is None:
+            expr = expr.subs(str(fs), sp.symbols(str(fs), real=True))
+    return expr
+
+
 def make_tensor_complex(tensor, prefix=('real_', 'imag_'), suffix=('', '')):
     """Substitute e.g. ``x`` in sympy expression with ``real_x+1j*imag_x``.
 
     In sympy, variables initalized by ``x = sympy.symbols('x')`` are by
     default assumed to be complex. In order to make this more explicit
     (e.g. for
-    :func:`~shgpy.fformgen.generate_contracted_fourier_transforms_complex`),
+    :func:`~shgpy.fformgen.generate_contracted_fourier_transforms`),
     we replace ``x`` by ``real_x + 1j*imag_x``.
 
 
@@ -89,6 +97,31 @@ def make_tensor_complex(tensor, prefix=('real_', 'imag_'), suffix=('', '')):
         tensor[i] = _make_parameters_in_expr_complex(sp.sympify(tensor[i]), prefix=prefix, suffix=suffix)
     return np.reshape(tensor, shape)
 
+
+def make_tensor_real(tensor):
+    """Substitute e.g. ``x`` in sympy expression with its real counterpart.
+
+    In sympy, variables initalized by ``x = sympy.symbols('x')`` are by
+    default assumed to be complex. In order to make this more explicit
+    (e.g. for
+    :func:`~shgpy.fformgen.generate_contracted_fourier_transforms`),
+    we replace ``sympy.Symbol('x')`` by ``sympy.Symbol('x', real=True)``.
+
+
+    Parameters
+    ----------
+    tensor : ndarray
+
+    Returns
+    -------
+    real_tensor : ndarray
+    """
+    shape = tensor.shape
+    tensor = tensor.flatten()
+    for i in range(len(tensor)):
+        tensor[i] = _make_parameters_in_expr_real(sp.sympify(tensor[i]))
+    return np.reshape(tensor, shape)
+    
 
 def rotation_matrix3(n, t):
     """Returns the 3x3 matrix which rotates by `t` about `n`
@@ -283,3 +316,24 @@ def transform(tensor, operation):
     args = [operation]*rank
     args.append(tensor)
     return tensor_contract(tensor_product(*args), [[2*i+1, 2*rank+i] for i in range(rank)])
+
+
+def _free_symbols_of_array(array):
+    total = []
+    for a in array.flatten():
+        total = total+list(sp.sympify(a).free_symbols)
+    return set(total)
+
+
+def _assert_real_params(chi):
+    free_symbols = _free_symbols_of_array(chi)
+    for fs in free_symbols:
+        if fs.is_real is not True:
+            raise ValueError('Parameters of chi must all be real: %s. Use shgpy.make_tensor_real or shgpy.make_tensor_complex.' % str(fs))
+
+
+def map_to_real(sym):
+    """Map a sympy.Symbol to its real counterpart."""
+    return sp.symbols(str(sym), real=True)
+
+

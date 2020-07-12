@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 t_dipole = np.zeros(shape=(3,3,3), dtype=sp.Expr)
 
 t_quad = shgpy.particularize(td.quadrupole['D_6h'])
+t_quad = shgpy.make_tensor_real(t_quad)
 
 save_filename = 'fform/None-None-D_6h(001)-particularized.p'
 

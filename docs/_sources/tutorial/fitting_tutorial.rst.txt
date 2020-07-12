@@ -77,6 +77,7 @@ Now let us turn to our specific use case. As an example, imagine that we are try
     np.array([0, 0, 1]),
 )
 >>> t_dipole = shgpy.transform(t_dipole, R)
+>>> t_dipole = shgpy.make_tensor_real(_)
 
 We're not going to add any quadrupole contribution, so we can set the quadrupole tensor to zero:
 
@@ -147,6 +148,12 @@ Here, ``ret`` is an instance of the `scipy.optimize.OptimizeResult <https://docs
 {psi: 1.5914701873213561, zyx: 1.2314580678986173}
 
 In addition to :func:`shgpy.fformfit.least_squares_fit`, there are a couple of other routines available for fitting RA-SHG data. The most useful one for most problems is actually :func:`shgpy.fformfit.basinhopping_fit` (and its cousins, see the :mod:`shgpy.fformfit` reference), which is based on the `scipy.optimize.basinhopping <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html#scipy.optimize.basinhopping>`_ function provided by SciPy. It is specifically designed to treat problems with many local minima and degrees of freedom. In the future, further fitting routines will be added, if there is interest (see :doc:`how to contribute <../contribute>`).
+
+A variant of the basinhopping algorithm which is also included in :mod:`shgpy.fformfit` is :func:`shgpy.fformfit.dual_annealing_fit`. See the API documentation for more information.
+
+Before concluding this tutorial, let me add one more comment about one important capability of this software. Once the fitting routine has finished generating the appropriate energy cost expression using ``fform`` and ``fdat``, it turns it into C code using ``sympy.utilities.codegen`` and compiles a shared object file, which it runs using ``ctypes`` during the fitting process. This drastically reduces computation time for complicated fitting functions, for which I've found ``sympy.lambdify`` to be extremely slow. As a result, if you want to save the generated shared object file and then load it for the next simulation, you can use the ``save_cost_func_filename`` and ``load_cost_func_filename`` options (and those related to them) in the fitting routines of :mod:`shgpy.fformfit`.
+
+If you'd like to generate the cost function without running the fitting routine directly afterwards (as opposed to running them in series, which, for backwards-compatibility, is what the aforementioned :mod:`shgpy.fformfit` routines do), use :func:`shgpy.fformfit.gen_cost_func`.
 
 Conclusion
 ----------

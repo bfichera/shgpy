@@ -2,13 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot=True, filename=None, show_legend=False):
+def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include,
+              show_plot=True, filename=None, show_legend=False):
     """An easy linear plotting routine for SHG data.
 
     Parameters
     ----------
     list_of_dats : list of DataContainer
-        List of :class:`~shgpy.core.data_handler.DataContainer` instances to plot.
+        List of :class:`~shgpy.core.data_handler.DataContainer` instances
+        to plot.
     list_of_param_dicts : list of dict
         List of `matplotlib` parameter dictionaries, each corresponding to
         a particular `DataContainer`.
@@ -25,10 +27,17 @@ def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot=True,
     """
     n = len(pcs_to_include)
     if n > 4:
-        raise ValueError('easy_plot only accepts a maximum of 4 polarization combos.')
+        raise ValueError('easy_plot only accepts a maximum of 4 '
+                         'polarization combos.')
     nrows = [1, 1, 1, 2][n-1]
     ncols = [1, 2, 3, 2][n-1]
-    fig, axs = plt.subplots(nrows=nrows, ncols=ncols, sharex=True, sharey=True, squeeze=False)
+    fig, axs = plt.subplots(
+        nrows=nrows,
+        ncols=ncols,
+        sharex=True,
+        sharey=True,
+        squeeze=False,
+    )
     for pc, ax in zip(pcs_to_include, axs.flatten()):
         for dat, kwparams in zip(list_of_dats, list_of_param_dicts):
             xdata, ydata = dat.get_pc(pc, 'radians')
@@ -42,13 +51,15 @@ def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot=True,
         plt.show()
 
 
-def easy_polar_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot=True, filename=None, show_legend=False):
+def easy_polar_plot(list_of_dats, list_of_param_dicts, pcs_to_include,
+                    show_plot=True, filename=None, show_legend=False):
     """An easy polar plotting routine for SHG data.
 
     Parameters
     ----------
     list_of_dats : list of DataContainer
-        List of :class:`~shgpy.core.data_handler.DataContainer` instances to plot.
+        List of :class:`~shgpy.core.data_handler.DataContainer` instances
+        to plot.
     list_of_param_dicts : list of dict
         List of `matplotlib` parameter dictionaries, each corresponding to
         a particular `DataContainer`.
@@ -65,7 +76,8 @@ def easy_polar_plot(list_of_dats, list_of_param_dicts, pcs_to_include, show_plot
     """
 
     n = len(pcs_to_include)
-    fig, axs = plt.subplots(1, n, subplot_kw=dict(projection='polar'), sharey=True)
+    fig, axs = plt.subplots(1, n, sharey=True,
+                            subplot_kw=dict(projection='polar'))
 
     for pc, ax in zip(pcs_to_include, axs.flatten()):
         for dat, kwparams in zip(list_of_dats, list_of_param_dicts):

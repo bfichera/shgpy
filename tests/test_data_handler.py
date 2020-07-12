@@ -15,19 +15,30 @@ MANUAL = False
 class TestData(unittest.TestCase):
 
     def test_creation(self):
-        items = (('PS', np.arange(0, 4).reshape((2,2))),('SS', np.arange(0, 4).reshape((2,2))),)
+        items = (
+            ('PS', np.arange(0, 4).reshape((2,2))),
+            ('SS', np.arange(0, 4).reshape((2,2))),
+        )
         hi = shgpy.DataContainer(items, 'radians')
         self.assertIsInstance(hi, shgpy.DataContainer)
 
     def test_dict_funcs(self):
-        items = (('PP', np.arange(0, 4).reshape((2,2))),('PS', np.arange(0, 4).reshape((2,2))),('SP', np.arange(0, 4).reshape((2,2))),('SS', np.arange(0, 4).reshape((2,2))),)
+        items = (
+            ('PP', np.arange(0, 4).reshape((2,2))),
+            ('PS', np.arange(0, 4).reshape((2,2))),
+            ('SP', np.arange(0, 4).reshape((2,2))),
+            ('SS', np.arange(0, 4).reshape((2,2))),
+        )
         hi = shgpy.DataContainer(items, 'radians')
         for i,j in zip(hi.get_items('radians'), list(items)):
             self.assertEqual(i[0], j[0])
             self.assertTrue(np.array_equal(i[1], j[1]))
 
     def test_manipulation(self):
-        items = (('PP', np.arange(0, 4).reshape((2,2))),('PS', np.arange(0, 4).reshape((2,2))),)
+        items = (
+            ('PP', np.arange(0, 4).reshape((2,2))),
+            ('PS', np.arange(0, 4).reshape((2,2))),
+        )
         hi = shgpy.DataContainer(items, 'radians')
         hi.scale_data(100)
         self.assertEqual(hi.get_scale(), 100)
@@ -45,13 +56,19 @@ class TestfData(unittest.TestCase):
 
     def test_creation(self):
         M = 16
-        items = (('PP', np.zeros(2*M+1, dtype=complex)), ('PS', np.ones(2*M+1, dtype=complex)*4))
+        items = (
+            ('PP', np.zeros(2*M+1, dtype=complex)),
+            ('PS', np.ones(2*M+1, dtype=complex)*4),
+        )
         hi = shgpy.fDataContainer(items, M=M)
         self.assertIsInstance(hi, shgpy.fDataContainer)
 
     def test_dict_funcs(self):
         M = 16
-        items = (('PP', np.zeros(2*M+1, dtype=complex)), ('PS', np.ones(2*M+1, dtype=complex)*4))
+        items = (
+            ('PP', np.zeros(2*M+1, dtype=complex)),
+            ('PS', np.ones(2*M+1, dtype=complex)*4),
+        )
         hi = shgpy.fDataContainer(items, M=M)
         self.assertEqual(hi.get_keys(), list(dict(items).keys()))
         for i,j in zip(hi.get_items(), list(dict(items).items())):
@@ -61,7 +78,10 @@ class TestfData(unittest.TestCase):
 
     def test_manipulation(self):
         M = 16
-        items = (('PP', np.zeros(2*M+1, dtype=complex)), ('PS', np.ones(2*M+1, dtype=complex)*4))
+        items = (
+            ('PP', np.zeros(2*M+1, dtype=complex)),
+            ('PS', np.ones(2*M+1, dtype=complex)*4),
+        )
         hi = shgpy.fDataContainer(items, M=M)
         hi.scale_fdata(14)
         self.assertEqual(hi.get_scale(), 14)
@@ -84,12 +104,25 @@ class TestLoadData(unittest.TestCase):
     def test_loaders(self):
         dat = shgpy.load_data(self.filenames_dict, 'degrees')
         self.assertIsInstance(dat, shgpy.DataContainer)
-        dat = shgpy.load_data_and_dark_subtract(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
+        dat = shgpy.load_data_and_dark_subtract(
+            self.filenames_dict,
+            'degrees',
+            self.filenames_dict,
+            'degrees',
+        )
         self.assertIsInstance(dat, shgpy.DataContainer)
         self.assertEqual(dat.get_maxval()[1], 0)
-        dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees')
+        dat, fdat = shgpy.load_data_and_fourier_transform(
+            self.filenames_dict,
+            'degrees',
+        )
         self.assertNotEqual(fdat.get_maxval()[1], 0)
-        dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
+        dat, fdat = shgpy.load_data_and_fourier_transform(
+            self.filenames_dict,
+            'degrees',
+            self.filenames_dict,
+            'degrees',
+        )
         self.assertEqual(fdat.get_maxval()[1], 0)
     
 
@@ -104,9 +137,21 @@ class TestFormAndfForm(unittest.TestCase):
 
     def test_form_to_dat(self):
         form = shgpy.fform_to_form(self.fform)
-        dat = shgpy.form_to_dat(form, {k:random.uniform(-1, 1) for k in form.get_free_symbols() if k != S.phi}, 1000)
+        dat = shgpy.form_to_dat(
+            form,
+            {
+                k:random.uniform(-1, 1)
+                for k in form.get_free_symbols()
+                if k != S.phi
+            },
+            1000,
+        )
         if MANUAL:
-            easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys())
+            easy_plot(
+                [dat],
+                [{'linestyle':'-', 'color':'blue'}],
+                dat.get_keys(),
+            )
 
 
 class TestConversions(unittest.TestCase):
@@ -127,22 +172,39 @@ class TestConversions(unittest.TestCase):
             'SP':'tests/Data/dataSP.csv',
             'SS':'tests/Data/dataSS.csv',
         }
-        dat, fdat = shgpy.load_data_and_fourier_transform(data_filenames_dict, 'degrees')
+        dat, fdat = shgpy.load_data_and_fourier_transform(
+            data_filenames_dict,
+            'degrees',
+        )
         form = shgpy.fform_to_form(fform)
 
         t1 = shgpy.dat_to_fdat(dat)
         self.assertIsInstance(t1, type(fdat))
         t2 = shgpy.fdat_to_dat(fdat, 1000)
         self.assertIsInstance(t2, type(dat))
-        t3 = shgpy.form_to_dat(form, self.random_subs_dict(fform.get_free_symbols()), 1000)
+        t3 = shgpy.form_to_dat(
+            form,
+            self.random_subs_dict(fform.get_free_symbols()),
+            1000,
+        )
         self.assertIsInstance(t3, type(dat))
         t4 = shgpy.form_to_fform(form)
         self.assertIsInstance(t4, type(fform))
-        t5 = shgpy.form_to_fdat(form, self.random_subs_dict(fform.get_free_symbols()))
+        t5 = shgpy.form_to_fdat(
+            form,
+            self.random_subs_dict(fform.get_free_symbols()),
+        )
         self.assertIsInstance(t5, type(fdat))
-        t6 = shgpy.fform_to_fdat(fform, self.random_subs_dict(fform.get_free_symbols()))
+        t6 = shgpy.fform_to_fdat(
+            fform,
+            self.random_subs_dict(fform.get_free_symbols()),
+        )
         self.assertIsInstance(t6, type(fdat))
-        t7 = shgpy.fform_to_dat(fform, self.random_subs_dict(fform.get_free_symbols()), 1000)
+        t7 = shgpy.fform_to_dat(
+            fform,
+            self.random_subs_dict(fform.get_free_symbols()),
+            1000,
+        )
         self.assertIsInstance(t7, type(dat))
         t8 = shgpy.fform_to_form(fform)
         self.assertIsInstance(t8, type(form))
@@ -158,8 +220,22 @@ class TestNormalIncidence(unittest.TestCase):
         }
         dat = shgpy.load_data(data_filenames_dict, 'degrees')
         if MANUAL:
-            easy_plot([dat], [{'linestyle':'-', 'marker':'o', 'markerfacecolor':'none', 'color':'blue'}], dat.get_keys())
-        dat, fdat = shgpy.load_data_and_fourier_transform(data_filenames_dict, 'degrees')
+            easy_plot(
+                [dat],
+                [
+                    {
+                        'linestyle':'-',
+                        'marker':'o',
+                        'markerfacecolor':'none',
+                        'color':'blue'
+                    },
+                ],
+                dat.get_keys(),
+            )
+        dat, fdat = shgpy.load_data_and_fourier_transform(
+            data_filenames_dict,
+            'degrees',
+        )
 
 
 class TestPathologicalData(unittest.TestCase):
@@ -175,20 +251,23 @@ class TestPathologicalData(unittest.TestCase):
 
         dat = shgpy.load_data(self.filenames_dict, 'degrees')
         self.assertIsInstance(dat, shgpy.DataContainer)
-        dat = shgpy.load_data_and_dark_subtract(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
+        dat = shgpy.load_data_and_dark_subtract(
+            self.filenames_dict,
+            'degrees',
+            self.filenames_dict,
+            'degrees',
+        )
         self.assertIsInstance(dat, shgpy.DataContainer)
         self.assertEqual(dat.get_maxval()[1], 0)
-        dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees')
+        dat, fdat = shgpy.load_data_and_fourier_transform(
+            self.filenames_dict,
+            'degrees',
+        )
         self.assertNotEqual(fdat.get_maxval()[1], 0)
-        dat, fdat = shgpy.load_data_and_fourier_transform(self.filenames_dict, 'degrees', self.filenames_dict, 'degrees')
+        dat, fdat = shgpy.load_data_and_fourier_transform(
+            self.filenames_dict,
+            'degrees',
+            self.filenames_dict,
+            'degrees',
+        )
         self.assertEqual(fdat.get_maxval()[1], 0)
-        
-
-
-
-
-
-
-
-
-
