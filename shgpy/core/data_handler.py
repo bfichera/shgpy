@@ -1352,7 +1352,7 @@ def load_fform(fform_filename):
     """Creat instance of fFormContainer from a fform_filename.
 
     ``fform_filename`` s are generated using the utilities provided
-    in the :class:`~shgpy.fformgen` package. Those utilities output
+    in the :mod:`~shgpy.fformgen` module. Those utilities output
     a pickled fFormContainer-like object which can be loaded into
     a true fFormContainer instance using this function.
 

@@ -2,8 +2,6 @@ import unittest
 
 import random
 import logging
-import numpy as np
-import sympy as sp
 
 import shgpy
 import shgpy.tensor_definitions as td
@@ -37,6 +35,19 @@ class TestFormGen(unittest.TestCase):
         forms = [form1, form2, form3, form4]
         for form in forms:
             form.apply_phase_shift(S.psi, S.phi)
-            dat = shgpy.form_to_dat(form, {k:random.uniform(-1, 1) for k in form.get_free_symbols() if k != S.phi}, 1000)
+            dat = shgpy.form_to_dat(
+                form,
+                {
+                    k:random.uniform(-1, 1)
+                    for k in form.get_free_symbols()
+                    if k != S.phi
+                },
+                1000,
+            )
             if MANUAL:
-                easy_plot([dat], [{'linestyle':'-', 'color':'blue'}], dat.get_keys(), show_plot=False)
+                easy_plot(
+                    [dat],
+                    [{'linestyle':'-', 'color':'blue'}],
+                    dat.get_keys(),
+                    show_plot=False,
+                )

@@ -35,7 +35,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 def _check_fform(fform):
     if not fform.get_free_symbols():
-        message = 'fFormContainer object has no free symbols to use as fitting parameters. Is your fitting formula actually zero?'
+        message = (
+            'fFormContainer object has no free symbols to use as fitting'
+            'parameters. Is your fitting formula actually zero?'
+        )
         warn(message)
         ret = OptimizeResult(
             x=np.array([]),
@@ -84,7 +87,9 @@ def _make_energy_expr_list(fform, fdat, free_symbols=None):
         for m in np.arange(-M, M+1):
             _logger.debug(f'Computing cost function term pc={k} m={m}')
             expr0 = fform.get_pc(k)[n2i(m, M)] - fdat.get_pc(k)[n2i(m, M)]
-            energy_expr_list.append((expr0*sp.conjugate(expr0)).xreplace(mapping))
+            energy_expr_list.append(
+                (expr0*sp.conjugate(expr0)).xreplace(mapping)
+            )
     _logger.debug('Cost expression evaluation took'
                    f' {time.time()-start} seconds.')
 
@@ -208,7 +213,11 @@ double autofunc(double *xs){
 
 
 def _make_energy_func_auto(energy_expr, save_filename=None):
-    energy_func = _fixed_autowrap(energy_expr, 'SHGPY_COST_FUNC', save_filename)
+    energy_func = _fixed_autowrap(
+        energy_expr,
+        'SHGPY_COST_FUNC',
+        save_filename,
+    )
 
     return energy_func
 
@@ -227,7 +236,8 @@ def _load_func(load_cost_func_filename):
     return cost_func
 
 
-def _make_energy_func_wrapper(fform, fdat, free_symbols=None, chunk=False, save_filename=None):
+def _make_energy_func_wrapper(fform, fdat, free_symbols=None,
+                              chunk=False, save_filename=None):
 
     if chunk:
         energy_expr_list = _make_energy_expr_list(
@@ -255,7 +265,8 @@ def _make_energy_func_wrapper(fform, fdat, free_symbols=None, chunk=False, save_
         return energy_func
 
 
-def gen_cost_func(fform, fdat, argument_list=None, chunk=False, save_filename=None):
+def gen_cost_func(fform, fdat, argument_list=None,
+                  chunk=False, save_filename=None):
     """Generate a cost function as an .so file and save it to disk.
 
     Parameters
@@ -318,14 +329,17 @@ def _make_energy_and_denergy_func_wrapper(fform, fdat, free_symbols=None,
     return fdf_energy
 
 
-def _load_energy_and_denergy_func(load_cost_func_filename, load_grad_cost_func_filename_prefix):
+def _load_energy_and_denergy_func(load_cost_func_filename,
+                                  load_grad_cost_func_filename_prefix):
     f_energy = _load_func(load_cost_func_filename)
     funcs = []
     i = 0
     while True:
         new_filename = load_grad_cost_func_filename_prefix+str(i)+'.so'
         if Path(new_filename).exists():
-            funcs.append(_load_func(load_grad_cost_func_filename_prefix+str(i)+'.so'))
+            funcs.append(
+                _load_func(load_grad_cost_func_filename_prefix+str(i)+'.so')
+            )
             i += 1
         else:
             _logger.debug('Loaded {i} gradient functions.')
@@ -335,7 +349,9 @@ def _load_energy_and_denergy_func(load_cost_func_filename, load_grad_cost_func_f
     return fdf_energy
 
 
-def least_squares_fit(fform, fdat, guess_dict, chunk_cost_func=False, save_cost_func_filename=None, load_cost_func_filename=None, least_sq_kwargs={}):
+def least_squares_fit(fform, fdat, guess_dict,
+                      chunk_cost_func=False, save_cost_func_filename=None,
+                      load_cost_func_filename=None, least_sq_kwargs={}):
     """No nonsense least-squares fit of RA-SHG data.
 
     Parameters
@@ -391,7 +407,8 @@ def least_squares_fit(fform, fdat, guess_dict, chunk_cost_func=False, save_cost_
         )
         f_energy = lambda x: np.sqrt(pre_f_energy(x))
 
-    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    _logger.info('Done with energy function generation. It took'
+                 f'{time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
 
@@ -400,12 +417,17 @@ def least_squares_fit(fform, fdat, guess_dict, chunk_cost_func=False, save_cost_
     ret = least_squares(f_energy, x0, **least_sq_kwargs)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    _logger.info(f'Done with least squares minimization. It took {ret.time} seconds.')
+    _logger.info('Done with least squares minimization. It took'
+                 f'{ret.time} seconds.')
 
     return ret
 
 
-def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, chunk_cost_func=False, save_cost_func_filename=None, load_cost_func_filename=None, least_sq_kwargs={}):
+def least_squares_fit_with_bounds(fform, fdat, guess_dict,
+                                  bounds_dict, chunk_cost_func=False,
+                                  save_cost_func_filename=None,
+                                  load_cost_func_filename=None,
+                                  least_sq_kwargs={}):
     """No nonsense least-squares fit of RA-SHG data.
 
     Parameters
@@ -464,22 +486,30 @@ def least_squares_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, chunk_co
         )
         f_energy = lambda x: np.sqrt(pre_f_energy(x))
 
-    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    _logger.info('Done with energy function generation. It took '
+                 f'{time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
-    bounds = [[bounds_dict[k][0] for k in free_symbols], [bounds_dict[k][1] for k in free_symbols]]
+    bounds = [
+        [bounds_dict[k][0] for k in free_symbols],
+        [bounds_dict[k][1] for k in free_symbols],
+    ]
 
     _logger.info('Starting least squares minimization.')
     start = time.time()
     ret = least_squares(f_energy, x0, bounds=bounds, **least_sq_kwargs)
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    _logger.info(f'Done with least squares minimization. It took {ret.time} seconds.')
+    _logger.info('Done with least squares minimization. It took '
+                 f'{ret.time} seconds.')
 
     return ret
 
 
-def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), stepsize=0.5, basinhopping_kwargs={}, chunk_cost_func=False, save_cost_func_filename=None, load_cost_func_filename=None):
+def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS',
+                     args=(), stepsize=0.5, basinhopping_kwargs={},
+                     chunk_cost_func=False, save_cost_func_filename=None,
+                     load_cost_func_filename=None):
     """Basinhopping fit of RA-SHG data.
 
     Parameters
@@ -543,7 +573,8 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
             save_cost_func_filename,
         )
 
-    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    _logger.info('Done with energy function generation. It took '
+                 f'{time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
 
@@ -555,15 +586,28 @@ def basinhopping_fit(fform, fdat, guess_dict, niter, method='BFGS', args=(), ste
 
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
-    ret = basinhopping(f_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize, **basinhopping_kwargs)
+    ret = basinhopping(
+        f_energy,
+        x0,
+        minimizer_kwargs=minimizer_kwargs,
+        niter=niter,
+        stepsize=stepsize,
+        **basinhopping_kwargs,
+    )
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    _logger.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+    _logger.info('Done with basinhopping minimization. It took '
+                 f'{ret.time} seconds.')
 
     return ret
 
 
-def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', args=(), stepsize=0.5, basinhopping_kwargs={}, chunk_cost_func=False, save_cost_func_filename=None, load_cost_func_filename=None):
+def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict,
+                                 niter, method='L-BFGS-B', args=(),
+                                 stepsize=0.5, basinhopping_kwargs={},
+                                 chunk_cost_func=False,
+                                 save_cost_func_filename=None,
+                                 load_cost_func_filename=None):
     """Basinhopping fit of RA-SHG data with bounds.
 
     Parameters
@@ -630,7 +674,8 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
             save_cost_func_filename,
         )
 
-    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    _logger.info('Done with energy function generation. It took '
+                 f'{time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
     if bounds_dict is not None:
@@ -646,15 +691,28 @@ def basinhopping_fit_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, me
 
     start = time.time()
     _logger.info('Starting basinhopping minimization.')
-    ret = basinhopping(f_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize, **basinhopping_kwargs)
+    ret = basinhopping(
+        f_energy,
+        x0,
+        minimizer_kwargs=minimizer_kwargs,
+        niter=niter,
+        stepsize=stepsize,
+        **basinhopping_kwargs,
+    )
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    _logger.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+    _logger.info('Done with basinhopping minimization. It took '
+                 f'{ret.time} seconds.')
 
     return ret
 
 
-def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(), stepsize=0.5, basinhopping_kwargs={}, chunk_cost_func=False, save_cost_func_filename=None, grad_save_cost_func_filename_prefix=None, load_cost_func_filename=None, load_grad_cost_func_filename_prefix=None):
+def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS',
+                         args=(), stepsize=0.5, basinhopping_kwargs={},
+                         chunk_cost_func=False, save_cost_func_filename=None,
+                         grad_save_cost_func_filename_prefix=None,
+                         load_cost_func_filename=None,
+                         load_grad_cost_func_filename_prefix=None):
     """Basinhopping fit of RA-SHG data.
 
     Parameters
@@ -720,8 +778,12 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
     _logger.info('Starting energy function generation.')
     start = time.time()
 
-    if load_cost_func_filename is not None and load_grad_cost_func_filename_prefix is not None:
-        fdf_energy = _load_energy_and_denergy_func(load_cost_func_filename, load_grad_cost_func_filename_prefix)
+    if (load_cost_func_filename is not None
+            and load_grad_cost_func_filename_prefix is not None):
+        fdf_energy = _load_energy_and_denergy_func(
+            load_cost_func_filename,
+            load_grad_cost_func_filename_prefix,
+        )
             
     else:
         fdf_energy = _make_energy_and_denergy_func_wrapper(
@@ -732,7 +794,8 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
             save_cost_func_filename,
             grad_save_cost_func_filename_prefix,
         )
-    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    _logger.info('Done with energy function generation. It took '
+                 f'{time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
 
@@ -744,15 +807,30 @@ def basinhopping_fit_jac(fform, fdat, guess_dict, niter, method='BFGS', args=(),
 
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
-    ret = basinhopping(fdf_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize, **basinhopping_kwargs)
+    ret = basinhopping(
+        fdf_energy,
+        x0,
+        minimizer_kwargs=minimizer_kwargs,
+        niter=niter,
+        stepsize=stepsize,
+        **basinhopping_kwargs,
+    )
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    _logger.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+    _logger.info('Done with basinhopping minimization. It took '
+                 f'{ret.time} seconds.')
 
     return ret
 
 
-def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter, method='L-BFGS-B', args=(), stepsize=0.5, basinhopping_kwargs={}, chunk_cost_func=False, save_cost_func_filename=None, grad_save_cost_func_filename_prefix=None, load_cost_func_filename=None, load_grad_cost_func_filename_prefix=None):
+def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict,
+                                     niter, method='L-BFGS-B', args=(),
+                                     stepsize=0.5, basinhopping_kwargs={},
+                                     chunk_cost_func=False, 
+                                     save_cost_func_filename=None,
+                                     grad_save_cost_func_filename_prefix=None,
+                                     load_cost_func_filename=None,
+                                     load_grad_cost_func_filename_prefix=None):
     """Basinhopping fit of RA-SHG data with bounds.
 
     Parameters
@@ -821,8 +899,12 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     _logger.info('Starting energy function generation.')
     start = time.time()
 
-    if load_cost_func_filename is not None and load_grad_cost_func_filename_prefix is not None:
-        fdf_energy = _load_energy_and_denergy_func(load_cost_func_filename, load_grad_cost_func_filename_prefix)
+    if (load_cost_func_filename is not None
+            and load_grad_cost_func_filename_prefix is not None):
+        fdf_energy = _load_energy_and_denergy_func(
+            load_cost_func_filename,
+            load_grad_cost_func_filename_prefix,
+        )
 
     else:
         fdf_energy = _make_energy_and_denergy_func_wrapper(
@@ -833,7 +915,8 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
             save_cost_func_filename,
             grad_save_cost_func_filename_prefix,
         )
-    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    _logger.info('Done with energy function generation. It took '
+                 f'{time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
     if bounds_dict is not None:
@@ -841,7 +924,12 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
     if bounds_dict is None:
         bounds = None
 
-    minimizer_kwargs = {'method':method, 'jac':True, 'bounds':bounds, 'args':args}
+    minimizer_kwargs = {
+        'method':method,
+        'jac':True,
+        'bounds':bounds,
+        'args':args,
+    }
     if 'minimizer_kwargs' in basinhopping_kwargs.keys():
         minimizer_kwargs.update(
             basinhopping_kwargs.pop('minimizer_kwargs')
@@ -849,10 +937,18 @@ def basinhopping_fit_jac_with_bounds(fform, fdat, guess_dict, bounds_dict, niter
 
     _logger.info('Starting basinhopping minimization.')
     start = time.time()
-    ret = basinhopping(fdf_energy, x0, minimizer_kwargs=minimizer_kwargs, niter=niter, stepsize=stepsize, **basinhopping_kwargs)
+    ret = basinhopping(
+        fdf_energy,
+        x0,
+        minimizer_kwargs=minimizer_kwargs,
+        niter=niter,
+        stepsize=stepsize,
+        **basinhopping_kwargs,
+    )
     ret.time = time.time()-start
     ret.xdict = {k:ret.x[i] for i,k in enumerate(free_symbols)}
-    _logger.info(f'Done with basinhopping minimization. It took {ret.time} seconds.')
+    _logger.info('Done with basinhopping minimization. It took '
+                 f'{ret.time} seconds.')
 
     return ret
 
@@ -961,7 +1057,8 @@ def dual_annealing_fit_with_bounds(
             save_cost_func_filename,
         )
 
-    _logger.info(f'Done with energy function generation. It took {time.time()-start} seconds.')
+    _logger.info('Done with energy function generation. It took '
+                 f'{time.time()-start} seconds.')
 
     x0 = [guess_dict[k] for k in free_symbols]
     if bounds_dict is not None:

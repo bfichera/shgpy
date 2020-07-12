@@ -30,5 +30,8 @@ class TestPickle(unittest.TestCase):
         path.unlink()
         
         self.assertNotEqual(fform_dict['SS'][0].subs(sp.symbols('x'), 1), 1)
-        self.assertEqual(fform_dict['SS'][0].subs(sp.symbols('x', real=True), 1), 1)
+        self.assertEqual(
+            fform_dict['SS'][0].subs(sp.symbols('x', real=True), 1),
+            1,
+        )
         self.assertEqual(fform_dict['SS'][0], x**2)

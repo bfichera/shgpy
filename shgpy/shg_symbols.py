@@ -1,9 +1,10 @@
 """This module defines a number of sympy.Symbol objects
 which are used throughout `shgpy`. They are used to define
-free parameters in suscepitbility tensors (see :class:`~shgpy.tensor_definitions`),
-and to standardize name conventions for important variables
-(like `phi` and `theta`, which are used throughout shgpy as the standard
-azimuthal and incidence angles, respectively).
+free parameters in suscepitbility tensors (see
+:mod:`~shgpy.tensor_definitions`), and to standardize name
+conventions for important variables (like `phi` and `theta`,
+which are used throughout shgpy as the standard azimuthal and
+incidence angles, respectively).
 
 These variables in this module should be treated as protected and not
 modified by the user unless absolutely necessary.
@@ -121,171 +122,169 @@ szzy = sp.symbols('szzy')
 szzz = sp.symbols('szzz')
 """"""
 
-xxxx= sp.symbols('xxxx')
+xxxx = sp.symbols('xxxx')
 """"""
-xxxy= sp.symbols('xxxy')
+xxxy = sp.symbols('xxxy')
 """"""
-xxxz= sp.symbols('xxxz')
+xxxz = sp.symbols('xxxz')
 """"""
-xxyx= sp.symbols('xxyx')
+xxyx = sp.symbols('xxyx')
 """"""
-xxyy= sp.symbols('xxyy')
+xxyy = sp.symbols('xxyy')
 """"""
-xxyz= sp.symbols('xxyz')
+xxyz = sp.symbols('xxyz')
 """"""
-xxzx= sp.symbols('xxzx')
+xxzx = sp.symbols('xxzx')
 """"""
-xxzy= sp.symbols('xxzy')
+xxzy = sp.symbols('xxzy')
 """"""
-xxzz= sp.symbols('xxzz')
+xxzz = sp.symbols('xxzz')
 """"""
-xyxx= sp.symbols('xyxx')
+xyxx = sp.symbols('xyxx')
 """"""
-xyxy= sp.symbols('xyxy')
+xyxy = sp.symbols('xyxy')
 """"""
-xyxz= sp.symbols('xyxz')
+xyxz = sp.symbols('xyxz')
 """"""
-xyyx= sp.symbols('xyyx')
+xyyx = sp.symbols('xyyx')
 """"""
-xyyy= sp.symbols('xyyy')
+xyyy = sp.symbols('xyyy')
 """"""
-xyyz= sp.symbols('xyyz')
+xyyz = sp.symbols('xyyz')
 """"""
-xyzx= sp.symbols('xyzx')
+xyzx = sp.symbols('xyzx')
 """"""
-xyzy= sp.symbols('xyzy')
+xyzy = sp.symbols('xyzy')
 """"""
-xyzz= sp.symbols('xyzz')
+xyzz = sp.symbols('xyzz')
 """"""
-xzxx= sp.symbols('xzxx')
+xzxx = sp.symbols('xzxx')
 """"""
-xzxy= sp.symbols('xzxy')
+xzxy = sp.symbols('xzxy')
 """"""
-xzxz= sp.symbols('xzxz')
+xzxz = sp.symbols('xzxz')
 """"""
-xzyx= sp.symbols('xzyx')
+xzyx = sp.symbols('xzyx')
 """"""
-xzyy= sp.symbols('xzyy')
+xzyy = sp.symbols('xzyy')
 """"""
-xzyz= sp.symbols('xzyz')
+xzyz = sp.symbols('xzyz')
 """"""
-xzzx= sp.symbols('xzzx')
+xzzx = sp.symbols('xzzx')
 """"""
-xzzy= sp.symbols('xzzy')
+xzzy = sp.symbols('xzzy')
 """"""
-xzzz= sp.symbols('xzzz')
+xzzz = sp.symbols('xzzz')
 """"""
-yxxx= sp.symbols('yxxx')
+yxxx = sp.symbols('yxxx')
 """"""
-yxxy= sp.symbols('yxxy')
+yxxy = sp.symbols('yxxy')
 """"""
-yxxz= sp.symbols('yxxz')
+yxxz = sp.symbols('yxxz')
 """"""
-yxyx= sp.symbols('yxyx')
+yxyx = sp.symbols('yxyx')
 """"""
-yxyy= sp.symbols('yxyy')
+yxyy = sp.symbols('yxyy')
 """"""
-yxyz= sp.symbols('yxyz')
+yxyz = sp.symbols('yxyz')
 """"""
-yxzx= sp.symbols('yxzx')
+yxzx = sp.symbols('yxzx')
 """"""
-yxzy= sp.symbols('yxzy')
+yxzy = sp.symbols('yxzy')
 """"""
-yxzz= sp.symbols('yxzz')
+yxzz = sp.symbols('yxzz')
 """"""
-yyxx= sp.symbols('yyxx')
+yyxx = sp.symbols('yyxx')
 """"""
-yyxy= sp.symbols('yyxy')
+yyxy = sp.symbols('yyxy')
 """"""
-yyxz= sp.symbols('yyxz')
+yyxz = sp.symbols('yyxz')
 """"""
-yyyx= sp.symbols('yyyx')
+yyyx = sp.symbols('yyyx')
 """"""
-yyyy= sp.symbols('yyyy')
+yyyy = sp.symbols('yyyy')
 """"""
-yyyz= sp.symbols('yyyz')
+yyyz = sp.symbols('yyyz')
 """"""
-yyzx= sp.symbols('yyzx')
+yyzx = sp.symbols('yyzx')
 """"""
-yyzy= sp.symbols('yyzy')
+yyzy = sp.symbols('yyzy')
 """"""
-yyzz= sp.symbols('yyzz')
+yyzz = sp.symbols('yyzz')
 """"""
-yzxx= sp.symbols('yzxx')
+yzxx = sp.symbols('yzxx')
 """"""
-yzxy= sp.symbols('yzxy')
+yzxy = sp.symbols('yzxy')
 """"""
-yzxz= sp.symbols('yzxz')
+yzxz = sp.symbols('yzxz')
 """"""
-yzyx= sp.symbols('yzyx')
+yzyx = sp.symbols('yzyx')
 """"""
-yzyy= sp.symbols('yzyy')
+yzyy = sp.symbols('yzyy')
 """"""
-yzyz= sp.symbols('yzyz')
+yzyz = sp.symbols('yzyz')
 """"""
-yzzx= sp.symbols('yzzx')
+yzzx = sp.symbols('yzzx')
 """"""
-yzzy= sp.symbols('yzzy')
+yzzy = sp.symbols('yzzy')
 """"""
-yzzz= sp.symbols('yzzz')
+yzzz = sp.symbols('yzzz')
 """"""
-zxxx= sp.symbols('zxxx')
+zxxx = sp.symbols('zxxx')
 """"""
-zxxy= sp.symbols('zxxy')
+zxxy = sp.symbols('zxxy')
 """"""
-zxxz= sp.symbols('zxxz')
+zxxz = sp.symbols('zxxz')
 """"""
-zxyx= sp.symbols('zxyx')
+zxyx = sp.symbols('zxyx')
 """"""
-zxyy= sp.symbols('zxyy')
+zxyy = sp.symbols('zxyy')
 """"""
-zxyz= sp.symbols('zxyz')
+zxyz = sp.symbols('zxyz')
 """"""
-zxzx= sp.symbols('zxzx')
+zxzx = sp.symbols('zxzx')
 """"""
-zxzy= sp.symbols('zxzy')
+zxzy = sp.symbols('zxzy')
 """"""
-zxzz= sp.symbols('zxzz')
+zxzz = sp.symbols('zxzz')
 """"""
-zyxx= sp.symbols('zyxx')
+zyxx = sp.symbols('zyxx')
 """"""
-zyxy= sp.symbols('zyxy')
+zyxy = sp.symbols('zyxy')
 """"""
-zyxz= sp.symbols('zyxz')
+zyxz = sp.symbols('zyxz')
 """"""
-zyyx= sp.symbols('zyyx')
+zyyx = sp.symbols('zyyx')
 """"""
-zyyy= sp.symbols('zyyy')
+zyyy = sp.symbols('zyyy')
 """"""
-zyyz= sp.symbols('zyyz')
+zyyz = sp.symbols('zyyz')
 """"""
-zyzx= sp.symbols('zyzx')
+zyzx = sp.symbols('zyzx')
 """"""
-zyzy= sp.symbols('zyzy')
+zyzy = sp.symbols('zyzy')
 """"""
-zyzz= sp.symbols('zyzz')
+zyzz = sp.symbols('zyzz')
 """"""
-zzxx= sp.symbols('zzxx')
+zzxx = sp.symbols('zzxx')
 """"""
-zzxy= sp.symbols('zzxy')
+zzxy = sp.symbols('zzxy')
 """"""
-zzxz= sp.symbols('zzxz')
+zzxz = sp.symbols('zzxz')
 """"""
-zzyx= sp.symbols('zzyx')
+zzyx = sp.symbols('zzyx')
 """"""
-zzyy= sp.symbols('zzyy')
+zzyy = sp.symbols('zzyy')
 """"""
-zzyz= sp.symbols('zzyz')
+zzyz = sp.symbols('zzyz')
 """"""
-zzzx= sp.symbols('zzzx')
+zzzx = sp.symbols('zzzx')
 """"""
-zzzy= sp.symbols('zzzy')
+zzzy = sp.symbols('zzzy')
 """"""
-zzzz= sp.symbols('zzzz')
+zzzz = sp.symbols('zzzz')
 """"""
 
-sin = sp.sin
-cos = sp.cos
 theta = sp.symbols('theta', real=True)
 """Angle of incidence
 
@@ -307,5 +306,3 @@ Fy = sp.symbols('Fy')
 """"""
 Fz = sp.symbols('Fz')
 """"""
-I = 1j
-conjugate = sp.conjugate

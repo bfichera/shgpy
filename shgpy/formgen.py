@@ -2,8 +2,8 @@
 
 This module provides a number of routines for calculating the SHG 
 response of a given material (encoded by its susceptbility tensor,
-see :class:`~shgpy.tensor_definitions` ). These routines are much
-more straightforward than those found in :class:`~shgpy.fformgen`,
+see :mod:`~shgpy.tensor_definitions` ). These routines are much
+more straightforward than those found in :mod:`~shgpy.fformgen`,
 but are only suited for the most simple problems because the
 conversion from formulas to Fourier formulas (which is all but
 necessary for efficient fitting functionality) is typically quite
@@ -62,12 +62,14 @@ def make_form_from_P_and_Q(Pp, Ps, Qp, Qs):
 
 # TODO Remove deprecation error
 def gen_P_just_dipole_real(*args, **kwargs):
-    raise NotImplementedError('gen_P_just_dipole_real was deprecated in version 0.7.0. Use gen_P_just_dipole instead.')
+    raise NotImplementedError('gen_P_just_dipole_real was deprecated in'
+                              'version 0.7.0. Use gen_P_just_dipole instead.')
 
 
 # TODO Remove deprecation error
 def gen_P_just_dipole_complex(*args, **kwargs):
-    raise NotImplementedError('gen_P_just_dipole_complex was deprecated in version 0.7.0. Use gen_P_just_dipole instead.')
+    raise NotImplementedError('gen_P_just_dipole_complex was deprecated in'
+                              'version 0.7.0. Use gen_P_just_dipole instead.')
 
 
 def gen_P_just_dipole(t1, theta):
@@ -76,7 +78,7 @@ def gen_P_just_dipole(t1, theta):
     Parameters
     ----------
     t1 : ndarray of sympy.Expr
-        SHG susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+        SHG susceptibility tensor; see :mod:`~shgpy.tensor_definitions`.
     theta : float or sympy.Symbol
         Angle of incidence
 
@@ -95,10 +97,25 @@ def gen_P_just_dipole(t1, theta):
     kout = np.array([s, 0, -c], dtype=object)
     Fp = np.array([-c, 0, s], dtype=object)
     Fs = np.array([0, 1, 0], dtype=object)
-    R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
+    R = np.array(
+        [
+            [sp.cos(S.phi), -sp.sin(S.phi), 0],
+            [sp.sin(S.phi), sp.cos(S.phi), 0],
+            [0, 0, 1],
+        ],
+    )
+    rotated_tensor = tensor_contract(
+        tensor_product(R, R, R, t1),
+        [[1, 6], [3, 7], [5, 8]],
+    )
+    Ps = tensor_contract(
+        tensor_product(rotated_tensor, Fs, Fs),
+        [[1, 3], [2, 4]],
+    )
+    Pp = tensor_contract(tensor_product(
+        rotated_tensor, Fp, Fp),
+        [[1, 3], [2, 4]],
+    )
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
 
@@ -107,12 +124,16 @@ def gen_P_just_dipole(t1, theta):
 
 # TODO Remove deprecation error
 def gen_P_dipole_quadrupole_complex(*args, **kwargs):
-    raise NotImplementedError('gen_P_dipole_quadrupole_complex was deprecated in version 0.7.0. Use gen_P_dipole_quadrupole instead.')
+    raise NotImplementedError('gen_P_dipole_quadrupole_complex was deprecated'
+                              ' in version 0.7.0. Use gen_P_dipole_quadrupole'
+                              ' instead.')
 
 
 # TODO Remove deprecation error
 def gen_P_dipole_quadrupole_real(*args, **kwargs):
-    raise NotImplementedError('gen_P_dipole_quadrupole_real was deprecated in version 0.7.0. Use gen_P_dipole_real instead.')
+    raise NotImplementedError('gen_P_dipole_quadrupole_real was deprecated'
+                              ' in version 0.7.0. Use gen_P_dipole_real'
+                              ' instead.')
 
 
 def gen_P_dipole_quadrupole(t1, t2, theta):
@@ -121,9 +142,11 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
     Parameters
     ----------
     t1 : ndarray of sympy.Expr
-        SHG dipole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+        SHG dipole susceptibility tensor; see
+        :mod:`~shgpy.tensor_definitions`.
     t2 : ndarray of sympy.Expr
-        SHG quadrupole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+        SHG quadrupole susceptibility tensor;
+        see :mod:`~shgpy.tensor_definitions`.
     theta : float or sympy.Symbol
         Angle of incidence
 
@@ -144,13 +167,37 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
     kout = np.array([s, 0, -c], dtype=object)
     Fp = np.array([-c, 0, s], dtype=object)
     Fs = np.array([0, 1, 0], dtype=object)
-    R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    rotated_qtensor = tensor_contract(tensor_product(R, R, R, R, t2), [[1, 8], [3, 9], [5, 10], [7, 11]])
-    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
-    Qs = tensor_contract(tensor_product(rotated_qtensor, kin, Fs, Fs), [[1, 4], [2, 5], [3, 6]])
-    Qp = tensor_contract(tensor_product(rotated_qtensor, kin, Fp, Fp), [[1, 4], [2, 5], [3, 6]])
+    R = np.array(
+        [
+            [sp.cos(S.phi), -sp.sin(S.phi), 0],
+            [sp.sin(S.phi), sp.cos(S.phi), 0],
+            [0, 0, 1],
+        ],
+    )
+    rotated_tensor = tensor_contract(
+        tensor_product(R, R, R, t1),
+        [[1, 6], [3, 7], [5, 8]],
+    )
+    rotated_qtensor = tensor_contract(
+        tensor_product(R, R, R, R, t2),
+        [[1, 8], [3, 9], [5, 10], [7, 11]],
+    )
+    Ps = tensor_contract(
+        tensor_product(rotated_tensor, Fs, Fs),
+        [[1, 3], [2, 4]],
+    )
+    Pp = tensor_contract(
+        tensor_product(rotated_tensor, Fp, Fp),
+        [[1, 3], [2, 4]],
+    )
+    Qs = tensor_contract(
+        tensor_product(rotated_qtensor, kin, Fs, Fs),
+        [[1, 4], [2, 5], [3, 6]],
+    )
+    Qp = tensor_contract(
+        tensor_product(rotated_qtensor, kin, Fp, Fp),
+        [[1, 4], [2, 5], [3, 6]],
+    )
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
     Qs -= np.dot(kout, Qs)*kout
@@ -160,12 +207,16 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
 
 # TODO Remove deprecation error
 def formgen_just_dipole_real(*args, **kwargs):
-    raise NotImplementedError('formgen_just_dipole_real was deprecated in version 0.7.0. Use formgen_just_dipole instead.')
+    raise NotImplementedError('formgen_just_dipole_real was deprecated in '
+                              'version 0.7.0. Use formgen_just_dipole'
+                              ' instead.')
 
 
 # TODO Remove deprecation error
 def formgen_just_dipole_complex(*args, **kwargs):
-    raise NotImplementedError('formgen_just_dipole_complex was deprecated in version 0.7.0. Use formgen_just_dipole instead.')
+    raise NotImplementedError('formgen_just_dipole_complex was deprecated in'
+                              ' version 0.7.0. Use formgen_just_dipole'
+                              ' instead.')
 
 
 def formgen_just_dipole(t1, theta):
@@ -174,7 +225,7 @@ def formgen_just_dipole(t1, theta):
     Parameters
     ----------
     t1 : ndarray of sympy.Expr
-        SHG susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+        SHG susceptibility tensor; see :mod:`~shgpy.tensor_definitions`.
     theta : float or sympy.Symbol
         Angle of incidence
 
@@ -189,8 +240,8 @@ def formgen_just_dipole(t1, theta):
     only in the sense that the computed intensity function is computed by
     computing the modulus-squared (rather than ``**2``) of the polarization.
     For this reason, it is usually suggested to explicitly substitute 
-    ``x -> real_x+1j*imag_x`` for each `x` in `t1`. See :func:`~shgpy.core.utilities.make_tensor_complex`
-    and the tutorial.
+    ``x -> real_x+1j*imag_x`` for each `x` in `t1`. See
+    :func:`~shgpy.core.utilities.make_tensor_complex` and the tutorial.
 
     """
     _assert_real_params(t1)
@@ -200,10 +251,25 @@ def formgen_just_dipole(t1, theta):
     kout = np.array([s, 0, -c], dtype=object)
     Fp = np.array([-c, 0, s], dtype=object)
     Fs = np.array([0, 1, 0], dtype=object)
-    R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
+    R = np.array(
+        [
+            [sp.cos(S.phi), -sp.sin(S.phi), 0],
+            [sp.sin(S.phi), sp.cos(S.phi), 0],
+            [0, 0, 1],
+        ],
+    )
+    rotated_tensor = tensor_contract(
+        tensor_product(R, R, R, t1),
+        [[1, 6], [3, 7], [5, 8]],
+    )
+    Ps = tensor_contract(
+        tensor_product(rotated_tensor, Fs, Fs),
+        [[1, 3], [2, 4]],
+    )
+    Pp = tensor_contract(
+        tensor_product(rotated_tensor, Fp, Fp),
+        [[1, 3], [2, 4]],
+    )
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
     PP = Pp[0]*sp.conjugate(Pp[0])+Pp[2]*sp.conjugate(Pp[2])
@@ -215,12 +281,16 @@ def formgen_just_dipole(t1, theta):
 
 # TODO Remove deprecation error
 def formgen_dipole_quadrupole_real(*args, **kwargs):
-    raise NotImplementedError('formgen_dipole_quadrupole_real was deprecated in version 0.7.0. Use formgen_dipole_quadrupole instead.')
+    raise NotImplementedError('formgen_dipole_quadrupole_real was deprecated'
+                              ' in version 0.7.0. Use' 
+                              ' formgen_dipole_quadrupole instead.')
 
 
 # TODO Remove deprecation error
 def formgen_dipole_quadrupole_complex(*args, **kwargs):
-    raise NotImplementedError('formgen_dipole_quadrupole_complex was deprecated in version 0.7.0. Use formgen_dipole_quadrupole instead.')
+    raise NotImplementedError('formgen_dipole_quadrupole_complex was '
+                              'deprecated in version 0.7.0. Use '
+                              'formgen_dipole_quadrupole instead.')
 
 
 def formgen_dipole_quadrupole(t1, t2, theta):
@@ -229,9 +299,11 @@ def formgen_dipole_quadrupole(t1, t2, theta):
     Parameters
     ----------
     t1 : ndarray of sympy.Expr
-        SHG dipole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+        SHG dipole susceptibility tensor; see
+        :mod:`~shgpy.tensor_definitions`.
     t2 : ndarray of sympy.Expr
-        SHG quadrupole susceptibility tensor; see :class:`~shgpy.tensor_definitions`.
+        SHG quadrupole susceptibility tensor; see
+        :mod:`~shgpy.tensor_definitions`.
     theta : float or sympy.Symbol
         Angle of incidence
 
@@ -246,20 +318,45 @@ def formgen_dipole_quadrupole(t1, t2, theta):
 
     theta = sp.sympify(theta)
     if not theta.is_real:
-        raise ValueError('theta must be a real variable (did you forget real=True in sympy.symbols?)')
+        raise ValueError('theta must be a real variable (did you forget'
+                         ' real=True in sympy.symbols?)')
     c = sp.cos(theta)
     s = sp.sin(theta)
     kin = np.array([s, 0, c], dtype=object)
     kout = np.array([s, 0, -c], dtype=object)
     Fp = np.array([-c, 0, s], dtype=object)
     Fs = np.array([0, 1, 0], dtype=object)
-    R = np.array([[sp.cos(S.phi), -sp.sin(S.phi), 0], [sp.sin(S.phi), sp.cos(S.phi), 0], [0, 0, 1]])
-    rotated_tensor = tensor_contract(tensor_product(R, R, R, t1), [[1, 6], [3, 7], [5, 8]])
-    rotated_qtensor = tensor_contract(tensor_product(R, R, R, R, t2), [[1, 8], [3, 9], [5, 10], [7, 11]])
-    Ps = tensor_contract(tensor_product(rotated_tensor, Fs, Fs), [[1, 3], [2, 4]])
-    Pp = tensor_contract(tensor_product(rotated_tensor, Fp, Fp), [[1, 3], [2, 4]])
-    Qs = tensor_contract(tensor_product(rotated_qtensor, kin, Fs, Fs), [[1, 4], [2, 5], [3, 6]])
-    Qp = tensor_contract(tensor_product(rotated_qtensor, kin, Fp, Fp), [[1, 4], [2, 5], [3, 6]])
+    R = np.array(
+        [
+            [sp.cos(S.phi), -sp.sin(S.phi), 0],
+            [sp.sin(S.phi), sp.cos(S.phi), 0],
+            [0, 0, 1]
+        ],
+    )
+    rotated_tensor = tensor_contract(
+        tensor_product(R, R, R, t1),
+        [[1, 6], [3, 7], [5, 8]],
+    )
+    rotated_qtensor = tensor_contract(
+        tensor_product(R, R, R, R, t2),
+        [[1, 8], [3, 9], [5, 10], [7, 11]],
+    )
+    Ps = tensor_contract(
+        tensor_product(rotated_tensor, Fs, Fs),
+        [[1, 3], [2, 4]],
+    )
+    Pp = tensor_contract(
+        tensor_product(rotated_tensor, Fp, Fp),
+        [[1, 3], [2, 4]],
+    )
+    Qs = tensor_contract(
+        tensor_product(rotated_qtensor, kin, Fs, Fs),
+        [[1, 4], [2, 5], [3, 6]],
+    )
+    Qp = tensor_contract(
+        tensor_product(rotated_qtensor, kin, Fp, Fp),
+        [[1, 4], [2, 5], [3, 6]],
+    )
     Ps -= np.dot(kout, Ps)*kout
     Pp -= np.dot(kout, Pp)*kout
     Qs -= np.dot(kout, Qs)*kout
