@@ -279,8 +279,8 @@ def gen_cost_func(fform, fdat, argument_list=None, chunk=False, save_filename=No
         Result after compiling generated C code.
 
     """
-    _make_energy_func_wrapper(fform, fdat, free_symbols=argument_list,
-                              chunk=chunk, save_filename=save_filename)
+    return _make_energy_func_wrapper(fform, fdat, free_symbols=argument_list,
+                                     chunk=chunk, save_filename=save_filename)
         
         
 def _make_denergy_func_auto(denergy_expr, save_filename_prefix=None):
