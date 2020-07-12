@@ -31,7 +31,7 @@ Installation of ShgPy is easy! Just install the ``shgpy`` package::
 
     $ pip install shgpy
 
-You'll also need to install ``numpy``, ``scipy``, ``sympy``, and, optionally, ``matplotlib``; refer to the corresponding documentation for more information about these packages.
+You'll also need to install ``numpy``, ``scipy``, ``sympy``, and, optionally, ``matplotlib``; refer to the corresponding documentation for more information about these packages. Additionally, you'll need a working installation of ``gcc``.
 
 Getting started
 ===============

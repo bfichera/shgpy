@@ -1,6 +1,25 @@
 Changelog
 =========
 
+v0.7.1
+------
+1. make_tensor_real
+2. renamed formgen and fformgen 
+3. using codegen
+4. gen_cost_func
+5. dual_annealing
+
+Officially transitioned to supporting only tensors for which all the involved symbols are purely real, as defined by ``sympy`` assumptions. This got rid of a lot of redundancy in function definitions, such as ``shgpy.fformgen.generate_contracted_fourier_transforms`` versus ``shgpy.fformgen.generate_contracted_fourier_transforms_complex``, ``shgpy.formgen.formgen_dipole_quadrupole_real`` and ``shgpy.formgen.formgen_dipole_quadrupole_complex``, ect. In all cases, these functions have been replaced by a single function, e.g. ``shgpy.formgen.formgen_dipole_quadrupole``, and you will receive a ``NotImplementedError`` if you try to use any of the replaced definitions.
+
+To aid in explicitly defining the reality of SHG tensors, added ``shgpy.make_tensor_real`` to complement ``shgpy.make_tensor_complex``.
+
+Transitioned to compiling cost functions at runtime by generating C code with ``sympy.ulities.codegen``. This is a workaround to the fact that complicated ``sympy.lambdify`` functions are very slow to evaluate.
+
+Added the ability to generate a cost function independently with :func:`shgpy.fformfit.gen_cost_func` and use it in one of the fitting routines by the ``load_cost_func_filename`` argument.
+
+Added ``shgpy.fformfit.dual_annealing_fit`` and ``shgpy.fformfit.dual_annealing_fit_with_bounds``.
+
+
 v0.6.1
 ------
 Added the ability to optionally send arguments to the ``scipy.optimize.basinhopping`` function. This is useful e.g. for debugging -- use

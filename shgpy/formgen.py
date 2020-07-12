@@ -106,12 +106,12 @@ def gen_P_just_dipole(t1, theta):
 
 
 # TODO Remove deprecation error
-def gen_P_just_dipole_complex(*args, **kwargs):
+def gen_P_dipole_quadrupole_complex(*args, **kwargs):
     raise NotImplementedError('gen_P_dipole_quadrupole_complex was deprecated in version 0.7.0. Use gen_P_dipole_quadrupole instead.')
 
 
 # TODO Remove deprecation error
-def gen_P_just_dipole_real(*args, **kwargs):
+def gen_P_dipole_quadrupole_real(*args, **kwargs):
     raise NotImplementedError('gen_P_dipole_quadrupole_real was deprecated in version 0.7.0. Use gen_P_dipole_real instead.')
 
 
