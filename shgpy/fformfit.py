@@ -251,6 +251,36 @@ def _make_energy_func_wrapper(fform, fdat, free_symbols=None, chunk=False, save_
         return energy_func
 
 
+def gen_cost_func(fform, fdat, argument_list=None, chunk=False, save_filename=None):
+    """Generate a cost function as an .so file and save it to disk.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        The Fourier formula to use
+    fdat : fDataContainer
+        The fourier data to fit
+    argument_list : array_like of sympy.Symbol, optional
+        Specify an order for the arguments. Default is alphabetical by
+        str(sympy.Symbol).
+    chunk : bool, optional
+        Chunk the function generation into multiple steps (one for each
+        Fourier component in fform and fdat). Default is False.
+    save_filename : path_like, optional
+        Filename to save the result. Default is not to save.
+
+    Returns
+    -------
+    cost_func : function
+        Result after compiling generated C code.
+
+    """
+    _make_energy_func_wrapper(fform, fdat, free_symbols=argument_list,
+                              chunk=chunk, save_filename=save_filename)
+        
+        
+
+
 def _make_denergy_func_auto(denergy_expr, save_filename_prefix=None):
     funcs = []
     for i, expr in enumerate(denergy_expr):
