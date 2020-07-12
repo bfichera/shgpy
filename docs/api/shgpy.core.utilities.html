@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shgpy.core.utilities module &#8212; ShgPy 0.6.1 documentation</title>
+    <title>shgpy.core.utilities module &#8212; ShgPy 0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -122,7 +122,7 @@
 <p>In sympy, variables initalized by <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">sympy.symbols('x')</span></code> are by
 default assumed to be complex. In order to make this more explicit
 (e.g. for
-<a class="reference internal" href="shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms_complex" title="shgpy.fformgen.generate_contracted_fourier_transforms_complex"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_contracted_fourier_transforms_complex()</span></code></a>),
+<a class="reference internal" href="shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_contracted_fourier_transforms()</span></code></a>),
 we replace <code class="docutils literal notranslate"><span class="pre">x</span></code> by <code class="docutils literal notranslate"><span class="pre">real_x</span> <span class="pre">+</span> <span class="pre">1j*imag_x</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -142,6 +142,35 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">('',</s
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.core.utilities.make_tensor_real">
+<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">make_tensor_real</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.make_tensor_real" title="Permalink to this definition">¶</a></dt>
+<dd><p>Substitute e.g. <code class="docutils literal notranslate"><span class="pre">x</span></code> in sympy expression with its real counterpart.</p>
+<p>In sympy, variables initalized by <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">sympy.symbols('x')</span></code> are by
+default assumed to be complex. In order to make this more explicit
+(e.g. for
+<a class="reference internal" href="shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_contracted_fourier_transforms()</span></code></a>),
+we replace <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x')</span></code> by <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x',</span> <span class="pre">real=True)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>real_tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.core.utilities.map_to_real">
+<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">map_to_real</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sym</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.map_to_real" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map a sympy.Symbol to its real counterpart.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -294,7 +323,7 @@ function of sympy.solvers.</p>
       &copy;2020, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

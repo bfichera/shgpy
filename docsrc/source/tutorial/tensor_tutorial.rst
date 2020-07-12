@@ -147,7 +147,7 @@ array([[[0, xyx, yyz],
 
 That's good, our tensor is actually invariant under 3-fold rotation as advertised.
 
-Before we end this tutorial, there's one more important issue we need to discuss. When you initialize a ``Symbol`` in ``sympy`` (as in ``x = sympy.symbols('x')``), there are no assumptions on that symbols except that it is commutative. In particular, the symbol is allowed to be complex. However, in ``shgpy`` it's much easier if we know exactly whether the symbol is real or imaginary. For this reason, **shgpy only accepts tensors for which all symbols are fully real**. To make sure that ``shgpy`` knows about this assumption, use
+Before we end this tutorial, there's one more important issue we need to discuss. When you initialize a ``Symbol`` in ``sympy`` (as in ``x = sympy.symbols('x')``), there are no assumptions on that symbol except that it is commutative. In particular, the symbol is allowed to be complex. However, in ``shgpy`` it's much easier if we know exactly whether the symbol is real or imaginary. For this reason, **shgpy only accepts tensors for which all symbols are fully real**. To make sure that ``shgpy`` knows about this assumption, use
 
 >>> t1_real = shgpy.make_tensor_real(t1)
 
@@ -156,17 +156,15 @@ Inspecting the elements of ``t1_real`` using ``sympy.Symbol.assumptions0`` shows
 Of course this assumption isn't quite realistic -- for real materials, the susceptibility elements can take on any complex value, not just fully real. In those cases, we can simply decompose each symbol into its real and imaginary parts -- both of which are fully real numbers. The easy way to do this is to use ``shgpy.make_tensor_complex``:
 
 >>> shgpy.make_tensor_complex(t1)
->>> array([[[0, I*imag_xyx + real_xyx, I*imag_yyz + real_yyz],
-        [I*imag_xyx + real_xyx, 0, 0],
-        [I*imag_yzy + real_yzy, 0, 0]],
-
-       [[I*imag_xyx + real_xyx, 0, 0],
-        [0, -I*imag_xyx - real_xyx, I*imag_yyz + real_yyz],
-        [0, I*imag_yzy + real_yzy, 0]],
-
-       [[I*imag_zyy + real_zyy, 0, 0],
-        [0, I*imag_zyy + real_zyy, 0],
-        [0, 0, I*imag_zzz + real_zzz]]], dtype=object)
+array([[[0, I*imag_xyx + real_xyx, I*imag_yyz + real_yyz],
+    [I*imag_xyx + real_xyx, 0, 0],
+    [I*imag_yzy + real_yzy, 0, 0]],
+   [[I*imag_xyx + real_xyx, 0, 0],
+    [0, -I*imag_xyx - real_xyx, I*imag_yyz + real_yyz],
+    [0, I*imag_yzy + real_yzy, 0]],
+   [[I*imag_zyy + real_zyy, 0, 0],
+    [0, I*imag_zyy + real_zyy, 0],
+    [0, 0, I*imag_zzz + real_zzz]]], dtype=object)
 
 Using ``sympy.Symbol.assumptions0`` you can again inspect ``real_...`` and ``imag_...`` to prove that they are explicitly real numbers. Now your tensor is safe to start trying to fit data, as described in the next section.
 

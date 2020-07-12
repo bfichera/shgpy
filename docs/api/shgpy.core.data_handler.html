@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shgpy.core.data_handler module &#8212; ShgPy 0.6.1 documentation</title>
+    <title>shgpy.core.data_handler module &#8212; ShgPy 0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -149,7 +149,7 @@ been applied to the data, as well as other attributes like the units with
 which the data was defined.</p>
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_items">
-<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of <cite>(pc, data)</cite> pairs.</p>
 <p>Equivalent to <cite>dict.items()</cite>.</p>
 <dl class="field-list simple">
@@ -171,7 +171,7 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_keys">
-<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the polarization combinations for this data.</p>
 <p>Equivalent to <cite>dict.keys()</cite>.</p>
 <dl class="field-list simple">
@@ -185,7 +185,7 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_maxval">
-<code class="sig-name descname">get_maxval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_maxval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_maxval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_maxval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum value of the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -201,7 +201,7 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_minval">
-<code class="sig-name descname">get_minval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_minval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_minval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_minval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the minimum value of the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -217,13 +217,13 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_offset">
-<code class="sig-name descname">get_offset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_offset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_offset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the degree to which the data has been offset</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_pc">
-<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pc</span></em>, <em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em>, <em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get data for single polarization combination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -246,7 +246,7 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_pc_maxval">
-<code class="sig-name descname">get_pc_maxval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc_maxval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_pc_maxval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc_maxval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum value of a particular polarization combination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -265,7 +265,7 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_pc_minval">
-<code class="sig-name descname">get_pc_minval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc_minval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_pc_minval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc_minval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the minimum value of a particular polarization combination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -284,7 +284,7 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_phase_shift">
-<code class="sig-name descname">get_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_phase_shift" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_phase_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the extent to which this data has been phase shifted from the original.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -302,13 +302,13 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_scale">
-<code class="sig-name descname">get_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_scale" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_scale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the extent to which this data has been scaled from the original.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.get_values">
-<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_values" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of data (without polarization combination reference)</p>
 <p>Equivalent to <cite>dict.values()</cite>.</p>
 <dl class="field-list simple">
@@ -330,13 +330,13 @@ in the form <cite>array([xdata, ydata])</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.normalize_data">
-<code class="sig-name descname">normalize_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">desired_maximum</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.normalize_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">normalize_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">desired_maximum</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.normalize_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize the data to a desired maximum.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.phase_shift_data">
-<code class="sig-name descname">phase_shift_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.phase_shift_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">phase_shift_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.phase_shift_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase shift the data by a constant amount.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -351,13 +351,13 @@ in the form <cite>array([xdata, ydata])</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.scale_data">
-<code class="sig-name descname">scale_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scale_factor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.scale_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">scale_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale_factor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.scale_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scale the data by a constant factor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.DataContainer.subtract_min">
-<code class="sig-name descname">subtract_min</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.subtract_min" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subtract_min</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.subtract_min" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subtract the minimum from the data.</p>
 </dd></dl>
 
@@ -387,7 +387,7 @@ manipulating such a formula. It basically acts as a dictionary of
 and <cite>formula</cite> is an instance of the sympy.Expr class.</p>
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.apply_phase_shift">
-<code class="sig-name descname">apply_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">phase_shift</span></em>, <em class="sig-param"><span class="n">var_to_shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.apply_phase_shift" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phase_shift</span></em>, <em class="sig-param"><span class="n">var_to_shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.apply_phase_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase shift the formula.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -405,19 +405,19 @@ and <cite>formula</cite> is an instance of the sympy.Expr class.</p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.expand">
-<code class="sig-name descname">expand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.expand" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">expand</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.expand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the <cite>sympy.expand</cite> method to every polarization combination.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.get_free_symbols">
-<code class="sig-name descname">get_free_symbols</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_free_symbols" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_free_symbols</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_free_symbols" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a sorted list of the free symbols in the Fourier formula.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.get_items">
-<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of <cite>(pc, formula)</cite> pairs.</p>
 <p>Equivalent to <cite>dict.items()</cite>.</p>
 <dl class="field-list simple">
@@ -433,7 +433,7 @@ in the form <cite>(pc, formula)</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.get_keys">
-<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the polarization combinations for this formula.</p>
 <p>Equivalent to <cite>dict.keys()</cite>.</p>
 <dl class="field-list simple">
@@ -447,7 +447,7 @@ in the form <cite>(pc, formula)</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.get_pc">
-<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the formula for single polarization combination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -467,7 +467,7 @@ in the form <cite>(pc, formula)</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.get_values">
-<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_values" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of the formulas (without polarization combination reference)</p>
 <p>Equivalent to <cite>dict.values()</cite>.</p>
 <dl class="field-list simple">
@@ -481,13 +481,13 @@ in the form <cite>(pc, formula)</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.simplify">
-<code class="sig-name descname">simplify</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.simplify" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">simplify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.simplify" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the <cite>sympy.simplify</cite> method to every polarization combination.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.FormContainer.subs">
-<code class="sig-name descname">subs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">subs_array</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.subs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">subs_array</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.subs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitute for some variables in the Fourier formula.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -588,14 +588,14 @@ is an ndarray of length <cite>2*M+1</cite>. The <cite>nth</cite> element here de
 <cite>(n-M)th</cite> fourier component of the data to be fitted.</p>
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_M">
-<code class="sig-name descname">get_M</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_M" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_M</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_M" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of Fourier frequencies.</p>
 <p>Each <cite>fdata</cite> array has <cite>2*M+1</cite> elements.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_items">
-<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of <cite>(pc, fdata)</cite> pairs.</p>
 <p>Equivalent to <cite>dict.items()</cite>.</p>
 <dl class="field-list simple">
@@ -611,7 +611,7 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_keys">
-<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the polarization combinations for this data.</p>
 <p>Equivalent to <cite>dict.keys()</cite>.</p>
 <dl class="field-list simple">
@@ -625,7 +625,7 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_maxval">
-<code class="sig-name descname">get_maxval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_maxval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_maxval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_maxval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum value of the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -645,7 +645,7 @@ the magnitudes of the different elements.</p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_pc">
-<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_pc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get fdata for single polarization combination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -665,7 +665,7 @@ the magnitudes of the different elements.</p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_pc_maxval">
-<code class="sig-name descname">get_pc_maxval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_pc_maxval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_pc_maxval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_pc_maxval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum value of a particular polarization combination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -686,7 +686,7 @@ the magnitudes of the different elements.</p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_phase_shift">
-<code class="sig-name descname">get_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_phase_shift" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_phase_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the extent to which this data has been phase shifted from the original.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -704,13 +704,13 @@ the magnitudes of the different elements.</p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_scale">
-<code class="sig-name descname">get_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_scale" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_scale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the extent to which this data has been scaled from the original.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.get_values">
-<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_values" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of data (without polarization combination reference)</p>
 <p>Equivalent to <cite>dict.values()</cite>.</p>
 <dl class="field-list simple">
@@ -726,13 +726,13 @@ in the form <cite>array(shape=(2*M+1,))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.normalize_fdata">
-<code class="sig-name descname">normalize_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">desired_maximum</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.normalize_fdata" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">normalize_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">desired_maximum</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.normalize_fdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize the data to a desired maximum.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.phase_shift_fdata">
-<code class="sig-name descname">phase_shift_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.phase_shift_fdata" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">phase_shift_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.phase_shift_fdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase shift the data by a constant amount.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -747,7 +747,7 @@ in the form <cite>array(shape=(2*M+1,))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fDataContainer.scale_fdata">
-<code class="sig-name descname">scale_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scale_factor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.scale_fdata" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">scale_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale_factor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.scale_fdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize the fdata by a given amount.</p>
 </dd></dl>
 
@@ -779,7 +779,7 @@ basically acts as a dictionary of <cite>{pc:fformula}</cite> pairs, where
 contains a formula for the <cite>(n-M)th</cite> Fourier coefficient.</p>
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fFormContainer.apply_phase_shift">
-<code class="sig-name descname">apply_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">phase_shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.apply_phase_shift" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">apply_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phase_shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.apply_phase_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase shift the Fourier formula.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -795,20 +795,20 @@ Fourier formula by <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fFormContainer.get_M">
-<code class="sig-name descname">get_M</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_M" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_M</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_M" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of Fourier frequencies.</p>
 <p>Each Fourier formula array has <cite>2*M+1</cite> elements.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fFormContainer.get_free_symbols">
-<code class="sig-name descname">get_free_symbols</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_free_symbols" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_free_symbols</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_free_symbols" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a sorted list of the free symbols in the Fourier formula.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fFormContainer.get_items">
-<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of <cite>(pc, fformula)</cite> pairs.</p>
 <p>Equivalent to <cite>dict.items()</cite>.</p>
 <dl class="field-list simple">
@@ -824,7 +824,7 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fFormContainer.get_keys">
-<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_keys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the polarization combinations for this Fourier formula.</p>
 <p>Equivalent to <cite>dict.keys()</cite>.</p>
 <dl class="field-list simple">
@@ -838,7 +838,7 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fFormContainer.get_pc">
-<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Fourier formula for single polarization combination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -858,7 +858,7 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fFormContainer.get_values">
-<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_values" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of the Fourier formulas (without polarization combination reference)</p>
 <p>Equivalent to <cite>dict.values()</cite>.</p>
 <dl class="field-list simple">
@@ -874,7 +874,7 @@ in the form <cite>array([xdata, ydata])</cite></p>
 
 <dl class="py method">
 <dt id="shgpy.core.data_handler.fFormContainer.subs">
-<code class="sig-name descname">subs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">subs_array</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.subs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">subs_array</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.subs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitute for some variables in the Fourier formula.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1170,7 +1170,7 @@ Default is False.</p>
 <code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_fform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform_filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_fform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creat instance of fFormContainer from a fform_filename.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fform_filename</span></code> s are generated using the utilities provided
-in the <a class="reference internal" href="shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-class docutils literal notranslate"><span class="pre">fformgen</span></code></a> package. Those utilities output
+in the <a class="reference internal" href="shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fformgen</span></code></a> module. Those utilities output
 a pickled fFormContainer-like object which can be loaded into
 a true fFormContainer instance using this function.</p>
 <dl class="field-list simple">
@@ -1264,7 +1264,7 @@ the containers and vi are the corresponding values.</p>
       &copy;2020, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

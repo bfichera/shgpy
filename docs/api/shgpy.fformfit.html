@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>shgpy.fformfit module &#8212; ShgPy 0.6.1 documentation</title>
+    <title>shgpy.fformfit module &#8212; ShgPy 0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -126,7 +126,7 @@ functions with many fitting parameters and local minima. See the
 relevant <cite>scipy</cite> documentation for more info.</p>
 <dl class="py function">
 <dt id="shgpy.fformfit.basinhopping_fit">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'BFGS'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'BFGS'</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunk_cost_func</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basinhopping fit of RA-SHG data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -144,11 +144,21 @@ This is the (Fourier-transformed) data to fit.</p>
 <dt><strong>method</strong><span class="classifier">str, optional</span></dt><dd><p>Minimization method to use, defaults to <cite>‘BFGS’</cite>. See scipy
 documentation for more information.</p>
 </dd>
+<dt><strong>args</strong><span class="classifier">tuple, optional</span></dt><dd><p>Additional arguments to give to the minimizer.</p>
+</dd>
 <dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Basinhopping stepsize, defaults to <cite>0.5</cite>. See scipy documentation
 for more information.</p>
 </dd>
 <dt><strong>basinhopping_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Other options to pass to the basinhopping routine. See scipy
 documentation for more information.</p>
+</dd>
+<dt><strong>chunk_cost_func</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to chunk the cost function generation into multiple parts.
+Default is False.</p>
+</dd>
+<dt><strong>save_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the cost function (as a shared library) at this
+location.</p>
+</dd>
+<dt><strong>load_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the cost function at this location.</p>
 </dd>
 </dl>
 </dd>
@@ -167,7 +177,7 @@ a dictionary.</p>
 
 <dl class="py function">
 <dt id="shgpy.fformfit.basinhopping_fit_jac">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_jac</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'BFGS'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_jac" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_jac</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'BFGS'</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunk_cost_func</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">grad_save_cost_func_filename_prefix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_grad_cost_func_filename_prefix</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_jac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basinhopping fit of RA-SHG data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -185,11 +195,28 @@ This is the (Fourier-transformed) data to fit.</p>
 <dt><strong>method</strong><span class="classifier">str, optional</span></dt><dd><p>Minimization method to use, defaults to <cite>‘BFGS’</cite>. See scipy
 documentation for more information.</p>
 </dd>
+<dt><strong>args</strong><span class="classifier">tuple, optional</span></dt><dd><p>Additional arguments to give to the minimizer.</p>
+</dd>
 <dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Basinhopping stepsize, defaults to <cite>0.5</cite>. See scipy documentation
 for more information.</p>
 </dd>
 <dt><strong>basinhopping_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Other options to pass to the basinhopping routine. See scipy
 documentation for more information.</p>
+</dd>
+<dt><strong>chunk_cost_func</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to chunk the cost function generation into multiple parts.
+Default is False.</p>
+</dd>
+<dt><strong>save_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the cost function (as a shared library) at this
+location.</p>
+</dd>
+<dt><strong>grad_save_cos_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the gradient cost functions as shared libraries
+at the locations defined by <code class="docutils literal notranslate"><span class="pre">...0.so</span></code>, <code class="docutils literal notranslate"><span class="pre">...1.so</span></code>, etc.</p>
+</dd>
+<dt><strong>load_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the cost function at this location.
+Must be used in tandem with <code class="docutils literal notranslate"><span class="pre">load_grad_cost_func_filename_prefix</span></code>.</p>
+</dd>
+<dt><strong>load_grad_cost_func_filename_prefix</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the gradient functions defined by this prefix.
+Must be used in tandem with <code class="docutils literal notranslate"><span class="pre">load_cost_func_filename</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -212,7 +239,7 @@ but can speed up the minimization algorithm.</p>
 
 <dl class="py function">
 <dt id="shgpy.fformfit.basinhopping_fit_jac_with_bounds">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_jac_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'L-BFGS-B'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_jac_with_bounds" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_jac_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'L-BFGS-B'</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunk_cost_func</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">grad_save_cost_func_filename_prefix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_grad_cost_func_filename_prefix</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_jac_with_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basinhopping fit of RA-SHG data with bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -233,11 +260,28 @@ This is the (Fourier-transformed) data to fit.</p>
 <dt><strong>method</strong><span class="classifier">str, optional</span></dt><dd><p>Minimization method to use, defaults to <cite>‘L-BFGS-B’</cite>. See scipy
 documentation for more information.</p>
 </dd>
+<dt><strong>args</strong><span class="classifier">tuple, optional</span></dt><dd><p>Additional arguments to give to the minimizer.</p>
+</dd>
 <dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Basinhopping stepsize, defaults to <cite>0.5</cite>. See scipy documentation
 for more information.</p>
 </dd>
 <dt><strong>basinhopping_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Other options to pass to the basinhopping routine. See scipy
 documentation for more information.</p>
+</dd>
+<dt><strong>chunk_cost_func</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to chunk the cost function generation into multiple parts.
+Default is False.</p>
+</dd>
+<dt><strong>save_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the cost function (as a shared library) at this
+location.</p>
+</dd>
+<dt><strong>grad_save_cost_func_filename_prefix</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the gradient cost functions as shared libraries
+at the locations defined by <code class="docutils literal notranslate"><span class="pre">...0.so</span></code>, <code class="docutils literal notranslate"><span class="pre">...1.so</span></code>, etc.</p>
+</dd>
+<dt><strong>load_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the cost function at this location.
+Must be used in tandem with <code class="docutils literal notranslate"><span class="pre">load_grad_cost_func_filename_prefix</span></code>.</p>
+</dd>
+<dt><strong>load_grad_cost_func_filename_prefix</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the gradient functions defined by this prefix.
+Must be used in tandem with <code class="docutils literal notranslate"><span class="pre">load_cost_func_filename</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -260,7 +304,7 @@ but can speed up the minimization algorithm.</p>
 
 <dl class="py function">
 <dt id="shgpy.fformfit.basinhopping_fit_with_bounds">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'L-BFGS-B'</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_with_bounds" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">basinhopping_fit_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">niter</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'L-BFGS-B'</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">()</span></em>, <em class="sig-param"><span class="n">stepsize</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">basinhopping_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">chunk_cost_func</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.basinhopping_fit_with_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basinhopping fit of RA-SHG data with bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -281,11 +325,21 @@ This is the (Fourier-transformed) data to fit.</p>
 <dt><strong>method</strong><span class="classifier">str, optional</span></dt><dd><p>Minimization method to use, defaults to <cite>‘L-BFGS-B’</cite>. See scipy
 documentation for more information.</p>
 </dd>
+<dt><strong>args</strong><span class="classifier">tuple, optional</span></dt><dd><p>Additional arguments to give to the minimizer.</p>
+</dd>
 <dt><strong>stepsize</strong><span class="classifier">float, optional</span></dt><dd><p>Basinhopping stepsize, defaults to <cite>0.5</cite>. See scipy documentation
 for more information.</p>
 </dd>
 <dt><strong>basinhopping_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Other options to pass to the basinhopping routine. See scipy
 documentation for more information.</p>
+</dd>
+<dt><strong>chunk_cost_func</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to chunk the cost function generation into multiple parts.
+Default is False.</p>
+</dd>
+<dt><strong>save_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the cost function (as a shared library) at this
+location.</p>
+</dd>
+<dt><strong>load_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the cost function at this location.</p>
 </dd>
 </dl>
 </dd>
@@ -303,9 +357,9 @@ a dictionary.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.fformfit.least_squares_fit">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">least_squares_fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.least_squares_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Least-squares fit of RA-SHG data.</p>
+<dt id="shgpy.fformfit.dual_annealing_fit_with_bounds">
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">dual_annealing_fit_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">maxiter</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">local_search_options</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">initial_temp</span><span class="o">=</span><span class="default_value">5230</span></em>, <em class="sig-param"><span class="n">restart_temp_ratio</span><span class="o">=</span><span class="default_value">2e-05</span></em>, <em class="sig-param"><span class="n">visit</span><span class="o">=</span><span class="default_value">2.62</span></em>, <em class="sig-param"><span class="n">accept</span><span class="o">=</span><span class="default_value">- 5.0</span></em>, <em class="sig-param"><span class="n">maxfun</span><span class="o">=</span><span class="default_value">10000000.0</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">no_local_search</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">callback</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">chunk_cost_func</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.dual_annealing_fit_with_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulated annealing fit of RA-SHG data with bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -316,6 +370,117 @@ This is the (Fourier-transformed) fitting formula.</p>
 This is the (Fourier-transformed) data to fit.</p>
 </dd>
 <dt><strong>guess_dict</strong><span class="classifier">dict</span></dt><dd><p>Dict of form <code class="docutils literal notranslate"><span class="pre">{sympy.Symbol:float}</span></code>. This is the initial guess.</p>
+</dd>
+<dt><strong>bounds_dict</strong><span class="classifier">dict</span></dt><dd><p>Dict of form <code class="docutils literal notranslate"><span class="pre">{sympy.Symbol:tuple}</span></code>. <cite>tuple</cite> should be of form
+<code class="docutils literal notranslate"><span class="pre">(lower_bound,</span> <span class="pre">upper_bound)</span></code>.</p>
+</dd>
+<dt><strong>maxiter</strong><span class="classifier">int</span></dt><dd><p>Maximum number of global search iterations.</p>
+</dd>
+<dt><strong>local_search_options</strong><span class="classifier">dict, optional</span></dt><dd><p>Extra keyword arguments to be passed to the local minimizer.</p>
+</dd>
+<dt><strong>initial_temp</strong><span class="classifier">float, optional</span></dt><dd><p>Initial temperature. Default is 5230.</p>
+</dd>
+<dt><strong>restart_temp_ratio</strong><span class="classifier">float, optional</span></dt><dd><p>When the temperature reaches <code class="docutils literal notranslate"><span class="pre">initial_temp</span> <span class="pre">*</span> <span class="pre">restart_temp_ratio</span></code>,
+the reannealing process is triggered. Default value is 2e-5. Range
+is (0,1).</p>
+</dd>
+<dt><strong>visit</strong><span class="classifier">float, optional</span></dt><dd><p>Parameter for visiting distribution. Default value is 2.62.</p>
+</dd>
+<dt><strong>accept</strong><span class="classifier">float, optional</span></dt><dd><p>Parameter for acceptance distribution. Default is -5.0.</p>
+</dd>
+<dt><strong>maxfun</strong><span class="classifier">int, optional</span></dt><dd><p>Soft limit for the number of objective function calls. Default
+is 1e7.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">{int, RandomState, Generator}, optional</span></dt><dd><p>The random seed to use.</p>
+</dd>
+<dt><strong>no_local_search</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, perform traditional generalized simulated annealing with
+no local search.</p>
+</dd>
+<dt><strong>callback</strong><span class="classifier">callable, optional</span></dt><dd><p>A callback function with signature <code class="docutils literal notranslate"><span class="pre">callback(x,</span> <span class="pre">f,</span> <span class="pre">context)</span></code>
+which will be called for all minima found.</p>
+</dd>
+<dt><strong>x0</strong><span class="classifier">ndarray, shape(n,), optional</span></dt><dd><p>Initial guess.</p>
+</dd>
+<dt><strong>chunk_cost_func</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to chunk the cost function generation into multiple parts.
+Default is False.</p>
+</dd>
+<dt><strong>save_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the cost function (as a shared library) at this
+location.</p>
+</dd>
+<dt><strong>load_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the cost function at this location.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ret</strong><span class="classifier">scipy.optimize.OptimizeResult</span></dt><dd><p>Instance of class <code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizeResult</span></code>.
+See <cite>scipy</cite> documentation for further description. Includes
+additional attribute <code class="docutils literal notranslate"><span class="pre">ret.xdict</span></code> which is a <cite>dict</cite> of 
+<code class="docutils literal notranslate"><span class="pre">{sympy.Symbol:float}</span></code> indicating the final answer as
+a dictionary.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>See the <code class="docutils literal notranslate"><span class="pre">scipy.optimize.dual_annealing</span></code> documentation for more info.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.fformfit.gen_cost_func">
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">gen_cost_func</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">argument_list</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">chunk</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.gen_cost_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a cost function as an .so file and save it to disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fform</strong><span class="classifier">fFormContainer</span></dt><dd><p>The Fourier formula to use</p>
+</dd>
+<dt><strong>fdat</strong><span class="classifier">fDataContainer</span></dt><dd><p>The fourier data to fit</p>
+</dd>
+<dt><strong>argument_list</strong><span class="classifier">array_like of sympy.Symbol, optional</span></dt><dd><p>Specify an order for the arguments. Default is alphabetical by
+str(sympy.Symbol).</p>
+</dd>
+<dt><strong>chunk</strong><span class="classifier">bool, optional</span></dt><dd><p>Chunk the function generation into multiple steps (one for each
+Fourier component in fform and fdat). Default is False.</p>
+</dd>
+<dt><strong>save_filename</strong><span class="classifier">path_like, optional</span></dt><dd><p>Filename to save the result. Default is not to save.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>cost_func</strong><span class="classifier">function</span></dt><dd><p>Result after compiling generated C code.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="shgpy.fformfit.least_squares_fit">
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">least_squares_fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">chunk_cost_func</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">least_sq_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.least_squares_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>No nonsense least-squares fit of RA-SHG data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fform</strong><span class="classifier">fFormContainer</span></dt><dd><p>Instance of class <a class="reference internal" href="shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fFormContainer</span></code></a>.
+This is the (Fourier-transformed) fitting formula.</p>
+</dd>
+<dt><strong>fdat</strong><span class="classifier">fDataContainer</span></dt><dd><p>Instance of class <a class="reference internal" href="shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer" title="shgpy.core.data_handler.fDataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fDataContainer</span></code></a>.
+This is the (Fourier-transformed) data to fit.</p>
+</dd>
+<dt><strong>guess_dict</strong><span class="classifier">dict</span></dt><dd><p>Dict of form <code class="docutils literal notranslate"><span class="pre">{sympy.Symbol:float}</span></code>. This is the initial guess.</p>
+</dd>
+<dt><strong>chunk_cost_func</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to chunk the cost function generation into multiple parts.
+Default is False.</p>
+</dd>
+<dt><strong>save_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the cost function (as a shared library) at this
+location.</p>
+</dd>
+<dt><strong>load_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the cost function at this location.</p>
+</dd>
+<dt><strong>least_sq_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Dictionary of additional options to pass to
+scipy.optimize.least_squares. Default is <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -334,8 +499,8 @@ a dictionary.</p>
 
 <dl class="py function">
 <dt id="shgpy.fformfit.least_squares_fit_with_bounds">
-<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">least_squares_fit_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.least_squares_fit_with_bounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Least-squares fit of RA-SHG data with bounds.</p>
+<code class="sig-prename descclassname">shgpy.fformfit.</code><code class="sig-name descname">least_squares_fit_with_bounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">guess_dict</span></em>, <em class="sig-param"><span class="n">bounds_dict</span></em>, <em class="sig-param"><span class="n">chunk_cost_func</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_cost_func_filename</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">least_sq_kwargs</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.fformfit.least_squares_fit_with_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>No nonsense least-squares fit of RA-SHG data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -349,6 +514,17 @@ This is the (Fourier-transformed) data to fit.</p>
 </dd>
 <dt><strong>bounds_dict</strong><span class="classifier">dict</span></dt><dd><p>Dict of form <code class="docutils literal notranslate"><span class="pre">{sympy.Symbol:tuple}</span></code>. <cite>tuple</cite> should be of form
 <code class="docutils literal notranslate"><span class="pre">(lower_bound,</span> <span class="pre">upper_bound)</span></code>.</p>
+</dd>
+<dt><strong>chunk_cost_func</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to chunk the cost function generation into multiple parts.
+Default is False.</p>
+</dd>
+<dt><strong>save_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, save the cost function (as a shared library) at this
+location.</p>
+</dd>
+<dt><strong>load_cost_func_filename</strong><span class="classifier">path-like, optional</span></dt><dd><p>If provided, load the cost function at this location.</p>
+</dd>
+<dt><strong>least_sq_kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>Dictionary of additional options to pass to
+scipy.optimize.least_squares. Default is <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -378,7 +554,7 @@ a dictionary.</p>
       &copy;2020, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
