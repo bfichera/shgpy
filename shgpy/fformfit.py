@@ -195,8 +195,8 @@ double autofunc(double *xs){
 
     start = time.time()
     _logger.debug('Start compiling code.')
-    os.system(f'gcc -c -lm {c_path} -o {o_path}')
-    os.system(f'gcc -shared {o_path} -o {so_path}')
+    os.system(f'gcc -c -lm -fPIC {c_path} -o {o_path}')
+    os.system(f'gcc -shared -fPIC {o_path} -o {so_path}')
     _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
     if save_filename is not None:
