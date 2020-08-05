@@ -116,6 +116,7 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None):
     )
     c_code = '#include <complex.h>\n'
     c_code += bad_c_code
+    c_code = c_code.replace('conjugate', 'conj')
 
     write_directory = Path(tempfile.mkdtemp()).absolute()
 
@@ -174,6 +175,8 @@ double autofunc(double *xs){
 
 }
 """ % ('+'.join(['expr'+str(i)+'(xs)' for i in range(len(energy_expr_list))]))
+    c_code = c_code.replace('conjugate', 'conj')
+
     h_code = h_code.replace('\n#endif', """double autofunc(double *xs);
 
 #endif
