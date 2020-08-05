@@ -1204,6 +1204,38 @@ def dat_subtract(dat1, dat2):
         new_ydata = ydata1 - ydata2
         new_dict[k] = np.array([new_xdata, new_ydata])
     return DataContainer(new_dict, 'radians', normal_to_oblique=False)
+
+
+def dat_add(dat1, dat2):
+    """Add two `DataContainer` instances.
+
+    Parameters
+    ----------
+    dat1 : DataContainer
+        Instance of :class:`~shgpy.core.data_handler.DataContainer`
+    dat2 : DataContainer
+        Instance of :class:`~shgpy.core.data_handler.DataContainer`
+
+    Returns
+    -------
+    dat_result : DataContainer
+        Instance of :class:`~shgpy.core.data_handler.DataContainer` containing
+        the contents of `dat1+dat2`.
+    
+    """
+    if set(dat1.get_keys()) != set(dat2.get_keys()):
+        raise ValueError('DataContainers have different keys.')
+    if dat1.get_values('radians')[0].shape != dat2.get_values('radians')[0].shape:
+        raise ValueError('DataContainers\' xydatas have different shapes.')
+    new_dict = {}
+    for k in dat1.get_keys():
+        new_xdata, ydata1 = dat1.get_pc(k, 'radians')
+        _, ydata2 = dat2.get_pc(k, 'radians')
+        if False in np.isclose(new_xdata.flatten(), _.flatten()):
+            raise ValueError('DataContainers have different xdatas.')
+        new_ydata = ydata1 + ydata2
+        new_dict[k] = np.array([new_xdata, new_ydata])
+    return DataContainer(new_dict, 'radians', normal_to_oblique=False)
        
 
 def load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_filenames_dict, dark_angle_units, normal_to_oblique=False):
