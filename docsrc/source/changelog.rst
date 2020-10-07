@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v0.7.5
+------
+- Fixed a number of tensors which were incorrectly defined due to typos in Boyd. The affected tensors were
+    - `D_6` (dipole)
+    - `C_4` (quadrupole)
+    - `C_4h` (quadrupole)
+    - `S_4` (quadrupole)
+
 v0.7.0
 ------
 - Officially transitioned to supporting only tensors for which all the involved symbols are purely real, as defined by ``sympy`` assumptions. This got rid of a lot of redundancy in function definitions, such as ``shgpy.fformgen.generate_contracted_fourier_transforms`` versus ``shgpy.fformgen.generate_contracted_fourier_transforms_complex``, ``shgpy.formgen.formgen_dipole_quadrupole_real`` and ``shgpy.formgen.formgen_dipole_quadrupole_complex``, ect. In all cases, these functions have been replaced by a single function, e.g. ``shgpy.formgen.formgen_dipole_quadrupole``, and you will receive a ``NotImplementedError`` if you try to use any of the replaced definitions.
