@@ -99,8 +99,8 @@ dipole['C_3'] = np.array([[[xxx, -yyy, yyz], [-yyy, -xxx, -yxz], [yzy, -yzx, 0]]
 dipole['C_3v'] = np.array([[[0, xyx, yyz], [xyx, 0, 0], [yzy, 0, 0]], [[xyx, 0, 0], [0, -xyx, yyz], [0, yzy, 0]], [[zyy, 0, 0], [0, zyy, 0], [0, 0, zzz]]], dtype=object)
 dipole['C_6'] = np.array([[[0, 0, yyz], [0, 0, -yxz], [yzy, -yzx, 0]], [[0, 0, yxz], [0, 0, yyz], [yzx, yzy, 0]], [[zyy, -zyx, 0], [zyx, zyy, 0], [0, 0, zzz]]], dtype=object)
 dipole['C_3h'] = np.array([[[-yyx, xxy, 0], [xxy, yyx, 0], [0, 0, 0]], [[xxy, yyx, 0], [yyx, -xxy, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=object)
-dipole['D_6'] = np.array([[[0, 0, 0], [0, 0, -yxz], [0, -yxz, 0]], [[0, 0, yxz], [0, 0, 0], [0, 0, 0]], [[0, -zyx, 0], [zyx, 0, 0], [0, 0, 0]]], dtype=object)
 dipole['C_6v'] = np.array([[[0, 0, yyz], [0, 0, 0], [yzy, 0, 0]], [[0, 0, 0], [0, 0, yyz], [0, yzy, 0]], [[zyy, 0, 0], [0, zyy, 0], [0, 0, zzz]]], dtype=object)
+dipole['D_6'] = np.array([[[0, 0, 0], [0, 0, -yxz], [0, -yzx, 0]], [[0, 0, yxz], [0, 0, 0], [yzx, 0, 0]], [[0, -zyx, 0], [zyx, 0, 0], [0, 0, 0]]], dtype=object)
 dipole['D_3h'] = np.array([[[0, xyx, 0], [xyx, 0, 0], [0, 0, 0]], [[xyx, 0, 0], [0, -xyx, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=object)
 dipole['C_1'] = np.array([[[xxx, xxy, xxz], [xyx, xyy, xyz], [xzx, xzy, xzz]], [[yxx, yxy, yxz], [yyx, yyy, yyz], [yzx, yzy, yzz]], [[zxx, zxy, zxz], [zyx, zyy, zyz], [zzx, zzy, zzz]]], dtype=object)
 for k,v in dipole.items():
