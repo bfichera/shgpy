@@ -138,7 +138,7 @@ surface['C_3'] = np.array([[[sxxx, -syyy, syyz], [-syyy, -sxxx, -syxz], [syzy, -
 surface['C_3v'] = np.array([[[0, sxyx, syyz], [sxyx, 0, 0], [syzy, 0, 0]], [[sxyx, 0, 0], [0, -sxyx, syyz], [0, syzy, 0]], [[szyy, 0, 0], [0, szyy, 0], [0, 0, szzz]]], dtype=object)
 surface['C_6'] = np.array([[[0, 0, syyz], [0, 0, -syxz], [syzy, -syzx, 0]], [[0, 0, syxz], [0, 0, syyz], [syzx, syzy, 0]], [[szyy, -szyx, 0], [szyx, szyy, 0], [0, 0, szzz]]], dtype=object)
 surface['C_3h'] = np.array([[[-syyx, sxxy, 0], [sxxy, syyx, 0], [0, 0, 0]], [[sxxy, syyx, 0], [syyx, -sxxy, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=object)
-surface['D_6'] = np.array([[[0, 0, 0], [0, 0, -syxz], [0, -syxz, 0]], [[0, 0, syxz], [0, 0, 0], [0, 0, 0]], [[0, -szyx, 0], [szyx, 0, 0], [0, 0, 0]]], dtype=object)
+surface['D_6'] = np.array([[[0, 0, 0], [0, 0, -syxz], [0, -syzx, 0]], [[0, 0, syxz], [0, 0, 0], [syzx, 0, 0]], [[0, -szyx, 0], [szyx, 0, 0], [0, 0, 0]]], dtype=object)
 surface['C_6v'] = np.array([[[0, 0, syyz], [0, 0, 0], [syzy, 0, 0]], [[0, 0, 0], [0, 0, syyz], [0, syzy, 0]], [[szyy, 0, 0], [0, szyy, 0], [0, 0, szzz]]], dtype=object)
 surface['D_3h'] = np.array([[[0, sxyx, 0], [sxyx, 0, 0], [0, 0, 0]], [[sxyx, 0, 0], [0, -sxyx, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]], dtype=object)
 surface['C_1'] = np.array([[[sxxx, sxxy, sxxz], [sxyx, sxyy, sxyz], [sxzx, sxzy, sxzz]], [[syxx, syxy, syxz], [syyx, syyy, syyz], [syzx, syzy, syzz]], [[szxx, szxy, szxz], [szyx, szyy, szyz], [szzx, szzy, szzz]]], dtype=object)
