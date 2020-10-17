@@ -47,9 +47,9 @@ def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include,
         if show_legend:
             ax.legend(loc='upper right')
     if xlabel is not None:
-        plt.setp(axs[-1,:], xlabel='Angle (radians)')
+        plt.setp(axs[-1,:], xlabel=xlabel)
     if ylabel is not None:
-        plt.setp(axs[:,0], ylabel='SHG intensity (a.u.)')
+        plt.setp(axs[:,0], ylabel=ylabel)
     if filename is not None:
         plt.savefig(filename)
     if show_plot:
