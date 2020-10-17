@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.7.6
+------
+- Added xlabel and ylabel axes to :func:`shgpy.plotter.easy_plot`
+
 v0.7.5
 ------
 - Fixed a number of tensors which were incorrectly defined due to typos in Boyd. The affected tensors were

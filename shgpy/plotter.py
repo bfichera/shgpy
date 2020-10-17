@@ -3,7 +3,8 @@ import numpy as np
 
 
 def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include,
-              show_plot=True, filename=None, show_legend=False):
+              show_plot=True, filename=None, show_legend=False,
+              xlabel=None, ylabel=None):
     """An easy linear plotting routine for SHG data.
 
     Parameters
@@ -45,6 +46,10 @@ def easy_plot(list_of_dats, list_of_param_dicts, pcs_to_include,
         ax.set_title(pc)
         if show_legend:
             ax.legend(loc='upper right')
+    if xlabel is not None:
+        plt.setp(axs[-1,:], xlabel='Angle (radians)')
+    if ylabel is not None:
+        plt.setp(axs[:,0], ylabel='SHG intensity (a.u.)')
     if filename is not None:
         plt.savefig(filename)
     if show_plot:
