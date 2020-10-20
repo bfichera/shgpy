@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>shgpy.core.utilities module &#8212; ShgPy 0.7.7 documentation</title>
+    <title>shgpy.core.utilities module &#8212; ShgPy 0.7.8 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -175,7 +175,7 @@ we replace <code class="docutils literal notranslate"><span class="pre">sympy.Sy
 
 <dl class="py function">
 <dt id="shgpy.core.utilities.particularize">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">particularize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.particularize" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">particularize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">permute_all_indices</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.particularize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Particularize <cite>tensor</cite> (e.g. enforce <code class="docutils literal notranslate"><span class="pre">chi_ijk</span> <span class="pre">=</span> <span class="pre">chi_ikj</span></code>).</p>
 <p>Because (e.g.) <code class="docutils literal notranslate"><span class="pre">P_i</span> <span class="pre">=</span> <span class="pre">chi_ijk</span> <span class="pre">E_j</span> <span class="pre">E_k</span></code>, <code class="docutils literal notranslate"><span class="pre">chi_ijk</span></code> needs to be symmetric
 in its last two indices. This symmetry is not documented in SHG tables,
@@ -187,6 +187,9 @@ function of sympy.solvers.</p>
 <dt><strong>tensor</strong><span class="classifier">ndarray</span></dt><dd><p>Tensor to be particularized.</p>
 </dd>
 <dt><strong>exclude</strong><span class="classifier">list of sympy.Symbol objects</span></dt><dd><p>Variables to exlude from the solver. Defaults to <code class="docutils literal notranslate"><span class="pre">[]</span></code>.</p>
+</dd>
+<dt><strong>permute_all_indices</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to permute all indices, not just the last two. Useful for
+materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</p>
 </dd>
 </dl>
 </dd>
