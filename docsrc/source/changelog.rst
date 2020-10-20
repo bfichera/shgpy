@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.7.7
+------
+- Added the ability to apply Kleinman symmetry to a particular SHG tensor (i.e. enforce full permutation symmetry of the susceptibility indices). Use :func:`shgpy.particularize` with the option `permute_all_indices=True`
+
 v0.7.6
 ------
 - Added xlabel and ylabel axes to :func:`shgpy.plotter.easy_plot`
