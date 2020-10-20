@@ -95,7 +95,7 @@ def easy_polar_plot(list_of_dats, list_of_param_dicts, pcs_to_include,
         ax.spines['polar'].set_visible(False)
         ax.set_yticklabels([])
         ax.set_xticks([0, np.pi/2, np.pi, 3*np.pi/2])
-        ax.set_xticklabels(['', '', '', '', ''])
+        ax.set_xticklabels(['', '', '', ''])
         ax.set_rticks([max([dat.get_maxval()[1] for dat in list_of_dats])])
         ax.set_rmin(0)
         ax.set_title(pc)
