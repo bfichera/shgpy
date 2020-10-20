@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v0.7.7
+v0.7.8
 ------
 - Added the ability to apply Kleinman symmetry to a particular SHG tensor (i.e. enforce full permutation symmetry of the susceptibility indices). Use :func:`shgpy.particularize` with the option `permute_all_indices=True`
 
