@@ -5,27 +5,7 @@ import itertools
 from warnings import warn
 
 
-def particularize(tensor, exclude=[]):
-    """Particularize `tensor` (e.g. enforce ``chi_ijk = chi_ikj``).
-
-    Because (e.g.) ``P_i = chi_ijk E_j E_k``, ``chi_ijk`` needs to be symmetric
-    in its last two indices. This symmetry is not documented in SHG tables,
-    so it needs to be implemented manually. Functions using the ``solve``
-    function of sympy.solvers.
-
-    Parameters
-    ----------
-    tensor : ndarray
-        Tensor to be particularized. 
-
-    exclude : list of sympy.Symbol objects
-        Variables to exlude from the solver. Defaults to ``[]``.
-
-    Returns
-    -------
-    particularized_tensor : ndarray
-
-    """
+def _particularize_last_two(tensor, exclude=[]):
 
     def _swap_last_two_indices(tensor):
         rank = len(tensor.shape)
@@ -49,6 +29,55 @@ def particularize(tensor, exclude=[]):
         return tensor
 
     return _apply_sol_to_tensor(tensor, _get_sols_from_particularization(tensor, exclude=exclude)[0])
+
+
+def _particularize_all(tensor, exclude=[]):
+    
+    def _apply_sol_to_tensor(tensor, sol):
+        return np.array([fa.subs(sol) for fa in tensor.flatten()]).reshape(tensor.shape)
+
+    expr_list = []
+    rank = len(tensor.shape)
+    dim = len(tensor[0])
+
+    for i in itertools.product(*[range(dim) for s in range(rank)]):
+        for j in set(itertools.permutations(i)):
+            expr_list.append(tensor[i]-tensor[j])
+
+    sols = solve(expr_list, dict=True, exclude=exclude)
+    
+    return _apply_sol_to_tensor(tensor, sols[0])
+    
+
+def particularize(tensor, exclude=[], permute_all_indices=False):
+    """Particularize `tensor` (e.g. enforce ``chi_ijk = chi_ikj``).
+
+    Because (e.g.) ``P_i = chi_ijk E_j E_k``, ``chi_ijk`` needs to be symmetric
+    in its last two indices. This symmetry is not documented in SHG tables,
+    so it needs to be implemented manually. Functions using the ``solve``
+    function of sympy.solvers.
+
+    Parameters
+    ----------
+    tensor : ndarray
+        Tensor to be particularized. 
+
+    exclude : list of sympy.Symbol objects
+        Variables to exlude from the solver. Defaults to ``[]``.
+
+    permute_all_indices : bool, optional
+        Whether to permute all indices, not just the last two. Useful for
+        materials where Kleinman symmetry is preserved. Default is `False`.
+
+    Returns
+    -------
+    particularized_tensor : ndarray
+
+    """
+    if permute_all_indices is False:
+        return _particularize_last_two(tensor, exclude=exclude)
+    elif permute_all_indices is True:
+        return _particularize_all(tensor, exclude=exclude)
 
 
 def _make_parameters_in_expr_complex(expr, prefix=('real_', 'imag_'), suffix=('', '')):
