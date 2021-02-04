@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>shgpy.core.utilities module &#8212; ShgPy 0.7.9 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <title>shgpy.core.utilities module &#8212; ShgPy 0.7.10 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="shgpy.fformfit module" href="shgpy.fformfit.html" />
@@ -117,7 +116,7 @@
 <span id="shgpy-core-utilities-module"></span><h1>shgpy.core.utilities module<a class="headerlink" href="#module-shgpy.core.utilities" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="shgpy.core.utilities.make_tensor_complex">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">make_tensor_complex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">'real_', 'imag_'</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="o">=</span><span class="default_value">'', ''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.make_tensor_complex" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">make_tensor_complex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">('real_', 'imag_')</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="o">=</span><span class="default_value">('', '')</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.make_tensor_complex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitute e.g. <code class="docutils literal notranslate"><span class="pre">x</span></code> in sympy expression with <code class="docutils literal notranslate"><span class="pre">real_x+1j*imag_x</span></code>.</p>
 <p>In sympy, variables initalized by <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">sympy.symbols('x')</span></code> are by
 default assumed to be complex. In order to make this more explicit
@@ -323,10 +322,10 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2020, Bryan Fichera.
+      &copy;2021, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

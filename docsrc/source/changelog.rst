@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.7.10
+-------
+- Fixed a bug associated with the rounding of prefactors in :func:`shgpy.fformgen.generate_contracted_fourier_transforms` (i.e. the `ndigits` parameter).
+
 v0.7.8
 ------
 - Added the ability to apply Kleinman symmetry to a particular SHG tensor (i.e. enforce full permutation symmetry of the susceptibility indices). Use :func:`shgpy.particularize` with the option `permute_all_indices=True`
