@@ -69,6 +69,7 @@ def _round_complex(z, ndigits):
 
 def _round_expr(expr, ndigits):
     try:
+        expr = expr.expand()
         return expr.xreplace(
             {n:(round(sp.re(n), ndigits)+1j*round(sp.im(n), ndigits))
             for n in expr.atoms(sp.Number)}
