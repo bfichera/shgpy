@@ -69,6 +69,7 @@ def _round_complex(z, ndigits):
 
 def _round_expr(expr, ndigits):
     try:
+        expr = expr.expand()
         return expr.xreplace(
             {n:(round(sp.re(n), ndigits)+1j*round(sp.im(n), ndigits))
             for n in expr.atoms(sp.Number)}
@@ -94,20 +95,6 @@ def _conjugate_tensor(tensor):
     for i,expr in enumerate(tensor.flatten()):
         ans[i] = sp.conjugate(sp.sympify(expr))
     return ans.reshape(tensor.shape)
-
-
-def _fexpr_n(expr_arr, n, precision=7):
-    Rshape = expr_arr.shape
-    expr_arrf = expr_arr.flatten()
-    h = np.zeros(len(expr_arrf), dtype=object)
-    for i in range(len(expr_arrf)):
-        f_re = sp.lambdify(S.phi, 1/2/sp.pi*expr_arrf[i]*sp.cos(-1*(n*S.phi)))
-        f_im = sp.lambdify(S.phi, 1/2/sp.pi*expr_arrf[i]*sp.sin(-1*(n*S.phi)))
-        t_re,_ = quad(f_re, 0, 2*np.pi)
-        t_im,_ = quad(f_im, 0, 2*np.pi)
-        h[i] = round(t_re, precision)+round(t_im, precision)*1j
-    h = h.reshape(Rshape)
-    return h
 
 
 def _convolve_ftensors(nR1, nR2, M=16, dtype=object):
@@ -215,7 +202,31 @@ def generate_uncontracted_fourier_transforms(aoi,
     rproj_y[n2i(0, M)] = proj_y
     rproj_z = np.zeros(shape=(2*M+1,)+proj_z.shape, dtype=object)
     rproj_z[n2i(0, M)] = proj_z
-    rR = [_fexpr_n(R, m) for m in np.arange(-M, M+1)]
+    rR = np.zeros(shape=(2*M+1, 3, 3), dtype=object)
+    rR[n2i(-1, M)] = np.array(
+        [
+            [0.5, -0.5j, 0.0],
+            [0.5j, 0.5, 0.0],
+            [0.0, 0.0, 0.0],
+        ],
+        dtype=object,
+    )
+    rR[n2i(0, M)] = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ],
+        dtype=object,
+    )
+    rR[n2i(1, M)] = np.array(
+        [
+            [0.5, 0.5j, 0.0],
+            [-0.5j, 0.5, 0.0],
+            [0.0, 0.0, 0.0],
+        ],
+        dtype=object,
+    )
     rF = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)
     rF[n2i(0, M)] = F
     rFc = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)
@@ -434,7 +445,31 @@ def generate_uncontracted_fourier_transforms_symb(uncontracted_filename_prefix,
     rproj_y[n2i(0, M)] = proj_y
     rproj_z = np.zeros(shape=(2*M+1,)+proj_z.shape, dtype=object)
     rproj_z[n2i(0, M)] = proj_z
-    rR = [_fexpr_n(R, m) for m in np.arange(-M, M+1)]
+    rR = np.zeros(shape=(2*M+1, 3, 3), dtype=object)
+    rR[n2i(-1, M)] = np.array(
+        [
+            [0.5, -0.5j, 0.0],
+            [0.5j, 0.5, 0.0],
+            [0.0, 0.0, 0.0],
+        ],
+        dtype=object,
+    )
+    rR[n2i(0, M)] = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ],
+        dtype=object,
+    )
+    rR[n2i(1, M)] = np.array(
+        [
+            [0.5, 0.5j, 0.0],
+            [-0.5j, 0.5, 0.0],
+            [0.0, 0.0, 0.0],
+        ],
+        dtype=object,
+    )
     rF = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)
     rF[n2i(0, M)] = F
     rFc = np.zeros(shape=(2*M+1,)+F.shape, dtype=object)

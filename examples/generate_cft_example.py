@@ -24,5 +24,5 @@ t_quad = np.zeros(shape=(3,3,3,3), dtype=sp.Expr)
 save_filename = 'fform/T_d-S_2-S_2(110)-particularized.p'
 
 start = time.time()
-shgpy.fformgen.generate_contracted_fourier_transforms(save_filename, 'uft/uft10deg', t_dipole, t_quad, ndigits=4)
+shgpy.fformgen.generate_contracted_fourier_transforms(save_filename, 'uft/uft10deg', t_dipole, t_quad, ndigits=9)
 mylogger.debug(f'Finished CFT generation. Took {time.time()-start} seconds.')
