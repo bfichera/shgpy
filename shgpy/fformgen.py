@@ -210,6 +210,14 @@ def generate_uncontracted_fourier_transforms(aoi,
         ],
         dtype=object,
     )
+    rR[n2i(0, M)] = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ],
+        dtype=object,
+    )
     rR[n2i(1, M)] = np.array(
         [
             [0.5, 0.5j, 0.0],
@@ -442,6 +450,14 @@ def generate_uncontracted_fourier_transforms_symb(uncontracted_filename_prefix,
             [0.5, -0.5j, 0.0],
             [0.5j, 0.5, 0.0],
             [0.0, 0.0, 0.0],
+        ],
+        dtype=object,
+    )
+    rR[n2i(0, M)] = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0],
         ],
         dtype=object,
     )
