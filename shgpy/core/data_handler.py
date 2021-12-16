@@ -1397,3 +1397,21 @@ def load_fform(fform_filename):
         for k,v in str_fform_dict.items()
     }
     return fFormContainer(_fform_dict)
+
+
+def save_fform(fform, fform_filename):
+    """Save an instance of fFormContainer to fform_filename.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of `fFormContainer`
+    fform_filename : str or file object
+
+    """
+    str_fform_dict = {
+        k:np.array([sp.srepr(s) for s in v])
+        for k,v in fform._fform_dict.items()    
+    }
+    with open(fform_filename, 'wb') as fh:
+        pickle.dump(str_fform_dict, fh)
