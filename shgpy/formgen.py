@@ -61,18 +61,6 @@ def make_form_from_P_and_Q(Pp, Ps, Qp, Qs):
     return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
 
 
-# TODO Remove deprecation error
-def gen_P_just_dipole_real(*args, **kwargs):
-    raise NotImplementedError('gen_P_just_dipole_real was deprecated in'
-                              'version 0.7.0. Use gen_P_just_dipole instead.')
-
-
-# TODO Remove deprecation error
-def gen_P_just_dipole_complex(*args, **kwargs):
-    raise NotImplementedError('gen_P_just_dipole_complex was deprecated in'
-                              'version 0.7.0. Use gen_P_just_dipole instead.')
-
-
 def gen_P_just_dipole(t1, theta):
     """Generate P formula assuming dipole SHG.
 
@@ -121,20 +109,6 @@ def gen_P_just_dipole(t1, theta):
     Pp -= np.dot(kout, Pp)*kout
 
     return Pp, Ps, 0, 0
-
-
-# TODO Remove deprecation error
-def gen_P_dipole_quadrupole_complex(*args, **kwargs):
-    raise NotImplementedError('gen_P_dipole_quadrupole_complex was deprecated'
-                              ' in version 0.7.0. Use gen_P_dipole_quadrupole'
-                              ' instead.')
-
-
-# TODO Remove deprecation error
-def gen_P_dipole_quadrupole_real(*args, **kwargs):
-    raise NotImplementedError('gen_P_dipole_quadrupole_real was deprecated'
-                              ' in version 0.7.0. Use gen_P_dipole_real'
-                              ' instead.')
 
 
 def gen_P_dipole_quadrupole(t1, t2, theta):
@@ -206,20 +180,6 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
     return Pp, Ps, Qp, Qs
 
 
-# TODO Remove deprecation error
-def formgen_just_dipole_real(*args, **kwargs):
-    raise NotImplementedError('formgen_just_dipole_real was deprecated in '
-                              'version 0.7.0. Use formgen_just_dipole'
-                              ' instead.')
-
-
-# TODO Remove deprecation error
-def formgen_just_dipole_complex(*args, **kwargs):
-    raise NotImplementedError('formgen_just_dipole_complex was deprecated in'
-                              ' version 0.7.0. Use formgen_just_dipole'
-                              ' instead.')
-
-
 def formgen_just_dipole(t1, theta):
     """Generate formula assuming dipole SHG.
 
@@ -278,20 +238,6 @@ def formgen_just_dipole(t1, theta):
     SP = Ps[0]*sp.conjugate(Ps[0])+Ps[2]*sp.conjugate(Ps[2])
     SS = Ps[1]*sp.conjugate(Ps[1])
     return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
-
-
-# TODO Remove deprecation error
-def formgen_dipole_quadrupole_real(*args, **kwargs):
-    raise NotImplementedError('formgen_dipole_quadrupole_real was deprecated'
-                              ' in version 0.7.0. Use' 
-                              ' formgen_dipole_quadrupole instead.')
-
-
-# TODO Remove deprecation error
-def formgen_dipole_quadrupole_complex(*args, **kwargs):
-    raise NotImplementedError('formgen_dipole_quadrupole_complex was '
-                              'deprecated in version 0.7.0. Use '
-                              'formgen_dipole_quadrupole instead.')
 
 
 def formgen_dipole_quadrupole(t1, t2, theta):
