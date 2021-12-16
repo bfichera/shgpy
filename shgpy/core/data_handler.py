@@ -9,6 +9,7 @@ import itertools
 from copy import deepcopy
 from .. import shg_symbols as S
 from warnings import warn
+from .fourier_transform import _fourier_transform
 
 _logger = logging.getLogger(__name__)
 
@@ -1050,15 +1051,11 @@ def form_to_fform(form, M=16):
 
     """
     iterable = {}
-    for k,v in form.get_items():
+    for k, v in form.get_items():
+        v = sp.expand_trig(v).expand()
         iterable[k] = np.zeros((2*M+1,), dtype=object)
-        _logger.info(f'Currently computing {k}.')
         for m in np.arange(-M, M+1):
-            _logger.debug(f'Currently computing m={m}.')
-            expr = sp.expand_trig(v*(sp.cos(-m*S.phi)+1j*sp.sin(-m*S.phi))).expand()
-            expr_re = _no_I_component(expr)
-            expr_im = _I_component(expr)
-            iterable[k][n2i(m, M)] = 1/2/sp.pi*sp.integrate(expr_re, (S.phi, 0, 2*sp.pi)) + 1/2/sp.pi*sp.I*sp.integrate(expr_im, (S.phi, 0, 2*sp.pi))
+            iterable[k][n2i(m, M)] = _fourier_transform(v, m, M)
     return fFormContainer(iterable, M=M)
 
 
