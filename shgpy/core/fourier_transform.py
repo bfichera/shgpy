@@ -3,11 +3,18 @@ import logging
 import sympy as sp
 
 from .. import shg_symbols as S
-from .data_handler import n2i
 from ._lookup_table import _lookup_table
 
 
 _logger = logging.getLogger(__name__)
+
+
+def n2i(n, M=16):
+    """Convert between Fourier index and array index
+
+    Returns the index (0-`2*M+1`) in a Fourier array corresponding to the `nth` Fourier component
+    """
+    return n+M
 
 
 def _get_keyterms(expr):
