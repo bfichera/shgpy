@@ -11,6 +11,8 @@ slow.
 
 """
 import itertools
+import inspect
+from warnings import warn
 
 import numpy as np
 import sympy as sp
@@ -57,6 +59,10 @@ def make_form_from_P_and_Q(Pp, Ps, Qp, Qs):
     form : FormContainer
 
     """
+    warn(
+        f'Warning: {inspect.stack()[0][3]} will be deprecated by next release. Use formgen() instead.',
+        category=FutureWarning,
+    )
 
     _assert_real_params(Pp)
     _assert_real_params(Ps)
@@ -92,6 +98,10 @@ def gen_P_just_dipole(t1, theta):
         The 2\\omega polarization assuming S-polarized input
 
     """
+    warn(
+        f'Warning: {inspect.stack()[0][3]} will be deprecated by next release. Use gen_S() instead.',
+        category=FutureWarning,
+    )
 
     _assert_real_params(t1)
     c = sp.cos(theta)
@@ -146,6 +156,10 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
         The 2\\omega effective polarization assuming S-polarized input
     
     """
+    warn(
+        f'Warning: {inspect.stack()[0][3]} will be deprecated by next release. Use gen_S() instead.',
+        category=FutureWarning,
+    )
     _assert_real_params(t1)
     _assert_real_params(t2)
 
@@ -193,7 +207,7 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
     return Pp, Ps, Qp, Qs
 
 
-def formgen(theta, t_eee=None, t_mee=None, t_qee=None):
+def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
     if t_eee is None and t_mee is None and t_qee is None:
         raise ValueError('One of t_eee, t_mee, and t_qee must be non None.')
     Sp = 0
@@ -264,6 +278,14 @@ def formgen(theta, t_eee=None, t_mee=None, t_qee=None):
 
     Ss -= np.dot(kout, Ss)*kout
     Sp -= np.dot(kout, Sp)*kout
+
+    return Sp, Ss
+
+
+def formgen(theta, t_eee=None, t_mee=None, t_qee=None):
+
+    Sp, Ss = gen_S(theta, t_eee, t_mee, t_qee)
+
     PP = Sp[0]*sp.conjugate(Sp[0])+Sp[2]*sp.conjugate(Sp[2])
     PS = Sp[1]*sp.conjugate(Sp[1])
     SP = Ss[0]*sp.conjugate(Ss[0])+Ss[2]*sp.conjugate(Ss[2])
@@ -297,6 +319,10 @@ def formgen_just_dipole(t1, theta):
     :func:`~shgpy.core.utilities.make_tensor_complex` and the tutorial.
 
     """
+    warn(
+        f'Warning: {inspect.stack()[0][3]} will be deprecated by next release. Use formgen() instead.',
+        category=FutureWarning,
+    )
     _assert_real_params(t1)
 
     c = sp.cos(theta)
@@ -352,6 +378,10 @@ def formgen_dipole_quadrupole(t1, t2, theta):
         Instance of :class:`~shgpy.core.data_handler.FormContainer`.
     
     """
+    warn(
+        f'Warning: {inspect.stack()[0][3]} will be deprecated by next release. Use formgen() instead.',
+        category=FutureWarning,
+    )
     _assert_real_params(t1)
     _assert_real_params(t2)
 
