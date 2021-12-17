@@ -10,6 +10,8 @@ necessary for efficient fitting functionality) is typically quite
 slow.
 
 """
+import itertools
+
 import numpy as np
 import sympy as sp
 from .core import (
@@ -23,6 +25,17 @@ from .core.utilities import _assert_real_params
 
 # TODO
 # Make all the functions here use gen_P_...
+
+
+def gen_levi_civita():
+    ans = np.zeros((3, 3, 3))
+    ans[0][1][2] = 1
+    ans[1][2][0] = 1
+    ans[2][0][1] = 1
+    ans[1][0][2] = -1
+    ans[0][2][1] = -1
+    ans[2][1][0] = -1
+    return ans
 
 
 def make_form_from_P_and_Q(Pp, Ps, Qp, Qs):
@@ -178,6 +191,85 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
     Qs -= np.dot(kout, Qs)*kout
     Qp -= np.dot(kout, Qp)*kout
     return Pp, Ps, Qp, Qs
+
+
+def formgen(theta, t_eee=None, t_mee=None, t_qee=None):
+    if t_eee is None and t_mee is None and t_qee is None:
+        raise ValueError('One of t_eee, t_mee, and t_qee must be non None.')
+    Sp = 0
+    Ss = 0
+    c = sp.cos(theta)
+    s = sp.sin(theta)
+    kin = np.array([s, 0, c], dtype=object)
+    kout = np.array([s, 0, -c], dtype=object)
+    Fp = np.array([-c, 0, s], dtype=object)
+    Fs = np.array([0, 1, 0], dtype=object)
+    R = np.array(
+        [
+            [sp.cos(S.phi), -sp.sin(S.phi), 0],
+            [sp.sin(S.phi), sp.cos(S.phi), 0],
+            [0, 0, 1],
+        ],
+    )
+    z = gen_levi_civita()
+
+    if t_eee is not None:
+        _assert_real_params(t_eee)
+        rt_eee = tensor_contract(
+            tensor_product(R, R, R, t_eee),
+            [[1, 6], [3, 7], [5, 8]],
+        )
+        Ps = tensor_contract(
+            tensor_product(rt_eee, Fs, Fs),
+            [[1, 3], [2, 4]],
+        )
+        Pp = tensor_contract(
+            tensor_product(rt_eee, Fp, Fp),
+            [[1, 3], [2, 4]],
+        )
+        Ss += Ps
+        Sp += Pp
+    if t_mee is not None:
+        _assert_real_params(t_mee)
+        rt_mee = tensor_contract(
+            tensor_product(R, R, R, t_mee),
+            [[1, 6], [3, 7], [5, 8]],
+        )
+        Ms = tensor_contract(
+            tensor_product(z, kin, rt_mee, Fs, Fs),
+            [[1, 3], [2, 4], [5, 7], [6, 8]],
+        )
+        Mp = tensor_contract(
+            tensor_product(z, kin, rt_mee, Fp, Fp),
+            [[1, 3], [2, 4], [5, 7], [6, 8]],
+        )
+        Ss += Ms
+        Sp += Mp
+    if t_qee is not None:
+        _assert_real_params(t_qee)
+        rt_qee = tensor_contract(
+            tensor_product(R, R, R, t_qee),
+            [[1, 6], [3, 7], [5, 8]],
+        )
+        Qs = tensor_contract(
+            tensor_product(rt_qee, kin, Fs, Fs),
+            [[1, 4], [2, 5], [3, 6]],
+        )
+        Qp = tensor_contract(
+            tensor_product(rt_qee, kin, Fp, Fp),
+            [[1, 4], [2, 5], [3, 6]],
+        )
+        Ss += sp.I*Qs
+        Sp += sp.I*Qp
+
+    Ss -= np.dot(kout, Ss)*kout
+    Sp -= np.dot(kout, Sp)*kout
+    PP = Sp[0]*sp.conjugate(Sp[0])+Sp[2]*sp.conjugate(Sp[2])
+    PS = Sp[1]*sp.conjugate(Sp[1])
+    SP = Ss[0]*sp.conjugate(Ss[0])+Ss[2]*sp.conjugate(Ss[2])
+    SS = Ss[1]*sp.conjugate(Ss[1])
+
+    return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
 
 
 def formgen_just_dipole(t1, theta):
