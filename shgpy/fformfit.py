@@ -92,7 +92,7 @@ def _make_energy_expr_list(fform, fdat, free_symbols=None):
     _logger.debug('Cost expression evaluation took'
                    f' {time.time()-start} seconds.')
 
-    return energy_expr_list
+    return energy_expr_list, xs
 
 
 def _make_denergy_expr(energy_expr):
@@ -150,7 +150,7 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None, method='gcc'):
     return cost_func
 
 
-def _make_energy_func_chunked(energy_expr_list, prefix, save_filename=None, method='gcc'):
+def _make_energy_func_chunked(energy_expr_list, prefix, variable, save_filename=None, method='gcc'):
 
     codegen = CCodeGen()
 
@@ -158,7 +158,7 @@ def _make_energy_func_chunked(energy_expr_list, prefix, save_filename=None, meth
     for i, expr in enumerate(energy_expr_list):
         _logger.debug(f'Writing code for expr {i} of {len(energy_expr_list)}')
         routines.append(
-            codegen.routine('expr'+str(i), expr)
+            codegen.routine('expr'+str(i), expr, argument_sequence=[variable])
         )
     [(c_name, bad_c_code), (h_name, h_code)] = codegen.write(
         routines,
@@ -244,7 +244,7 @@ def _make_energy_func_wrapper(fform, fdat, free_symbols=None,
                               method='gcc'):
 
     if chunk:
-        energy_expr_list = _make_energy_expr_list(
+        energy_expr_list, xs = _make_energy_expr_list(
             fform,
             fdat,
             free_symbols,
@@ -252,7 +252,8 @@ def _make_energy_func_wrapper(fform, fdat, free_symbols=None,
         energy_func = _make_energy_func_chunked(
             energy_expr_list,
             'SHGPY_COST_FUNC',
-            save_filename,
+            variable=xs,
+            save_filename=save_filename,
             method=method,
         )
         return energy_func
