@@ -101,7 +101,7 @@ def _make_denergy_expr(energy_expr):
     return np.array([sp.diff(energy_expr, xs[i]) for i in range(n)])
 
 
-def _fixed_autowrap(energy_expr, prefix, save_filename=None):
+def _fixed_autowrap(energy_expr, prefix, save_filename=None, method='gcc'):
 
     codegen = CCodeGen()
 
@@ -134,8 +134,8 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None):
 
     start = time.time()
     _logger.debug('Start compiling code.')
-    os.system(f'gcc -c -lm {c_path} -o {o_path}')
-    os.system(f'gcc -shared {o_path} -o {so_path}')
+    os.system(f'{method} -c -lm {c_path} -o {o_path}')
+    os.system(f'{method} -shared {o_path} -o {so_path}')
     _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
     if save_filename is not None:
@@ -150,7 +150,7 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None):
     return cost_func
 
 
-def _make_energy_func_chunked(energy_expr_list, prefix, save_filename=None):
+def _make_energy_func_chunked(energy_expr_list, prefix, save_filename=None, method='gcc'):
 
     codegen = CCodeGen()
 
@@ -198,8 +198,8 @@ double autofunc(double *xs){
 
     start = time.time()
     _logger.debug('Start compiling code.')
-    os.system(f'gcc -c -lm -fPIC {c_path} -o {o_path}')
-    os.system(f'gcc -shared -fPIC {o_path} -o {so_path}')
+    os.system(f'{method} -c -lm -fPIC {c_path} -o {o_path}')
+    os.system(f'{method} -shared -fPIC {o_path} -o {so_path}')
     _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
     if save_filename is not None:
@@ -214,11 +214,12 @@ double autofunc(double *xs){
     return cost_func
 
 
-def _make_energy_func_auto(energy_expr, save_filename=None):
+def _make_energy_func_auto(energy_expr, save_filename=None, method='gcc'):
     energy_func = _fixed_autowrap(
         energy_expr,
         'SHGPY_COST_FUNC',
         save_filename,
+        method=method,
     )
 
     return energy_func
@@ -239,7 +240,8 @@ def _load_func(load_cost_func_filename):
 
 
 def _make_energy_func_wrapper(fform, fdat, free_symbols=None,
-                              chunk=False, save_filename=None):
+                              chunk=False, save_filename=None,
+                              method='gcc'):
 
     if chunk:
         energy_expr_list = _make_energy_expr_list(
@@ -251,6 +253,7 @@ def _make_energy_func_wrapper(fform, fdat, free_symbols=None,
             energy_expr_list,
             'SHGPY_COST_FUNC',
             save_filename,
+            method=method,
         )
         return energy_func
 
@@ -263,12 +266,13 @@ def _make_energy_func_wrapper(fform, fdat, free_symbols=None,
         energy_func = _make_energy_func_auto(
             energy_expr,
             save_filename,
+            method=method,
         ) 
         return energy_func
 
 
 def gen_cost_func(fform, fdat, argument_list=None,
-                  chunk=False, save_filename=None):
+                  chunk=False, save_filename=None, method='gcc'):
     """Generate a cost function as an .so file and save it to disk.
 
     Parameters
@@ -285,6 +289,8 @@ def gen_cost_func(fform, fdat, argument_list=None,
         Fourier component in fform and fdat). Default is False.
     save_filename : path_like, optional
         Filename to save the result. Default is not to save.
+    method : str, optional
+        Compiler to use. Tested with gcc and clang. Default is gcc.
 
     Returns
     -------
@@ -293,7 +299,8 @@ def gen_cost_func(fform, fdat, argument_list=None,
 
     """
     return _make_energy_func_wrapper(fform, fdat, free_symbols=argument_list,
-                                     chunk=chunk, save_filename=save_filename)
+                                     chunk=chunk, save_filename=save_filename,
+                                     method=method)
         
         
 def _make_denergy_func_auto(denergy_expr, save_filename_prefix=None):

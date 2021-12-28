@@ -606,7 +606,7 @@ class fFormContainer:
         ----------
         subs_array : array_like of array_like of sympy.Expr
             An array of pairs of values. For example, to substitute the expression
-            `2*xyz` for the variable `xxx`, use ``subs_array = ((xxx, 2*xyz))``.
+            `2*xyz` for the variable `xxx`, use ``subs_array = ((xxx, 2*xyz),)``.
         """
         subs_fform_dict = {}
         for k,v in self.get_items():
