@@ -186,7 +186,16 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc'):
 def gen_model_func(fform, save_folder, method='gcc'):
     cost_func_dict = _fixed_autowrap_model(fform, save_folder, method=method)
 
-    def model_func(pc, m, xs):
+    def model_func(xs, pc, m):
+        return cost_func_dict[pc][m](xs.astype(float))
+
+    return model_func
+
+
+def load_model_func(fform, save_folder):
+    cost_func_dict = _load_func_dict(fform, save_folder)
+
+    def model_func(xs, pc, m):
         return cost_func_dict[pc][m](xs.astype(float))
 
     return model_func
@@ -330,6 +339,10 @@ def _make_energy_func_auto(energy_expr, save_filename=None, method='gcc'):
     )
 
     return energy_func
+
+
+def load_func(load_cost_func_filename):
+    return _load_func(load_cost_func_filename)
 
 
 def _load_func(load_cost_func_filename):
