@@ -123,7 +123,7 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc'):
 
     if save_folder is not None:
         if Path(save_folder).exists():
-            Path(save_folder).rmdir()
+            shutil.rmtree(save_folder)
         Path.mkdir(Path(save_folder))
 
     cost_func_dict = {}
