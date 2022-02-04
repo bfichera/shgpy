@@ -208,7 +208,7 @@ def _load_func_dict(fform, save_folder):
     for k in fform.get_keys():
         cost_func_dict[k] = {}
         for m in np.arange(-M, M+1):
-            cost_func_dict[k][m] = _load_func(save_folder+'_'.join((k, str(m))))
+            cost_func_dict[k][m] = _load_func(save_folder / ('_'.join((k, str(m)))+'.so'))
     return cost_func_dict
 
 
