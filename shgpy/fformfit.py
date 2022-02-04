@@ -202,12 +202,13 @@ def load_model_func(fform, save_folder):
 
 
 def _load_func_dict(fform, save_folder):
+    save_folder = Path(save_folder)
     cost_func_dict = {}
     M = fform.get_M()
     for k in fform.get_keys():
         cost_func_dict[k] = {}
         for m in np.arange(-M, M+1):
-            cost_func_dict[k][m] = _load_func(save_folder)
+            cost_func_dict[k][m] = _load_func(save_folder+'_'.join((k, m)))
     return cost_func_dict
 
 
