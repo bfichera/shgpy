@@ -291,7 +291,7 @@ class DataContainer:
         elif requested_angle_units == 'degrees':
             return list(self._get_data_dict_degrees().values())
 
-    def as_pandas(self, requested_angle_units='radians'):
+    def as_pandas(self, requested_angle_units):
         """Get data as a pandas DataFrame."""
         a1 = self.get_keys()
         a2 = self.get_values(requested_angle_units)[0][0]
