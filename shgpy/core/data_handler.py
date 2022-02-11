@@ -291,6 +291,9 @@ class DataContainer:
         elif requested_angle_units == 'degrees':
             return list(self._get_data_dict_degrees().values())
 
+    def __repr__(self):
+        return repr(self.as_pandas('radians'))
+
     def as_pandas(self, requested_angle_units):
         """Get data as a pandas DataFrame."""
         a1 = self.get_keys()
@@ -404,6 +407,9 @@ class fDataContainer:
     def _check_angle_units(self, angle_units):
         if angle_units not in ['radians', 'degrees']:
             raise ValueError('angle_units input must be one of \'radians\' or \'degrees\'.')
+
+    def __repr__(self):
+        return repr(self.as_pandas())
 
     def as_pandas(self):
         """Get fdata as a pandas DataFrame."""
@@ -690,6 +696,9 @@ class fFormContainer:
         Each Fourier formula array has `2*M+1` elements."""
         return self._M
 
+    def __repr__(self):
+        return repr(self.as_pandas())
+
     def as_pandas(self):
         """Get fdata as a pandas DataFrame."""
         M = self.get_M()
@@ -862,6 +871,9 @@ class FormContainer:
         """Apply the `sympy.expand` method to every polarization combination."""
         for k,v in self.get_items():
             self._form_dict[k] = sp.expand(v)
+
+    def __repr__(self):
+        return repr(self.as_pandas())
 
     def as_pandas(self):
         """Get data as a pandas DataFrame."""
