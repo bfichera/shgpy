@@ -1,5 +1,6 @@
 import numpy as np
 import sympy as sp
+import pandas as pd
 import csv
 import pickle
 from scipy.interpolate import interp1d
@@ -290,6 +291,33 @@ class DataContainer:
         elif requested_angle_units == 'degrees':
             return list(self._get_data_dict_degrees().values())
 
+    def __repr__(self):
+        return repr(self.as_pandas('radians'))
+
+    def as_pandas(self, requested_angle_units):
+        """Get data as a pandas DataFrame."""
+        a1 = self.get_keys()
+        a2 = self.get_values(requested_angle_units)[0][0]
+        index = pd.MultiIndex.from_product(
+            (
+                a1,
+                a2,
+            ),
+            names=('POLARIZATION', 'ANGLE'),
+        )
+        raw_data_as_1d = np.array(
+            [
+                self.get_pc(k, requested_angle_units)[1].flatten()
+                for k in self.get_keys()
+            ],
+        ).flatten()
+        df = pd.DataFrame(
+            raw_data_as_1d,
+            index=index,
+        )
+        df.columns = ['VALUE']
+        return df
+
     def get_items(self, requested_angle_units):
         """Get a list of `(pc, data)` pairs.
 
@@ -379,6 +407,34 @@ class fDataContainer:
     def _check_angle_units(self, angle_units):
         if angle_units not in ['radians', 'degrees']:
             raise ValueError('angle_units input must be one of \'radians\' or \'degrees\'.')
+
+    def __repr__(self):
+        return repr(self.as_pandas())
+
+    def as_pandas(self):
+        """Get fdata as a pandas DataFrame."""
+        M = self.get_M()
+        a1 = self.get_keys()
+        a2 = np.arange(-M, M+1)
+        index = pd.MultiIndex.from_product(
+            (
+                a1,
+                a2,
+            ),
+            names=('POLARIZATION', 'N'),
+        )
+        raw_data_as_1d = np.array(
+            [
+                self.get_pc(k)
+                for k in self.get_keys()
+            ],
+        ).flatten()
+        df = pd.DataFrame(
+            raw_data_as_1d,
+            index=index,
+        )
+        df.columns = ['VALUE']
+        return df
 
     def get_keys(self):
         """Get the polarization combinations for this data.
@@ -640,6 +696,34 @@ class fFormContainer:
         Each Fourier formula array has `2*M+1` elements."""
         return self._M
 
+    def __repr__(self):
+        return repr(self.as_pandas())
+
+    def as_pandas(self):
+        """Get fdata as a pandas DataFrame."""
+        M = self.get_M()
+        a1 = self.get_keys()
+        a2 = np.arange(-M, M+1)
+        index = pd.MultiIndex.from_product(
+            (
+                a1,
+                a2,
+            ),
+            names=('POLARIZATION', 'N'),
+        )
+        raw_data_as_1d = np.array(
+            [
+                self.get_pc(k)
+                for k in self.get_keys()
+            ],
+        ).flatten()
+        df = pd.DataFrame(
+            raw_data_as_1d,
+            index=index,
+        )
+        df.columns = ['EXPRESSION']
+        return df
+
     def get_pc(self, pc):
         """Get the Fourier formula for single polarization combination.
 
@@ -791,6 +875,29 @@ class FormContainer:
         """Apply the `sympy.expand` method to every polarization combination."""
         for k,v in self.get_items():
             self._form_dict[k] = sp.expand(v)
+
+    def __repr__(self):
+        return repr(self.as_pandas())
+
+    def as_pandas(self):
+        """Get data as a pandas DataFrame."""
+        a1 = self.get_keys()
+        index = pd.Index(
+                a1,
+                name='POLARIZATION',
+        )
+        raw_data_as_1d = np.array(
+            [
+                self.get_pc(k)
+                for k in self.get_keys()
+            ],
+        ).flatten()
+        df = pd.DataFrame(
+            raw_data_as_1d,
+            index=index,
+        )
+        df.columns = ['EXPRESSION']
+        return df
 
     def get_keys(self):
         """Get the polarization combinations for this formula.
@@ -1154,7 +1261,7 @@ def merge_containers(containers, mapping):
         return new_type(iterable)
 
 
-def read_csv_file(filename, delimiter=','):
+def read_csv(filename, delimiter=','):
     """Read a csv file.
 
     Parameters
@@ -1266,8 +1373,8 @@ def load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_file
     """
     if set(data_filenames_dict.keys()) != set(dark_filenames_dict.keys()):
         raise ValueError('filename dicts have different keys.')
-    dat1 = DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, data_angle_units, normal_to_oblique=normal_to_oblique)
-    dat2 = DataContainer({k:read_csv_file(v) for k,v in dark_filenames_dict.items()}, dark_angle_units, normal_to_oblique=normal_to_oblique)
+    dat1 = DataContainer({k:read_csv(v) for k,v in data_filenames_dict.items()}, data_angle_units, normal_to_oblique=normal_to_oblique)
+    dat2 = DataContainer({k:read_csv(v) for k,v in dark_filenames_dict.items()}, dark_angle_units, normal_to_oblique=normal_to_oblique)
     return dat_subtract(dat1, dat2)
     
 
@@ -1288,7 +1395,7 @@ def load_data(data_filenames_dict, angle_units, normal_to_oblique=False):
     dat : DataContainer
     
     """
-    return DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, angle_units, normal_to_oblique=normal_to_oblique)
+    return DataContainer({k:read_csv(v) for k,v in data_filenames_dict.items()}, angle_units, normal_to_oblique=normal_to_oblique)
 
 
 def dat_to_fdat(dat, interp_kind='cubic', M=16):
