@@ -692,6 +692,10 @@ class fFormContainer:
         """
         return list(self._fform_dict.items())
 
+    def apply_arbitrary_scale(self, scale_var):
+        for k, v in self._fform_dict.items():
+            self._fform_dict[k] = scale_var*v
+
 
 class FormContainer:
     """Contains an SHG formula in `phi`-space.
@@ -837,6 +841,10 @@ class FormContainer:
             Formula expression for polarization combination `pc`. 
         """
         return self._form_dict[pc]
+
+    def apply_arbitrary_scale(self, scale_var):
+        for k, v in self._form_dict.items():
+            self._form_dict[k] = scale_var*v
 
 
 def n2i(n, M=16):
