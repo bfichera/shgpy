@@ -307,9 +307,6 @@ def formgen(theta, t_eee=None, t_mee=None, t_qee=None):
 
     Sp, Ss = gen_S(theta, t_eee, t_mee, t_qee)
 
-    Sp = Sp
-    Ss = Ss
-
     PP = _ex(Sp[0]*sp.conjugate(Sp[0]))+_ex(Sp[2]*sp.conjugate(Sp[2]))
     PS = _ex(Sp[1]*sp.conjugate(Sp[1]))
     SP = _ex(Ss[0]*sp.conjugate(Ss[0]))+_ex(Ss[2]*sp.conjugate(Ss[2]))
