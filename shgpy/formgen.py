@@ -43,10 +43,6 @@ def _sympy_modify_ndarray(a, func, args, kwargs):
     return ans.reshape(a.shape)
 
 
-def _ex(a):
-    return _expand_ndarray(_expand_trig_ndarray(a))
-
-
 def gen_levi_civita():
     ans = np.zeros((3, 3, 3))
     ans[0][1][2] = 1
@@ -228,6 +224,10 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
 def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
     if t_eee is None and t_mee is None and t_qee is None:
         raise ValueError('One of t_eee, t_mee, and t_qee must be non None.')
+
+    def _ex(a):
+        return _expand_ndarray(_expand_trig_ndarray(a))
+
     Sp = 0
     Ss = 0
     c = sp.cos(theta)
@@ -306,6 +306,9 @@ def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
 def formgen(theta, t_eee=None, t_mee=None, t_qee=None):
 
     Sp, Ss = gen_S(theta, t_eee, t_mee, t_qee)
+
+    def _ex(e):
+        return sp.expand(sp.expand_trig(e))
 
     PP = _ex(Sp[0]*sp.conjugate(Sp[0]))+_ex(Sp[2]*sp.conjugate(Sp[2]))
     PS = _ex(Sp[1]*sp.conjugate(Sp[1]))
