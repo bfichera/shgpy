@@ -85,7 +85,7 @@ def _fourier_transform(expr, n, M=16):
             ans += arg / keyterm * ftval
             _logger.debug(f'Took {time.time()-start} seconds')
             if time.time()-start > 0.5:
-                import breakpoint()
+                breakpoint()
     else:
         _logger.debug(f'Computing term n={n}, only one arg')
         keyterms = _get_keyterms(expr)
