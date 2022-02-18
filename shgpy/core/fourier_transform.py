@@ -75,6 +75,7 @@ def _fourier_transform(expr, n, M=16):
         all_args = expr.args
         num_args = len(all_args)
         for i, arg in enumerate(all_args):
+            start = time.time()
             _logger.debug(f'Computing term n={n}, i={i} of {num_args}')
             keyterms = _get_keyterms(arg)
             assert len(keyterms) == 1
@@ -82,6 +83,9 @@ def _fourier_transform(expr, n, M=16):
             code = _get_code(keyterm)
             ftval = _lookup_table[code][n2i(n, M)]
             ans += arg / keyterm * ftval
+            _logger.debug(f'Took {time.time()-start} seconds')
+            if time.time()-start > 0.5:
+                import breakpoint()
     else:
         _logger.debug(f'Computing term n={n}, only one arg')
         keyterms = _get_keyterms(expr)
