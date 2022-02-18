@@ -1,4 +1,5 @@
 import logging
+import time
 
 import sympy as sp
 
@@ -78,7 +79,9 @@ def _fourier_transform(expr, n, M=16):
             sp.cos(S.phi)**code[0]*sp.sin(S.phi)**code[1]:ftval
             for code, ftval in relevant_codes.items()
         }
+        start = time.time()
         ans = expr.xreplace(mapping)
+        _logger.debug(f'Computing n={n} took {time.time()-start} seconds.')
     else:
         _logger.debug(f'Computing term n={n}, only one arg')
         keyterms = _get_keyterms(expr)
