@@ -85,7 +85,7 @@ def _fourier_transform(expr, n, M=16):
             ftval = _lookup_table[code][n2i(n, M)]
             ans += arg / keyterm * ftval
             _logger.debug(f'Took {time.time()-start} seconds')
-            if time.time()-start > 0.5:
+            if time.time()-start > 0.5 and n >= -6:
                 breakpoint()
     else:
         _logger.debug(f'Computing term n={n}, only one arg')
