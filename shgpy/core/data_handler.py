@@ -1161,6 +1161,7 @@ def form_to_fform(form, M=16):
     for k, v in form.get_items():
         iterable[k] = np.zeros((2*M+1,), dtype=object)
         for m in np.arange(-M, M+1):
+            _logger.debug(f'Computing fourier transform for pc={k}, m={m}')
             iterable[k][n2i(m, M)] = _fourier_transform(v, m, M)
     return fFormContainer(iterable, M=M)
 

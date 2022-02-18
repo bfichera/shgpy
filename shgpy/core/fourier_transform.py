@@ -72,7 +72,10 @@ def _fourier_transform(expr, n, M=16):
             if n == 0:
                 return expr
             return 0
-        for arg in expr.args:
+        all_args = expr.args
+        num_args = len(all_args)
+        for i, arg in enumerate(all_args):
+            _logger.debug(f'Computing term n={n}, i={i} of {num_args}')
             keyterms = _get_keyterms(arg)
             assert len(keyterms) == 1
             keyterm = keyterms[0]
@@ -80,6 +83,7 @@ def _fourier_transform(expr, n, M=16):
             ftval = _lookup_table[code][n2i(n, M)]
             ans += arg / keyterm * ftval
     else:
+        _logger.debug(f'Computing term n={n}, only one arg')
         keyterms = _get_keyterms(expr)
         assert len(keyterms) == 1
         keyterm = keyterms[0]
