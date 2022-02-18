@@ -1159,7 +1159,6 @@ def form_to_fform(form, M=16):
     """
     iterable = {}
     for k, v in form.get_items():
-        v = sp.expand_trig(v).expand()
         iterable[k] = np.zeros((2*M+1,), dtype=object)
         for m in np.arange(-M, M+1):
             iterable[k][n2i(m, M)] = _fourier_transform(v, m, M)
