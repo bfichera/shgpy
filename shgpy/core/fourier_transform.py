@@ -80,7 +80,18 @@ def _fourier_transform(expr, n, M=16):
             for code, ftval in relevant_codes.items()
         }
         start = time.time()
-        ans = expr.xreplace(mapping)
+        args = []
+        for arg in expr.args:
+            has_phi = []
+            no_phi = []
+            for a in arg.args:
+                if a.has(S.phi):
+                    has_phi.append(a)
+                else:
+                    no_phi.append(a)
+            no_phi.append(mapping[sp.Mul(*has_phi)])
+            args.append(sp.Mul(*no_phi))
+        ans = expr.func(*args)
         _logger.debug(f'Computing n={n} took {time.time()-start} seconds.')
     else:
         _logger.debug(f'Computing term n={n}, only one arg')
