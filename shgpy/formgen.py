@@ -39,7 +39,7 @@ def _expand_trig_ndarray(a, *args, **kwargs):
 def _sympy_modify_ndarray(a, func, args, kwargs):
     ans = np.zeros(a.shape, dtype=object).flatten()
     for i, e in enumerate(a.flatten()):
-        ans[i] = func(sp.sympify(e), *args, **kwargs)
+        ans[i] = func(e, *args, **kwargs)
     return ans.reshape(a.shape)
 
 
