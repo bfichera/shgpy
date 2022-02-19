@@ -91,4 +91,6 @@ def _fourier_transform(expr, n, M=16):
         ftval = _lookup_table[code][n+16]
         if ftval != 0:
             ans = expr / keyterm * ftval
+        else:
+            ans = 0
     return ans
