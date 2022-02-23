@@ -10,7 +10,6 @@ necessary for efficient fitting functionality) is typically quite
 slow.
 
 """
-import itertools
 import inspect
 from warnings import warn
 
@@ -27,6 +26,21 @@ from .core.utilities import _assert_real_params
 
 # TODO
 # Make all the functions here use gen_P_...
+
+
+def _expand_ndarray(a, *args, **kwargs):
+    return _sympy_modify_ndarray(a, sp.expand, args, kwargs)
+
+
+def _expand_trig_ndarray(a, *args, **kwargs):
+    return _sympy_modify_ndarray(a, sp.expand_trig, args, kwargs)
+
+
+def _sympy_modify_ndarray(a, func, args, kwargs):
+    ans = np.zeros(a.shape, dtype=object).flatten()
+    for i, e in enumerate(a.flatten()):
+        ans[i] = func(e, *args, **kwargs)
+    return ans.reshape(a.shape)
 
 
 def gen_levi_civita():
@@ -210,6 +224,10 @@ def gen_P_dipole_quadrupole(t1, t2, theta):
 def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
     if t_eee is None and t_mee is None and t_qee is None:
         raise ValueError('One of t_eee, t_mee, and t_qee must be non None.')
+
+    def _ex(a):
+        return _expand_ndarray(_expand_trig_ndarray(a))
+
     Sp = 0
     Ss = 0
     c = sp.cos(theta)
@@ -233,6 +251,7 @@ def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
             tensor_product(R, R, R, t_eee),
             [[1, 6], [3, 7], [5, 8]],
         )
+        rt_eee = _ex(rt_eee)
         Ps = tensor_contract(
             tensor_product(rt_eee, Fs, Fs),
             [[1, 3], [2, 4]],
@@ -241,14 +260,15 @@ def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
             tensor_product(rt_eee, Fp, Fp),
             [[1, 3], [2, 4]],
         )
-        Ss += Ps
-        Sp += Pp
+        Ss += _ex(Ps)
+        Sp += _ex(Pp)
     if t_mee is not None:
         _assert_real_params(t_mee)
         rt_mee = tensor_contract(
             tensor_product(R, R, R, t_mee),
             [[1, 6], [3, 7], [5, 8]],
         )
+        rt_mee = _ex(rt_mee)
         Ms = tensor_contract(
             tensor_product(z, kin, rt_mee, Fs, Fs),
             [[1, 3], [2, 4], [5, 7], [6, 8]],
@@ -257,14 +277,15 @@ def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
             tensor_product(z, kin, rt_mee, Fp, Fp),
             [[1, 3], [2, 4], [5, 7], [6, 8]],
         )
-        Ss += Ms
-        Sp += Mp
+        Ss += _ex(Ms)
+        Sp += _ex(Mp)
     if t_qee is not None:
         _assert_real_params(t_qee)
         rt_qee = tensor_contract(
             tensor_product(R, R, R, t_qee),
             [[1, 6], [3, 7], [5, 8]],
         )
+        rt_qee = _ex(rt_qee)
         Qs = tensor_contract(
             tensor_product(rt_qee, kin, Fs, Fs),
             [[1, 4], [2, 5], [3, 6]],
@@ -273,23 +294,26 @@ def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
             tensor_product(rt_qee, kin, Fp, Fp),
             [[1, 4], [2, 5], [3, 6]],
         )
-        Ss += sp.I*Qs
-        Sp += sp.I*Qp
+        Ss += _ex(sp.I*Qs)
+        Sp += _ex(sp.I*Qp)
 
     Ss -= np.dot(kout, Ss)*kout
     Sp -= np.dot(kout, Sp)*kout
 
-    return Sp, Ss
+    return _ex(Sp), _ex(Ss)
 
 
 def formgen(theta, t_eee=None, t_mee=None, t_qee=None):
 
     Sp, Ss = gen_S(theta, t_eee, t_mee, t_qee)
 
-    PP = Sp[0]*sp.conjugate(Sp[0])+Sp[2]*sp.conjugate(Sp[2])
-    PS = Sp[1]*sp.conjugate(Sp[1])
-    SP = Ss[0]*sp.conjugate(Ss[0])+Ss[2]*sp.conjugate(Ss[2])
-    SS = Ss[1]*sp.conjugate(Ss[1])
+    def _ex(e):
+        return sp.expand(sp.expand_trig(e))
+
+    PP = _ex(Sp[0]*sp.conjugate(Sp[0]))+_ex(Sp[2]*sp.conjugate(Sp[2]))
+    PS = _ex(Sp[1]*sp.conjugate(Sp[1]))
+    SP = _ex(Ss[0]*sp.conjugate(Ss[0]))+_ex(Ss[2]*sp.conjugate(Ss[2]))
+    SS = _ex(Ss[1]*sp.conjugate(Ss[1]))
 
     return FormContainer({'PP':PP, 'PS':PS, 'SP':SP, 'SS':SS})
 

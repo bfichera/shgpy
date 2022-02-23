@@ -5,7 +5,7 @@ from time import time
 
 import shgpy
 import shgpy.tensor_definitions as td
-from shgpy.formgen import formgen_just_dipole
+from shgpy.formgen import formgen
 
 mylogger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -22,7 +22,7 @@ t_dipole = shgpy.transform(t_dipole, R)
 t_quad = np.zeros(shape=(3,3,3,3), dtype=sp.Expr)
 
 start = time()
-form = formgen_just_dipole(t_dipole, sp.pi/18)
+form = formgen(sp.pi/18, t_eee=t_dipole)
 mylogger.debug(f'Finished form generation. It took {time()-start} seconds.')
 
 start = time()

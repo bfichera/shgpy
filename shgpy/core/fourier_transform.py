@@ -1,4 +1,5 @@
 import logging
+import time
 
 import sympy as sp
 
@@ -66,24 +67,41 @@ def _get_code(mul):
 
 
 def _fourier_transform(expr, n, M=16):
-    ans = 0
     if expr.func == sp.Add or S.phi not in expr.free_symbols:
         if S.phi not in expr.free_symbols:
             if n == 0:
                 return expr
             return 0
+        relevant_codes = {}
+        for code in _lookup_table.keys():
+            relevant_codes[code] = _lookup_table[code][n2i(n, M)]
+        mapping = {
+            sp.cos(S.phi)**code[0]*sp.sin(S.phi)**code[1]:ftval
+            for code, ftval in relevant_codes.items()
+        }
+        start = time.time()
+        args = []
         for arg in expr.args:
-            keyterms = _get_keyterms(arg)
-            assert len(keyterms) == 1
-            keyterm = keyterms[0]
-            code = _get_code(keyterm)
-            ftval = _lookup_table[code][n2i(n, M)]
-            ans += arg / keyterm * ftval
+            has_phi = []
+            no_phi = []
+            for a in arg.args:
+                if a.has(S.phi):
+                    has_phi.append(a)
+                else:
+                    no_phi.append(a)
+            no_phi.append(mapping[sp.Mul(*has_phi)])
+            args.append(sp.Mul(*no_phi))
+        ans = expr.func(*args)
+        _logger.debug(f'Computing n={n} took {time.time()-start} seconds.')
     else:
+        _logger.debug(f'Computing term n={n}, only one arg')
         keyterms = _get_keyterms(expr)
         assert len(keyterms) == 1
         keyterm = keyterms[0]
         code = _get_code(keyterm)
         ftval = _lookup_table[code][n+16]
-        ans += expr / keyterm * ftval
+        if ftval != 0:
+            ans = expr / keyterm * ftval
+        else:
+            ans = 0
     return ans

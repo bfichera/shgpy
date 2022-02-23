@@ -54,13 +54,22 @@ class DataContainer:
         self._data_dict = deepcopy(dict(iterable))
         self._phase_shift = 0
         self._offset = 0
+        self._coerced = False
         if input_angle_units == 'degrees':
             self._convert_data_dict_to_radians()
         if normal_to_oblique:
             self._coerce_to_oblique_incidence()
+            self._coerged=True
         self._remove_duplicates()
         self._modulate_data_dict()
         self._sort_data_dict()
+
+    def copy(self):
+        dat = DataContainer(self._data_dict, normal_to_oblique=self.coerced)
+        dat._scale = self._scale
+        dat._phase_shift = self._phase_shift,
+        dat._offset = self._offset
+        return dat
 
     def _check_angle_units(self, angle_units):
         if angle_units not in ['radians', 'degrees']:
@@ -393,6 +402,12 @@ class fDataContainer:
         self._scale = 1
         self._phase_shift = 0
 
+    def copy(self):
+        fdat = fDataContainer(self._fdata_dict, M=self._M)
+        fdat._scale = self._scale
+        fdat._phase_shift = self._phase_shift,
+        return fdat
+
     def _check_defining_iterable(self, iterable):
         def raise_error():
             raise ValueError('Invalid Data input')
@@ -619,6 +634,10 @@ class fFormContainer:
         self._fform_dict = self._copy_iterable(iterable)
         self._sympify()
 
+    def copy(self):
+        fform = fFormContainer(self._fform_dict, M=self._M)
+        return fform
+
     def _copy_iterable(self, iterable):
         _fform_dict = {
             k:np.array([s for s in v])
@@ -805,6 +824,10 @@ class FormContainer:
         self._check_defining_iterable(iterable)
         self._form_dict = self._copy_iterable(iterable)
         self._sympify()
+
+    def copy(self):
+        form = FormContainer(self._form_dict)
+        return form
 
     def _copy_iterable(self, iterable):
         _form_dict = {
@@ -1167,9 +1190,9 @@ def form_to_fform(form, M=16):
     """
     iterable = {}
     for k, v in form.get_items():
-        v = sp.expand_trig(v).expand()
         iterable[k] = np.zeros((2*M+1,), dtype=object)
         for m in np.arange(-M, M+1):
+            _logger.debug(f'Computing fourier transform for pc={k}, m={m}')
             iterable[k][n2i(m, M)] = _fourier_transform(v, m, M)
     return fFormContainer(iterable, M=M)
 
