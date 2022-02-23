@@ -167,6 +167,7 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc'):
                 o_path = write_directory / Path(prefix + '.o')
                 so_path = write_directory / Path(prefix + '.so')
 
+                _logger.debug(c_code)
                 with open(c_path, 'w') as fh:
                     fh.write(c_code)
                     fh.write('\n')
@@ -245,6 +246,7 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None, method='gcc'):
     o_path = write_directory / Path(prefix + '.o')
     so_path = write_directory / Path(prefix + '.so')
 
+    _logger.debug(c_code)
     with open(c_path, 'w') as fh:
         fh.write(c_code)
         fh.write('\n')
@@ -315,6 +317,7 @@ double autofunc(double *xs){
     o_path = write_directory / Path(prefix + '.o')
     so_path = write_directory / Path(prefix + '.so')
 
+    _logger.debug(c_code)
     with open(c_path, 'w') as fh:
         fh.write(c_code)
         fh.write('\n')
