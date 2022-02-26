@@ -142,7 +142,7 @@ def _make_model_expr(fform, pc, m, component, free_symbols=None):
     return model_expr
 
 
-def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc'):
+def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc', max_terms_per_file=10):
 
     codegen = CCodeGen()
 
@@ -167,7 +167,7 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc'):
                     component,
                     free_symbols=free_symbols,
                 )
-                expr_chunks = _split_expr(full_expr, 3)
+                expr_chunks = _split_expr(full_expr, max_terms_per_file)
                 cost_func_dict[k][m][component] = []
                 for ei, expr in enumerate(expr_chunks):
                     routines = []
