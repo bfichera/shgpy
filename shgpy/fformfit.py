@@ -28,8 +28,30 @@ import os
 import shutil
 from pathlib import Path
 import ctypes
+from math import ceil
 
 _logger = logging.getLogger(__name__)
+
+
+def _split(a, num_per):
+    ans = []
+    for n in range(ceil(len(a)/num_per)):
+        temp = []
+        for i in range(num_per):
+            try:
+                temp.append(a[n*num_per+i])
+            except IndexError:
+                break
+        ans.append(temp)
+    return ans
+
+
+def _split_expr(expr, num_per):
+    if expr.func != sp.Add:
+        _logger.debug(f'expr has only one term:\n{expr}')
+        return [expr]
+    _logger.debug(f'expr has {len(expr.args)} terms.')
+    return [sp.Add(*g, evaluate=False) for g in _split(expr.args, num_per)]
 
 
 def _check_fform(fform):
@@ -138,54 +160,57 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc'):
             cost_func_dict[k][m] = {}
             for component in ['real', 'imag']:
                 _logger.debug('Writing code for pc={k}, m={m}')
-                prefix = '_'.join((k, str(m), component))
-                routines = []
-                routines.append(
-                    codegen.routine(
-                        'autofunc',
-                        _make_model_expr(
-                            fform,
-                            k,
-                            m,
-                            component,
-                            free_symbols=free_symbols,
+                full_expr = _make_model_expr(
+                    fform,
+                    k,
+                    m,
+                    component,
+                    free_symbols=free_symbols,
+                )
+                expr_chunks = _split_expr(full_expr, 3)
+                cost_func_dict[k][m][component] = []
+                for ei, expr in enumerate(expr_chunks):
+                    routines = []
+                    prefix = '_'.join((k, str(m), component, str(ei)))
+                    routines.append(
+                        codegen.routine(
+                            'autofunc',
+                            expr,
                         ),
-                    ),
-                )
-                [(c_name, bad_c_code), (h_name, h_code)] = codegen.write(
-                    routines,
-                    prefix,
-                )
-                c_code = '#include <complex.h>\n'
-                c_code += bad_c_code
-                c_code = c_code.replace('conjugate', 'conj')
+                    )
+                    [(c_name, bad_c_code), (h_name, h_code)] = codegen.write(
+                        routines,
+                        prefix,
+                    )
+                    c_code = '#include <complex.h>\n'
+                    c_code += bad_c_code
+                    c_code = c_code.replace('conjugate', 'conj')
 
-                write_directory = Path(tempfile.mkdtemp()).absolute()
+                    write_directory = Path(tempfile.mkdtemp()).absolute()
 
-                c_path = write_directory / Path(prefix + '.c')
-                h_path = write_directory / Path(prefix + '.h')
-                o_path = write_directory / Path(prefix + '.o')
-                so_path = write_directory / Path(prefix + '.so')
+                    c_path = write_directory / Path(prefix + '.c')
+                    h_path = write_directory / Path(prefix + '.h')
+                    o_path = write_directory / Path(prefix + '.o')
+                    so_path = write_directory / Path(prefix + '.so')
 
-                _logger.debug(c_code)
-                with open(c_path, 'w') as fh:
-                    fh.write(c_code)
-                    fh.write('\n')
-                with open(h_path, 'w') as fh:
-                    fh.write(h_code)
-                    fh.write('\n')
+                    with open(c_path, 'w') as fh:
+                        fh.write(c_code)
+                        fh.write('\n')
+                    with open(h_path, 'w') as fh:
+                        fh.write(h_code)
+                        fh.write('\n')
 
-                start = time.time()
-                _logger.debug(f'Start compiling code for PC={k}, m={m}')
-                os.system(f'{method} -c -lm {c_path} -o {o_path}')
-                os.system(f'{method} -shared {o_path} -o {so_path}')
-                _logger.debug(f'Compiling code took {time.time()-start} seconds.')
+                    start = time.time()
+                    _logger.debug(f'Start compiling code for PC={k}, m={m}')
+                    os.system(f'{method} -c -lm {c_path} -o {o_path}')
+                    os.system(f'{method} -shared {o_path} -o {so_path}')
+                    _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
-                if save_folder is not None:
-                    shutil.copy(so_path, Path(save_folder))
+                    if save_folder is not None:
+                        shutil.copy(so_path, Path(save_folder))
 
-                cost_func_dict[k][m][component] = _load_func(so_path)
-                shutil.rmtree(write_directory)
+                    cost_func_dict[k][m][component].append(_load_func(so_path))
+                    shutil.rmtree(write_directory)
 
     return cost_func_dict
 
@@ -194,7 +219,15 @@ def gen_model_func(fform, save_folder, method='gcc'):
     cost_func_dict = _fixed_autowrap_model(fform, save_folder, method=method)
 
     def model_func(xs, pc, m):
-        return cost_func_dict[pc][m]['real'](xs.astype(float)) + 1j*cost_func_dict[pc][m]['imag'](xs.astype(float))
+        return sum(
+            [
+                v(xs.astype(float)) for v in cost_func_dict[pc][m]['real']
+            ]
+        ) + sum(
+            [
+                1j*v(xs.astype(float)) for v in cost_func_dict[pc][m]['imag']
+            ]
+        )
 
     return model_func
 
@@ -203,8 +236,15 @@ def load_model_func(fform, save_folder):
     cost_func_dict = _load_func_dict(fform, save_folder)
 
     def model_func(xs, pc, m):
-        return cost_func_dict[pc][m]['real'](xs.astype(float)) + 1j*cost_func_dict[pc][m]['imag'](xs.astype(float))
-
+        return sum(
+            [
+                v(xs.astype(float)) for v in cost_func_dict[pc][m]['real']
+            ]
+        ) + sum(
+            [
+                1j*v(xs.astype(float)) for v in cost_func_dict[pc][m]['imag']
+            ]
+        )
 
     return model_func
 
@@ -218,7 +258,9 @@ def _load_func_dict(fform, save_folder):
         for m in np.arange(-M, M+1):
             cost_func_dict[k][m] = {}
             for component in ['real', 'imag']:
-                cost_func_dict[k][m][component] = _load_func(save_folder / ('_'.join((k, str(m), component))+'.so'))
+                cost_func_dict[k][m][component] = []
+                for path in save_folder.glob('_'.join((k, str(m), component))+'*.so'):
+                    cost_func_dict[k][m][component].append(_load_func(path))
     return cost_func_dict
 
 
@@ -246,7 +288,6 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None, method='gcc'):
     o_path = write_directory / Path(prefix + '.o')
     so_path = write_directory / Path(prefix + '.so')
 
-    _logger.debug(c_code)
     with open(c_path, 'w') as fh:
         fh.write(c_code)
         fh.write('\n')
@@ -317,7 +358,6 @@ double autofunc(double *xs){
     o_path = write_directory / Path(prefix + '.o')
     so_path = write_directory / Path(prefix + '.so')
 
-    _logger.debug(c_code)
     with open(c_path, 'w') as fh:
         fh.write(c_code)
         fh.write('\n')

@@ -29,5 +29,5 @@ start = time()
 fform = shgpy.form_to_fform(form)
 mylogger.debug(f'Finished fform generation. It took {time()-start} seconds.')
 
-save_filename = 'fform/T_d-S_2-S_2(110)-particularized-byform.p'
+save_filename = 'fform/Td.p'
 shgpy.save_fform(fform, save_filename)

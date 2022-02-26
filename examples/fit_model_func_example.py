@@ -52,7 +52,6 @@ params.add(
     min=0.0,
     max=2*np.pi,
 )
-params['zyx'].set(value=1.23, vary=False)
 params.pretty_print()
     
 
@@ -75,7 +74,6 @@ dat = shgpy.load_data(
     data_filenames_dict_1,
     'degrees',
 )
-dat.normalize_data()
 fdat = shgpy.dat_to_fdat(dat)
 
 ret_SA = lmfit.minimize(
