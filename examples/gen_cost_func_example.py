@@ -4,6 +4,8 @@ import shgpy
 import shgpy.shg_symbols as S
 from shgpy.fformfit import gen_cost_func
 
+COST_FUNC_FILENAME = 'func/Td.cf'
+
 mylogger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
@@ -20,4 +22,4 @@ fform_filename = 'fform/T_d-S_2-S_2(110)-particularized-byform.p'
 fform = shgpy.load_fform(fform_filename)
 fform.apply_phase_shift(S.psi)
 
-cost_func = gen_cost_func(fform, fdat, chunk=True, method='clang')
+cost_func = gen_cost_func(fform, fdat, chunk=True, method='clang', save_filename=COST_FUNC_FILENAME)
