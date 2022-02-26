@@ -15,4 +15,4 @@ METHOD = 'clang'
 
 fform = shgpy.load_fform(FFORM_FILENAME)
 
-model_func = gen_model_func(fform, SAVE_FOLDER, method=METHOD)
+model_func = gen_model_func(fform, SAVE_FOLDER, method=METHOD, max_terms_per_file=3)

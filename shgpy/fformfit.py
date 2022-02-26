@@ -202,8 +202,8 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc', m
 
                     start = time.time()
                     _logger.debug(f'Start compiling code for PC={k}, m={m}')
-                    os.system(f'{method} -c -lm {c_path} -o {o_path}')
-                    os.system(f'{method} -shared {o_path} -o {so_path}')
+                    os.system(f'{method} -w -c -lm {c_path} -o {o_path}')
+                    os.system(f'{method} -w -shared {o_path} -o {so_path}')
                     _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
                     if save_folder is not None:
@@ -215,8 +215,8 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc', m
     return cost_func_dict
 
 
-def gen_model_func(fform, save_folder, method='gcc'):
-    cost_func_dict = _fixed_autowrap_model(fform, save_folder, method=method)
+def gen_model_func(fform, save_folder, method='gcc', max_terms_per_file=10):
+    cost_func_dict = _fixed_autowrap_model(fform, save_folder, method=method, max_terms_per_file=max_terms_per_file)
 
     def model_func(xs, pc, m):
         return sum(
@@ -297,8 +297,8 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None, method='gcc'):
 
     start = time.time()
     _logger.debug('Start compiling code.')
-    os.system(f'{method} -c -lm {c_path} -o {o_path}')
-    os.system(f'{method} -shared {o_path} -o {so_path}')
+    os.system(f'{method} -w -c -lm {c_path} -o {o_path}')
+    os.system(f'{method} -w -shared {o_path} -o {so_path}')
     _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
     if save_filename is not None:
@@ -367,8 +367,8 @@ double autofunc(double *xs){
 
     start = time.time()
     _logger.debug('Start compiling code.')
-    os.system(f'{method} -c -lm -fPIC {c_path} -o {o_path}')
-    os.system(f'{method} -shared -fPIC {o_path} -o {so_path}')
+    os.system(f'{method} -w -c -lm -fPIC {c_path} -o {o_path}')
+    os.system(f'{method} -w -shared -fPIC {o_path} -o {so_path}')
     _logger.debug(f'Compiling code took {time.time()-start} seconds.')
 
     if save_filename is not None:
