@@ -260,6 +260,7 @@ def _load_func_dict(fform, save_folder):
             for component in ['real', 'imag']:
                 cost_func_dict[k][m][component] = []
                 for path in save_folder.glob('_'.join((k, str(m), component))+'*.so'):
+                    _logger.debug(f'Loading cost function from {path}')
                     cost_func_dict[k][m][component].append(_load_func(path))
     return cost_func_dict
 
