@@ -139,6 +139,11 @@ class DataContainer:
     def _get_data_dict_degrees(self):
         return {k:np.array([np.rad2deg(v[0]), np.copy(v[1])]) for k,v in self._data_dict.items()}
 
+    def filter(self, filter, *args, **kwargs):
+        for pc, (xdata, ydata) in self._data_dict.items():
+            new_ydata = filter(ydata, *args, **kwargs)
+            self._data_dict[pc] = np.array([xdata, new_ydata])
+
     def scale_data(self, scale_factor):
         """Scale the data by a constant factor."""
         if scale_factor < 0:
