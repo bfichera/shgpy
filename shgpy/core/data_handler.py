@@ -308,28 +308,46 @@ class DataContainer:
     def __repr__(self):
         return repr(self.as_pandas('radians'))
 
-    def as_pandas(self, requested_angle_units):
+    def as_pandas(self, requested_angle_units, index='multi'):
         """Get data as a pandas DataFrame."""
         a1 = self.get_keys()
         a2 = self.get_values(requested_angle_units)[0][0]
-        index = pd.MultiIndex.from_product(
-            (
-                a1,
-                a2,
-            ),
-            names=('POLARIZATION', 'ANGLE'),
-        )
-        raw_data_as_1d = np.array(
-            [
-                self.get_pc(k, requested_angle_units)[1].flatten()
-                for k in self.get_keys()
-            ],
-        ).flatten()
-        df = pd.DataFrame(
-            raw_data_as_1d,
-            index=index,
-        )
-        df.columns = ['VALUE']
+        if index == 'multi':
+            index = pd.MultiIndex.from_product(
+                (
+                    a1,
+                    a2,
+                ),
+                names=('POLARIZATION', 'ANGLE'),
+            )
+            raw_data_as_1d = np.array(
+                [
+                    self.get_pc(k, requested_angle_units)[1].flatten()
+                    for k in self.get_keys()
+                ],
+            ).flatten()
+            df = pd.DataFrame(
+                raw_data_as_1d,
+                index=index,
+            )
+            df.columns = ['VALUE']
+        elif index == 'none':
+            df = pd.DataFrame()
+            c = 0
+            for pc in self.get_keys():
+                xdata, ydata = self.get_pc(pc, requested_angle_units)
+                for x, y in zip(xdata, ydata):
+                    df = pd.concat(
+                        [
+                            df,
+                            pd.DataFrame(
+                                {'ANGLE': x, 'VALUE': y, 'POLARIZATION': pc},
+                                index=[c],
+                            ),
+                        ],
+                    )
+                    c += 1
+                    
         return df
 
     def get_items(self, requested_angle_units):
@@ -431,29 +449,47 @@ class fDataContainer:
     def __repr__(self):
         return repr(self.as_pandas())
 
-    def as_pandas(self):
+    def as_pandas(self, index='multi'):
         """Get fdata as a pandas DataFrame."""
         M = self.get_M()
-        a1 = self.get_keys()
-        a2 = np.arange(-M, M+1)
-        index = pd.MultiIndex.from_product(
-            (
-                a1,
-                a2,
-            ),
-            names=('POLARIZATION', 'N'),
-        )
-        raw_data_as_1d = np.array(
-            [
-                self.get_pc(k)
-                for k in self.get_keys()
-            ],
-        ).flatten()
-        df = pd.DataFrame(
-            raw_data_as_1d,
-            index=index,
-        )
-        df.columns = ['VALUE']
+        if index == 'multi':
+            a1 = self.get_keys()
+            a2 = np.arange(-M, M+1)
+            index = pd.MultiIndex.from_product(
+                (
+                    a1,
+                    a2,
+                ),
+                names=('POLARIZATION', 'N'),
+            )
+            raw_data_as_1d = np.array(
+                [
+                    self.get_pc(k)
+                    for k in self.get_keys()
+                ],
+            ).flatten()
+            df = pd.DataFrame(
+                raw_data_as_1d,
+                index=index,
+            )
+            df.columns = ['VALUE']
+        elif index == 'none':
+            df = pd.DataFrame()
+            c = 0
+            for pc in self.get_keys():
+                fdata = self.get_pc(pc)
+                ndata = np.arange(-M, M+1)
+                for n, f in zip(ndata, fdata):
+                    df = pd.concat(
+                        [
+                            df,
+                            pd.DataFrame(
+                                {'N': n, 'VALUE': f, 'POLARIZATION': pc},
+                                index=[c],
+                            ),
+                        ],
+                    )
+                    c += 1
         return df
 
     def get_keys(self):
@@ -723,29 +759,47 @@ class fFormContainer:
     def __repr__(self):
         return repr(self.as_pandas())
 
-    def as_pandas(self):
+    def as_pandas(self, index='multi'):
         """Get fdata as a pandas DataFrame."""
         M = self.get_M()
-        a1 = self.get_keys()
-        a2 = np.arange(-M, M+1)
-        index = pd.MultiIndex.from_product(
-            (
-                a1,
-                a2,
-            ),
-            names=('POLARIZATION', 'N'),
-        )
-        raw_data_as_1d = np.array(
-            [
-                self.get_pc(k)
-                for k in self.get_keys()
-            ],
-        ).flatten()
-        df = pd.DataFrame(
-            raw_data_as_1d,
-            index=index,
-        )
-        df.columns = ['EXPRESSION']
+        if index == 'multi':
+            a1 = self.get_keys()
+            a2 = np.arange(-M, M+1)
+            index = pd.MultiIndex.from_product(
+                (
+                    a1,
+                    a2,
+                ),
+                names=('POLARIZATION', 'N'),
+            )
+            raw_data_as_1d = np.array(
+                [
+                    self.get_pc(k)
+                    for k in self.get_keys()
+                ],
+            ).flatten()
+            df = pd.DataFrame(
+                raw_data_as_1d,
+                index=index,
+            )
+            df.columns = ['EXPRESSION']
+        elif index == 'none':
+            df = pd.DataFrame()
+            c = 0
+            for pc in self.get_keys():
+                edata = self.get_pc(pc)
+                ndata = np.arange(-M, M+1)
+                for n, e in zip(ndata, edata):
+                    df = pd.concat(
+                        [
+                            df,
+                            pd.DataFrame(
+                                {'N': n, 'EXPRESSION': e, 'POLARIZATION': pc},
+                                index=[c],
+                            ),
+                        ],
+                    )
+                    c += 1
         return df
 
     def get_pc(self, pc):
@@ -907,24 +961,40 @@ class FormContainer:
     def __repr__(self):
         return repr(self.as_pandas())
 
-    def as_pandas(self):
+    def as_pandas(self, index='multi'):
         """Get data as a pandas DataFrame."""
-        a1 = self.get_keys()
-        index = pd.Index(
-                a1,
-                name='POLARIZATION',
-        )
-        raw_data_as_1d = np.array(
-            [
-                self.get_pc(k)
-                for k in self.get_keys()
-            ],
-        ).flatten()
-        df = pd.DataFrame(
-            raw_data_as_1d,
-            index=index,
-        )
-        df.columns = ['EXPRESSION']
+        if index == 'multi':
+            a1 = self.get_keys()
+            index = pd.Index(
+                    a1,
+                    name='POLARIZATION',
+            )
+            raw_data_as_1d = np.array(
+                [
+                    self.get_pc(k)
+                    for k in self.get_keys()
+                ],
+            ).flatten()
+            df = pd.DataFrame(
+                raw_data_as_1d,
+                index=index,
+            )
+            df.columns = ['EXPRESSION']
+        elif index == 'none':
+            df = pd.DataFrame()
+            c = 0
+            for pc in self.get_keys():
+                e = self.get_pc(pc)
+                df = pd.concat(
+                    [
+                        df,
+                        pd.DataFrame(
+                            {'EXPRESSION': e, 'POLARIZATION': pc},
+                            index=[c],
+                        ),
+                    ],
+                )
+                c += 1
         return df
 
     def get_keys(self):
