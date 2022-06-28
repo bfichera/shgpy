@@ -333,20 +333,16 @@ class DataContainer:
             df.columns = ['VALUE']
         elif index == 'none':
             df = pd.DataFrame()
-            c = 0
             for pc in self.get_keys():
                 xdata, ydata = self.get_pc(pc, requested_angle_units)
-                for x, y in zip(xdata, ydata):
-                    df = pd.concat(
-                        [
-                            df,
-                            pd.DataFrame(
-                                {'ANGLE': x, 'VALUE': y, 'POLARIZATION': pc},
-                                index=[c],
-                            ),
-                        ],
-                    )
-                    c += 1
+                df = pd.concat(
+                    [
+                        df,
+                        pd.DataFrame(
+                            {'ANGLE': xdata, 'VALUE': ydata, 'POLARIZATION': pc},
+                        ),
+                    ],
+                )
                     
         return df
 
@@ -475,21 +471,17 @@ class fDataContainer:
             df.columns = ['VALUE']
         elif index == 'none':
             df = pd.DataFrame()
-            c = 0
             for pc in self.get_keys():
                 fdata = self.get_pc(pc)
                 ndata = np.arange(-M, M+1)
-                for n, f in zip(ndata, fdata):
-                    df = pd.concat(
-                        [
-                            df,
-                            pd.DataFrame(
-                                {'N': n, 'VALUE': f, 'POLARIZATION': pc},
-                                index=[c],
-                            ),
-                        ],
-                    )
-                    c += 1
+                df = pd.concat(
+                    [
+                        df,
+                        pd.DataFrame(
+                            {'N': ndata, 'VALUE': fdata, 'POLARIZATION': pc},
+                        ),
+                    ],
+                )
         return df
 
     def get_keys(self):
@@ -785,21 +777,17 @@ class fFormContainer:
             df.columns = ['EXPRESSION']
         elif index == 'none':
             df = pd.DataFrame()
-            c = 0
             for pc in self.get_keys():
                 edata = self.get_pc(pc)
                 ndata = np.arange(-M, M+1)
-                for n, e in zip(ndata, edata):
-                    df = pd.concat(
-                        [
-                            df,
-                            pd.DataFrame(
-                                {'N': n, 'EXPRESSION': e, 'POLARIZATION': pc},
-                                index=[c],
-                            ),
-                        ],
-                    )
-                    c += 1
+                df = pd.concat(
+                    [
+                        df,
+                        pd.DataFrame(
+                            {'N': ndata, 'EXPRESSION': edata, 'POLARIZATION': pc},
+                        ),
+                    ],
+                )
         return df
 
     def get_pc(self, pc):
@@ -982,19 +970,16 @@ class FormContainer:
             df.columns = ['EXPRESSION']
         elif index == 'none':
             df = pd.DataFrame()
-            c = 0
             for pc in self.get_keys():
                 e = self.get_pc(pc)
                 df = pd.concat(
                     [
                         df,
                         pd.DataFrame(
-                            {'EXPRESSION': e, 'POLARIZATION': pc},
-                            index=[c],
+                            {'EXPRESSION': [e], 'POLARIZATION': pc},
                         ),
                     ],
                 )
-                c += 1
         return df
 
     def get_keys(self):
