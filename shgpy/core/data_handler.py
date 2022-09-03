@@ -10,7 +10,7 @@ import itertools
 from copy import deepcopy
 from .. import shg_symbols as S
 from warnings import warn
-from .fourier_transform import _fourier_transform
+from ._fourier_transform import _fourier_transform
 
 _logger = logging.getLogger(__name__)
 
