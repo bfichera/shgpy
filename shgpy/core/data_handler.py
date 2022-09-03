@@ -59,12 +59,13 @@ class DataContainer:
             self._convert_data_dict_to_radians()
         if normal_to_oblique:
             self._coerce_to_oblique_incidence()
-            self._coerged=True
+            self._coerced = True
         self._remove_duplicates()
         self._modulate_data_dict()
         self._sort_data_dict()
 
     def copy(self):
+        """Return a copy of the DataContainer."""
         dat = DataContainer(self._data_dict, normal_to_oblique=self.coerced)
         dat._scale = self._scale
         dat._phase_shift = self._phase_shift,
