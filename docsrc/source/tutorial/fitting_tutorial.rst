@@ -9,7 +9,7 @@ Before going through this tutorial, make sure you've :doc:`installed shgpy <../i
 Introduction
 ------------
 
-In :doc:`the first tutorial <data_access_tutorial>`, we learned how to load RA-SHG data into ShgPy using :func:`shgpy.core.data_handler.load_data` and the `shgpy.core.data_handler.DataContainer` class. In :doc:`the last tutorial <tensor_tutorial>`, we learned about how tensors for different point groups were defined in ShgPy and how to manipulate them. Now, we're going to put these concepts together and learn how to fit RA-SHG data.
+In :doc:`the first tutorial <data_access_tutorial>`, we learned how to load RA-SHG data into ShgPy using :func:`shgpy.core.data_handler.load_data` and the :class:`shgpy.core.data_handler.DataContainer` class. In :doc:`the last tutorial <tensor_tutorial>`, we learned about how tensors for different point groups were defined in ShgPy and how to manipulate them. Now, we're going to put these concepts together and learn how to fit RA-SHG data.
 
 Fourier formula generation (the easy way)
 -----------------------------------------
@@ -22,7 +22,7 @@ where the electric fields depend on `phi` like::
 
     E_i(phi) = R_ij(phi) E_j.
 
-Generally speaking, we usually project the incoming and outgoing light onto all combinations of parallel ("P") and perpendicular ("S") to the plane of incidence, so that at the end of the day we need to compute 4 separate expressions for each of the four different combinations ("PP", "PS", "SP", and "SS"). These expression are calculated by running :func:`shgpy.formgen.formgen`, as described below.
+Generally speaking, we usually project the incoming and outgoing light onto all combinations of parallel ("P") and perpendicular ("S") to the plane of incidence, so that at the end of the day we need to compute 4 separate expressions (one for each of the four different combinations "PP", "PS", "SP", and "SS"). These expression are calculated by running :func:`shgpy.formgen.formgen`, as described below.
 
 Let us consider the case of trying to fit the GaAs data available in ``examples/Data`` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
 
@@ -58,15 +58,15 @@ Looking at the result:
 
 The return value ``form`` is an instance of the class :class:`shgpy.core.data_handler.FormContainer`; we won't go into the details now, but there are various convenience routines native to this class which can be used to inspect and manipulate these expressions. Most of these are documented in the API documentation.
 
-The next step in our fitting routine is to compute the Fourier transforms of these four expressions. In previous iterations of ``shgpy``, this was a bit of an arduous process, requiring one to perform a set of precomputations (there is a bug in ``sympy`` that makes it impossible to compute them on the fly). However, as of ``v0.8.0``, a new workaroud was developed in which all of the precomutation could be shipped in the package download. Thus computing the Fourier transform of ``form`` now requires only a single line:
+The next step in our fitting routine is to compute the Fourier transforms of these four expressions. In previous iterations of ``shgpy``, this was a bit of an arduous process, requiring one to perform a set of precomputations (there is a bug in ``sympy`` that makes it impossible to compute them on the fly). However, as of ``v0.8.0``, a new workaroud was developed in which all of the precomputation could be shipped in the package download. Thus computing the Fourier transform of ``form`` now requires only a single line:
 
 >>> fform = shgpy.form_to_fform(form)
 
-The return value here, ``fform``, is an instance of the :class:`shgpy.core.data_handler.fFormContainer` class. Like the ``shgpy.core.data_handler.FormContainer`` class, this class contains a number of helper routines which can be used to inspect and manipulate the Fourier expressions contained in ``fform``. For our purposes, it is sufficient to know that ``fform`` simply contains the Fourier transforms of the expressions contained in ``form``, and that these Fourier transforms are exactly the inputs we need to go into the fitting procedure I will describe below.
+The return value here, ``fform``, is an instance of the :class:`shgpy.core.data_handler.fFormContainer` class. Like the :class:`shgpy.core.data_handler.FormContainer` class, this class contains a number of helper routines which can be used to inspect and manipulate the Fourier expressions contained in ``fform``. For our purposes, it is sufficient to know that ``fform`` simply contains the Fourier transforms of the expressions contained in ``form``, and that these Fourier transforms are exactly the inputs we need to go into the fitting procedure I will describe below.
 
 By the way, for simple tensors running ``shgpy.fform_to_form`` should take around a second or two and can thus be reliably executed at runtime. However, if you want to cache the result, you can use the helper routines ``shgpy.save_fform`` and ``shgpy.load_fform``, e.g.:
 
->>> shgpy.save_fform('T_d-None-None(110)-particularized.p')
+>>> shgpy.save_fform(fform, 'T_d-None-None(110)-particularized.p')
 
 Fourier formula generation (the hard way)
 -----------------------------------------
@@ -160,7 +160,7 @@ What we've just done is by far the most difficult step (both conceptually and co
 The final step: fitting your first RA-SHG data
 ----------------------------------------------
 
-All that's left now is to load the Fourier formula just generated (at ``'T_d-None-None(110)-particularized.p'``) into ShgPy, load the data that we want to fit, and then fun one of the functions in :mod:`shgpy.fformfit`.
+All that's left now is to load the Fourier formula just generated (at ``'T_d-None-None(110)-particularized.p'``) into ShgPy, load the data that we want to fit, and then run one of the functions in :mod:`shgpy.fformfit`.
 
 Before we begin, let's recall from :doc:`the first tutorial <data_access_tutorial>` how we loaded RA-SHG data into ShgPy. In that tutorial, we loaded the data into an instance of the special class :class:`shgpy.core.data_handler.DataContainer`, and noted that other datatypes would be loaded into similar objects when it came to actually doing the fitting.
 
