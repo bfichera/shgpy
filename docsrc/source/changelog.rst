@@ -1,6 +1,16 @@
 Changelog
 =========
 
+v0.8.0
+------
+- Rewrote the fourier formula generation process. Previously ``sympy`` had a bug which made computing the Fourier transforms of typical SHG formulas incredibly slow. The previous workaroud was to compute the Fourier transforms of a general SHG tensor ahead of time (i.e. the "uncontracted Fourier transforms"), and then having the user generate a full Fourier formula for their specific system using a contraction of this tensor. A different workaround which I was not able to implement until now is to enumerate all the possible terms that could appear in a viable SHG formula (i.e. arbitrary products of sines and cosines), and then create a lookup table for their respective Fourier transforms for access at runtime. This is now implemented in :func:`shgpy.core.data_handler.form_to_fform`. My initial tests suggest that, while it is still slightly slower than the previous workaround, not only is it much simpler for the user, but it also makes it trivial to compute the Fourier transforms of higher multiple SHG formulas (i.e. magnetic dipole and electric quadrupole contributions). This is now documented in the tutorials and examples.
+- Added the ability to generate the raw cost functions or model functions from the Fourier formulas. This is useful in case the user wants to use a different wrapper around ``scipy.optimize`` like LMFIT (which I highly recommend!).
+- Added `copy` and `as_pandas` methods to containers
+- Added `filter` method to :func:`shgpy.core.data_handler.DataContainer`.
+- Added `apply_arbitrary_scale` method to :func:`shgpy.core.data_handler.FormContainer` and :func:`shgpy.core.data_handler.fFormContainer`.
+- Added multiple example files demonstrating the above.
+
+
 v0.7.10
 -------
 - Fixed a bug associated with the rounding of prefactors in :func:`shgpy.fformgen.generate_contracted_fourier_transforms` (i.e. the `ndigits` parameter).
