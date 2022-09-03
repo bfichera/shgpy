@@ -145,12 +145,12 @@ class DataContainer:
 
         Parameters
         ----------
-        filter: function
+        filter : function
             The function to apply to the y-axis data. Must have the signature
             ``filter(ydata, *args, **kwargs)``.
-        args: list-like
+        args : list-like
             Arguments to pass to `filter`.
-        kwargs: dict
+        kwargs : dict
             Keywork arguments to pass to `filter`.
 
         """
@@ -327,9 +327,9 @@ class DataContainer:
         
         Parameters
         ----------
-        requested_angle_units: {'radians', 'degrees'}
+        requested_angle_units : {'radians', 'degrees'}
             Units requested for `xdata`
-        index: {'multi', 'none'}, optional
+        index : {'multi', 'none'}, optional
             If `'multi'`, the returned ``pandas.DataFrame`` object has a
             MultiIndex structure. If `'none'`, no index is supplied to
             ``pandas.DataFrame``. Default is `'multi'`
@@ -476,7 +476,7 @@ class fDataContainer:
         
         Parameters
         ----------
-        index: {'multi', 'none'}, optional
+        index : {'multi', 'none'}, optional
             If `'multi'`, the returned ``pandas.DataFrame`` object has a
             MultiIndex structure. If `'none'`, no index is supplied to
             ``pandas.DataFrame``. Default is `'multi'`
@@ -792,7 +792,7 @@ class fFormContainer:
         
         Parameters
         ----------
-        index: {'multi', 'none'}, optional
+        index : {'multi', 'none'}, optional
             If `'multi'`, the returned ``pandas.DataFrame`` object has a
             MultiIndex structure. If `'none'`, no index is supplied to
             ``pandas.DataFrame``. Default is `'multi'`
@@ -1000,7 +1000,7 @@ class FormContainer:
         
         Parameters
         ----------
-        index: {'multi', 'none'}, optional
+        index : {'multi', 'none'}, optional
             If `'multi'`, the returned ``pandas.DataFrame`` object has a
             MultiIndex structure. If `'none'`, no index is supplied to
             ``pandas.DataFrame``. Default is `'multi'`
