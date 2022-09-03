@@ -22,7 +22,7 @@ where the electric fields depend on `phi` like::
 
     E_i(phi) = R_ij(phi) E_j.
 
-Generally speaking, we usually project the incoming and outgoing light onto all combinations of parallel ("P") and perpendicular ("S") to the plane of incidence, so that at the end of the day we need to compute 4 separate expressions for each of the four different combinations ("PP", "PS", "SP", and "SS"). These expression are calculated by running :func:``shgpy.formgen.formgen``, as described below.
+Generally speaking, we usually project the incoming and outgoing light onto all combinations of parallel ("P") and perpendicular ("S") to the plane of incidence, so that at the end of the day we need to compute 4 separate expressions for each of the four different combinations ("PP", "PS", "SP", and "SS"). These expression are calculated by running :func:`shgpy.formgen.formgen`, as described below.
 
 Let us consider the case of trying to fit the GaAs data available in ``examples/Data`` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
 
@@ -45,7 +45,7 @@ we now run
 >>> from shgpy.formgen import formgen
 >>> form = formgen(AOI, t_eee=t_dipole, t_mee=None, t_qee=None)
 
-If we wanted to also compute a magnetic dipole or electric quadrupole contribution, we would only need to pass the corresponding tensors into the ``t_mee`` or ``t_qee`` arguments of :func:``shgpy.fformgen.fformgen``.
+If we wanted to also compute a magnetic dipole or electric quadrupole contribution, we would only need to pass the corresponding tensors into the ``t_mee`` or ``t_qee`` arguments of :func:`shgpy.fformgen.fformgen`.
 
 Looking at the result:
 
@@ -56,13 +56,13 @@ Looking at the result:
     SP            0.121232196306961*zyx**2*sin(phi)**6 + 1.21232...
     SS            1.125*zyx**2*sin(phi)**6 - 2.25*zyx**2*sin(phi...
 
-The return value ``form`` is an instance of the class :class:``shgpy.core.data_handler.FormContainer``; we won't go into the details now, but there are various convenience routines native to this class which can be used to inspect and manipulate these expressions. Most of these are documented in the API documentation.
+The return value ``form`` is an instance of the class :class:`shgpy.core.data_handler.FormContainer`; we won't go into the details now, but there are various convenience routines native to this class which can be used to inspect and manipulate these expressions. Most of these are documented in the API documentation.
 
 The next step in our fitting routine is to compute the Fourier transforms of these four expressions. In previous iterations of ``shgpy``, this was a bit of an arduous process, requiring one to perform a set of precomputations (there is a bug in ``sympy`` that makes it impossible to compute them on the fly). However, as of ``v0.8.0``, a new workaroud was developed in which all of the precomutation could be shipped in the package download. Thus computing the Fourier transform of ``form`` now requires only a single line:
 
 >>> fform = shgpy.form_to_fform(form)
 
-The return value here, ``fform``, is an instance of the :class:``shgpy.core.data_handler.fFormContainer`` class. Like the ``shgpy.core.data_handler.FormContainer`` class, this class contains a number of helper routines which can be used to inspect and manipulate the Fourier expressions contained in ``fform``. For our purposes, it is sufficient to know that ``fform`` simply contains the Fourier transforms of the expressions contained in ``form``, and that these Fourier transforms are exactly the inputs we need to go into the fitting procedure I will describe below.
+The return value here, ``fform``, is an instance of the :class:`shgpy.core.data_handler.fFormContainer` class. Like the ``shgpy.core.data_handler.FormContainer`` class, this class contains a number of helper routines which can be used to inspect and manipulate the Fourier expressions contained in ``fform``. For our purposes, it is sufficient to know that ``fform`` simply contains the Fourier transforms of the expressions contained in ``form``, and that these Fourier transforms are exactly the inputs we need to go into the fitting procedure I will describe below.
 
 By the way, for simple tensors running ``shgpy.fform_to_form`` should take around a second or two and can thus be reliably executed at runtime. However, if you want to cache the result, you can use the helper routines ``shgpy.save_fform`` and ``shgpy.load_fform``, e.g.:
 
@@ -212,7 +212,7 @@ A variant of the basinhopping algorithm which is also included in :mod:`shgpy.ff
 
 Before concluding this tutorial, let me add one more comment about one important capability of this software. Once the fitting routine has finished generating the appropriate energy cost expression using ``fform`` and ``fdat``, it turns it into C code using ``sympy.utilities.codegen`` and compiles a shared object file, which it runs using ``ctypes`` during the fitting process. This drastically reduces computation time for complicated fitting functions, for which I've found ``sympy.lambdify`` to be extremely slow. As a result, if you want to save the generated shared object file and then load it for the next simulation, you can use the ``save_cost_func_filename`` and ``load_cost_func_filename`` options (and those related to them) in the fitting routines of :mod:`shgpy.fformfit`. If you'd like to generate the cost function without running the fitting routine directly afterwards (as opposed to running them in series, which, for backwards-compatibility, is what the aforementioned :mod:`shgpy.fformfit` routines do), use :func:`shgpy.fformfit.gen_cost_func`.
 
-Furthermore, if you have a cost function generated by :func:``shgpy.fformfit.gen_cost_func``, you can then use the extensive set of routines in ``scipy.optimize`` (or even a different ``scipy.optimize`` wrapper, like LMFIT) to write your own specialized fitting procedure. These days, when I do RA-SHG fitting in my own research, I almost never use the wrapper functions in :mod:``shgpy.fformfit`` like :func:``shgpy.fformfit.basinhopping_fit``; rather, I generate a cost function with :func:``shgpy.fformfit.gen_cost_func`` (or, for even more control, a model function using :func:``shgpy.fformfit.get_model_func``), and then use LMFIT to minimize that cost function. Setting up LMFIT for this purpose is beyond the scope of this tutorial, but basic examples can be found in ``examples/fit_model_func_example.py`` and ``examples/fit_cost_func_example.py``.
+Furthermore, if you have a cost function generated by :func:`shgpy.fformfit.gen_cost_func`, you can then use the extensive set of routines in ``scipy.optimize`` (or even a different ``scipy.optimize`` wrapper, like LMFIT) to write your own specialized fitting procedure. These days, when I do RA-SHG fitting in my own research, I almost never use the wrapper functions in :mod:`shgpy.fformfit` like :func:`shgpy.fformfit.basinhopping_fit`; rather, I generate a cost function with :func:`shgpy.fformfit.gen_cost_func` (or, for even more control, a model function using :func:`shgpy.fformfit.get_model_func`), and then use LMFIT to minimize that cost function. Setting up LMFIT for this purpose is beyond the scope of this tutorial, but basic examples can be found in ``examples/fit_model_func_example.py`` and ``examples/fit_cost_func_example.py``.
 
 
 Conclusion
