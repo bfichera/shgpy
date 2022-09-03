@@ -304,6 +304,25 @@ def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
 
 
 def formgen(theta, t_eee=None, t_mee=None, t_qee=None):
+    """Generate generic SHG formula for any multipole.
+
+    Parameters
+    ----------
+    theta : float
+        Angle of incidence.
+    t_eee : ndarray of sympy.Expr, optional
+        The electric dipole tensor. Pass `None` to neglect electric
+        dipole. Default is `None`. Must pass at least one of `t_eee`,
+        `t_mee`, or `t_qee`.
+    t_mee : ndarray of sympy.Expr, optional
+        The magnetic dipole tensor. Pass `None` to neglect magnetic
+        dipole. Default is `None`. Must pass at least one of `t_eee`,
+        `t_mee`, or `t_qee`.
+    t_qee : ndarray of sympy.Expr, optional
+        The electric quadrupole tensor. Pass `None` to neglect electric
+        quadrupole. Default is `None`. Must pass at least one of `t_eee`,
+        `t_mee`, or `t_qee`.
+    """
 
     Sp, Ss = gen_S(theta, t_eee, t_mee, t_qee)
 
