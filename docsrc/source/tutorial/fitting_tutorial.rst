@@ -11,12 +11,71 @@ Introduction
 
 In :doc:`the first tutorial <data_access_tutorial>`, we learned how to load RA-SHG data into ShgPy using :func:`shgpy.core.data_handler.load_data` and the `shgpy.core.data_handler.DataContainer` class. In :doc:`the last tutorial <tensor_tutorial>`, we learned about how tensors for different point groups were defined in ShgPy and how to manipulate them. Now, we're going to put these concepts together and learn how to fit RA-SHG data.
 
-Fourier formula generation
---------------------------
+Fourier formula generation (the easy way)
+-----------------------------------------
+
+In real space, the SHG formula can be computed from a given tensor using the well-known expression::
+
+    P_i = chi_ijk E_j E_k,
+
+where the electric fields depend on `phi` like::
+
+    E_i(phi) = R_ij(phi) E_j.
+
+Generally speaking, we usually project the incoming and outgoing light onto all combinations of parallel ("P") and perpendicular ("S") to the plane of incidence, so that at the end of the day we need to compute 4 separate expressions for each of the four different combinations ("PP", "PS", "SP", and "SS"). These expression are calculated by running :func:``shgpy.formgen.formgen``, as described below.
+
+Let us consider the case of trying to fit the GaAs data available in ``examples/Data`` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
+
+>>> from shgpy.tensor_definitions import dipole
+>>> t_dipole = shgpy.particularize(dipole['T_d'])
+>>> import numpy as np
+>>> R = shgpy.rotation_matrix_from_two_vectors(
+    np.array([1, 1, 0]),
+    np.array([0, 0, 1]),
+)
+>>> t_dipole = shgpy.transform(t_dipole, R)
+>>> t_dipole = shgpy.make_tensor_real(t_dipole)
+
+Defining
+
+>>> AOI = 0.1745 # 10 degrees, in radians
+
+we now run
+
+>>> from shgpy.formgen import formgen
+>>> form = formgen(AOI, t_eee=t_dipole, t_mee=None, t_qee=None)
+
+If we wanted to also compute a magnetic dipole or electric quadrupole contribution, we would only need to pass the corresponding tensors into the ``t_mee`` or ``t_qee`` arguments of :func:``shgpy.fformgen.fformgen``.
+
+Looking at the result:
+
+>>> form
+    POLARIZATION                                                   
+    PP            1.02630490104953*zyx**2*sin(phi)**6 + 2.052609...
+    PS            0.117577963371275*zyx**2*sin(phi)**6 - 1.17577...
+    SP            0.121232196306961*zyx**2*sin(phi)**6 + 1.21232...
+    SS            1.125*zyx**2*sin(phi)**6 - 2.25*zyx**2*sin(phi...
+
+The return value ``form`` is an instance of the class :class:``shgpy.core.data_handler.FormContainer``; we won't go into the details now, but there are various convenience routines native to this class which can be used to inspect and manipulate these expressions. Most of these are documented in the API documentation.
+
+The next step in our fitting routine is to compute the Fourier transforms of these four expressions. In previous iterations of ``shgpy``, this was a bit of an arduous process, requiring one to perform a set of precomputations (there is a bug in ``sympy`` that makes it impossible to compute them on the fly). However, as of ``v0.8.0``, a new workaroud was developed in which all of the precomutation could be shipped in the package download. Thus computing the Fourier transform of ``form`` now requires only a single line:
+
+>>> fform = shgpy.form_to_fform(form)
+
+The return value here, ``fform``, is an instance of the :class:``shgpy.core.data_handler.fFormContainer`` class. Like the ``shgpy.core.data_handler.FormContainer`` class, this class contains a number of helper routines which can be used to inspect and manipulate the Fourier expressions contained in ``fform``. For our purposes, it is sufficient to know that ``fform`` simply contains the Fourier transforms of the expressions contained in ``form``, and that these Fourier transforms are exactly the inputs we need to go into the fitting procedure I will describe below.
+
+By the way, for simple tensors running ``shgpy.fform_to_form`` should take around a second or two and can thus be reliably executed at runtime. However, if you want to cache the result, you can use the helper routines ``shgpy.save_fform`` and ``shgpy.load_fform``, e.g.:
+
+>>> shgpy.save_fform('T_d-None-None(110)-particularized.p')
+
+Fourier formula generation (the hard way)
+-----------------------------------------
+
+As alluded to above, a previous version of ``shgpy`` involved a lengthy workaround to a symbolic integration bug in ``sympy`` which required the user to precompute and cache a number of expressions in order to avoid unreasonable computation times. However, a new workaroud has been developed in ``v0.8.0`` which is much simpler and there is basically no reason to use the legacy workaround if you are a new user. If you started using ``shgpy`` before ``v0.8.0`` and currently have the legacy workaround in deployment, there's no problem with using it from here out and I don't plan to deprecate it in the near future (note, however, that computing the magnetic dipole contribution is only available in ``v0.8.0`` with the new workaround). The following section is available as a reference for those early users who prefer to use the old ``fformgen`` procedure.
 
 As alluded to previously, the central idea behind fitting in ShgPy is to fit in Fourier space. This provides a drastic simplification to the cost function. However, the problem is that computing a Fourier transform symbolically is difficult, and we have resort to some tricks to compute it efficiently (or at least, ahead of time).
 
-What do I mean by the last part? To begin, let's think about what the function is that we're trying to compute. Ultimately, we want to compute an intensity as a function of the azimuthal angle ``phi`` in the experiment. This is given by the square of the nonlinear polarization, i.e.::
+What do I mean by the last part? To begin, let's think about what the function is that we're trying to compute. Ultimately, we want to compute an intensity as a function of the azimuthal angle ``phi`` in the experiment. As above, this is given by the square of the nonlinear polarization, i.e.::
 
     I = |P_i|**2 = |chi_ijk E_j E_k|**2
 
@@ -99,7 +158,7 @@ On my machine, this takes about five to ten minutes, depending on the complexity
 What we've just done is by far the most difficult step (both conceptually and computationally) in ShgPy, but it is easily worth it. By spending 10-15 minutes of computation time now, we have dramatically simplified the routines that we are about to run in the next section of this tutorial.
 
 The final step: fitting your first RA-SHG data
-----------------------------------------------   
+----------------------------------------------
 
 All that's left now is to load the Fourier formula just generated (at ``'T_d-None-None(110)-particularized.p'``) into ShgPy, load the data that we want to fit, and then fun one of the functions in :mod:`shgpy.fformfit`.
 
@@ -124,7 +183,7 @@ The fitting formula, on the other other hand, is stored in a related object call
 >>> fform_filename = 'T_d-None-None(110)-particularized.p'
 >>> fform = shgpy.load_fform(fform_filename)
 
-This would be a good time to read the documentation provided in :mod:`shgpy.core.data_handler` to familiarize oneself with these functions. (You will find that there is a fourth object, :class:`shgpy.core.data_handler.FormContainer`, which is designed to contain ``phi``-space formulas; see also :mod:`shgpy.formgen` and the documentation therein for more details.)
+(By the way, this would be a good time to read the documentation provided in :mod:`shgpy.core.data_handler` to familiarize oneself with these functions).
 
 There is one more fitting parameter which is not captured by :func:`shgpy.fformgen.generate_contracted_fourier_transforms`, which is the relative phase shift between the data and the fitting formula. So let's phase shift the formula by an arbitrary angle.
 
@@ -151,9 +210,10 @@ In addition to :func:`shgpy.fformfit.least_squares_fit`, there are a couple of o
 
 A variant of the basinhopping algorithm which is also included in :mod:`shgpy.fformfit` is :func:`shgpy.fformfit.dual_annealing_fit`. See the API documentation for more information.
 
-Before concluding this tutorial, let me add one more comment about one important capability of this software. Once the fitting routine has finished generating the appropriate energy cost expression using ``fform`` and ``fdat``, it turns it into C code using ``sympy.utilities.codegen`` and compiles a shared object file, which it runs using ``ctypes`` during the fitting process. This drastically reduces computation time for complicated fitting functions, for which I've found ``sympy.lambdify`` to be extremely slow. As a result, if you want to save the generated shared object file and then load it for the next simulation, you can use the ``save_cost_func_filename`` and ``load_cost_func_filename`` options (and those related to them) in the fitting routines of :mod:`shgpy.fformfit`.
+Before concluding this tutorial, let me add one more comment about one important capability of this software. Once the fitting routine has finished generating the appropriate energy cost expression using ``fform`` and ``fdat``, it turns it into C code using ``sympy.utilities.codegen`` and compiles a shared object file, which it runs using ``ctypes`` during the fitting process. This drastically reduces computation time for complicated fitting functions, for which I've found ``sympy.lambdify`` to be extremely slow. As a result, if you want to save the generated shared object file and then load it for the next simulation, you can use the ``save_cost_func_filename`` and ``load_cost_func_filename`` options (and those related to them) in the fitting routines of :mod:`shgpy.fformfit`. If you'd like to generate the cost function without running the fitting routine directly afterwards (as opposed to running them in series, which, for backwards-compatibility, is what the aforementioned :mod:`shgpy.fformfit` routines do), use :func:`shgpy.fformfit.gen_cost_func`.
 
-If you'd like to generate the cost function without running the fitting routine directly afterwards (as opposed to running them in series, which, for backwards-compatibility, is what the aforementioned :mod:`shgpy.fformfit` routines do), use :func:`shgpy.fformfit.gen_cost_func`.
+Furthermore, if you have a cost function generated by :func:``shgpy.fformfit.gen_cost_func``, you can then use the extensive set of routines in ``scipy.optimize`` (or even a different ``scipy.optimize`` wrapper, like LMFIT) to write your own specialized fitting procedure. These days, when I do RA-SHG fitting in my own research, I almost never use the wrapper functions in :mod:``shgpy.fformfit`` like :func:``shgpy.fformfit.basinhopping_fit``; rather, I generate a cost function with :func:``shgpy.fformfit.gen_cost_func`` (or, for even more control, a model function using :func:``shgpy.fformfit.get_model_func``), and then use LMFIT to minimize that cost function. Setting up LMFIT for this purpose is beyond the scope of this tutorial, but basic examples can be found in ``examples/fit_model_func_example.py`` and ``examples/fit_cost_func_example.py``.
+
 
 Conclusion
 ----------
