@@ -141,6 +141,19 @@ class DataContainer:
         return {k:np.array([np.rad2deg(v[0]), np.copy(v[1])]) for k,v in self._data_dict.items()}
 
     def filter(self, filter, *args, **kwargs):
+        """Apply a filter to the y-axis data.
+
+        Parameters
+        ----------
+        filter: function
+            The function to apply to the y-axis data. Must have the signature
+            ``filter(ydata, *args, **kwargs)``.
+        args: list-like
+            Arguments to pass to `filter`.
+        kwargs: dict
+            Keywork arguments to pass to `filter`.
+
+        """
         for pc, (xdata, ydata) in self._data_dict.items():
             new_ydata = filter(ydata, *args, **kwargs)
             self._data_dict[pc] = np.array([xdata, new_ydata])
@@ -310,7 +323,18 @@ class DataContainer:
         return repr(self.as_pandas('radians'))
 
     def as_pandas(self, requested_angle_units, index='multi'):
-        """Get data as a pandas DataFrame."""
+        """Get data as a pandas DataFrame.
+        
+        Parameters
+        ----------
+        requested_angle_units: {'radians', 'degrees'}
+            Units requested for `xdata`
+        index: {'multi', 'none'}, optional
+            If `'multi'`, the returned ``pandas.DataFrame`` object has a
+            MultiIndex structure. If `'none'`, no index is supplied to
+            ``pandas.DataFrame``. Default is `'multi'`
+
+        """
         a1 = self.get_keys()
         a2 = self.get_values(requested_angle_units)[0][0]
         if index == 'multi':
@@ -423,6 +447,7 @@ class fDataContainer:
         self._phase_shift = 0
 
     def copy(self):
+        """Return a copy of the fDataContainer."""
         fdat = fDataContainer(self._fdata_dict, M=self._M)
         fdat._scale = self._scale
         fdat._phase_shift = self._phase_shift,
@@ -447,7 +472,16 @@ class fDataContainer:
         return repr(self.as_pandas())
 
     def as_pandas(self, index='multi'):
-        """Get fdata as a pandas DataFrame."""
+        """Get data as a pandas DataFrame.
+        
+        Parameters
+        ----------
+        index: {'multi', 'none'}, optional
+            If `'multi'`, the returned ``pandas.DataFrame`` object has a
+            MultiIndex structure. If `'none'`, no index is supplied to
+            ``pandas.DataFrame``. Default is `'multi'`
+
+        """
         M = self.get_M()
         if index == 'multi':
             a1 = self.get_keys()
@@ -669,6 +703,7 @@ class fFormContainer:
         self._sympify()
 
     def copy(self):
+        """Return a copy of the fFormContainer."""
         fform = fFormContainer(self._fform_dict, M=self._M)
         return fform
 
@@ -753,7 +788,16 @@ class fFormContainer:
         return repr(self.as_pandas())
 
     def as_pandas(self, index='multi'):
-        """Get fdata as a pandas DataFrame."""
+        """Get data as a pandas DataFrame.
+        
+        Parameters
+        ----------
+        index: {'multi', 'none'}, optional
+            If `'multi'`, the returned ``pandas.DataFrame`` object has a
+            MultiIndex structure. If `'none'`, no index is supplied to
+            ``pandas.DataFrame``. Default is `'multi'`
+
+        """
         M = self.get_M()
         if index == 'multi':
             a1 = self.get_keys()
@@ -874,6 +918,7 @@ class FormContainer:
         self._sympify()
 
     def copy(self):
+        """Return a copy of the FormContainer."""
         form = FormContainer(self._form_dict)
         return form
 
@@ -951,7 +996,16 @@ class FormContainer:
         return repr(self.as_pandas())
 
     def as_pandas(self, index='multi'):
-        """Get data as a pandas DataFrame."""
+        """Get data as a pandas DataFrame.
+        
+        Parameters
+        ----------
+        index: {'multi', 'none'}, optional
+            If `'multi'`, the returned ``pandas.DataFrame`` object has a
+            MultiIndex structure. If `'none'`, no index is supplied to
+            ``pandas.DataFrame``. Default is `'multi'`
+
+        """
         if index == 'multi':
             a1 = self.get_keys()
             index = pd.Index(
