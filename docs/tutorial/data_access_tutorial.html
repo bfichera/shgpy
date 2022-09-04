@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Data access tutorial &#8212; ShgPy 0.7.10 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Data access tutorial &#8212; ShgPy 0.8.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -93,12 +95,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="documentwrapper">
@@ -107,19 +109,19 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="data-access-tutorial">
-<h1>Data access tutorial<a class="headerlink" href="#data-access-tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+  <section id="data-access-tutorial">
+<h1>Data access tutorial<a class="headerlink" href="#data-access-tutorial" title="Permalink to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>Wecome to ShgPy! In this tutorial, we will go through the basic steps to understand how ShgPy deals with accessing and manipulating data. Before starting this tutorial, make sure you have installed ShgPy by running:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install shgpy
 </pre></div>
 </div>
 <p>at the terminal. You’ll also need to install <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy</span></code>, <code class="docutils literal notranslate"><span class="pre">sympy</span></code>, and, optionally, <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>; refer to the corresponding documentation for more information on these packages. If you want to follow along with these tutorials, it’s a good idea to download the <a class="reference internal" href="../examples.html"><span class="doc">example files</span></a>.</p>
 <p>The main functionality of ShgPy is to be able to fit RA-SHG data to specific fitting formulas, and ultimately to extract susceptibility tensor values from those fits. But before we get into the details, it’s useful to first familiarize ourselves with the basic routines for loading, manipulating, and plotting SHG data – without worrying yet about any internal computation.</p>
-</div>
-<div class="section" id="loading-ra-shg-data-into-shgpy">
-<h2>Loading RA-SHG data into ShgPy<a class="headerlink" href="#loading-ra-shg-data-into-shgpy" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="loading-ra-shg-data-into-shgpy">
+<h2>Loading RA-SHG data into ShgPy<a class="headerlink" href="#loading-ra-shg-data-into-shgpy" title="Permalink to this heading">¶</a></h2>
 <p>The first thing we’re going to try to do is just to load a collection of RA-SHG data into python. To do this, we’re going to make use of some routines in <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a>. Throughout this tutorial, feel free to reference the API documentation for further details about the functions and classes that we’re going to be using.</p>
 <p>By the way, this tutorial will be loosely following the example program located at <code class="docutils literal notranslate"><span class="pre">examples/data_plot_example.py</span></code>, so you are welcome to follow along there (or else type these commands into a python terminal of your own).</p>
 <p>The first thing we need to do is to import <code class="docutils literal notranslate"><span class="pre">shgpy</span></code>:</p>
@@ -185,8 +187,8 @@
 <p>If we plot the data again, we’ll see that all of the data has been scaled by a factor of 100 and rotated through an angle <code class="docutils literal notranslate"><span class="pre">np.pi/2</span></code>.</p>
 <p>Take a minute now to skim the documentation for <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a>, to see what else can be done with <code class="docutils literal notranslate"><span class="pre">DataContainer</span></code> s. As always, if there’s something you think is missing, feel free to submit a feature request! See <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>.</p>
 <p>Onec you’re satisfied, move on to <a class="reference internal" href="fitting_tutorial.html"><span class="doc">the next tutorial</span></a> to start fitting your data.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -196,10 +198,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2021, Bryan Fichera.
+      &copy;2022, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

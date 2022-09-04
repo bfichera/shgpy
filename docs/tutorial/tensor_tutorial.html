@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tensor tutorial &#8212; ShgPy 0.7.10 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tensor tutorial &#8212; ShgPy 0.8.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -93,12 +95,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="documentwrapper">
@@ -107,18 +109,18 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="tensor-tutorial">
-<h1>Tensor tutorial<a class="headerlink" href="#tensor-tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+  <section id="tensor-tutorial">
+<h1>Tensor tutorial<a class="headerlink" href="#tensor-tutorial" title="Permalink to this heading">¶</a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">¶</a></h2>
 <p>Before going through this tutorial, make sure you’ve <a class="reference internal" href="../index.html"><span class="doc">installed shgpy</span></a> and read through <a class="reference internal" href="data_access_tutorial.html"><span class="doc">the last tutorial</span></a>.</p>
-</div>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>RA-SHG is a technique which is designed to measure a particular set of numbers which we collectively call the “susceptibility tensor.” This tutorial will go through the basics of how tensors are implemented in ShgPy, so that in the next tutorial we’ll know how to generate fitting formulas depending on the tensor that we want to fit to.</p>
-</div>
-<div class="section" id="tensor-definitions">
-<h2>Tensor definitions<a class="headerlink" href="#tensor-definitions" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="tensor-definitions">
+<h2>Tensor definitions<a class="headerlink" href="#tensor-definitions" title="Permalink to this heading">¶</a></h2>
 <p>Depending on the point group of the material that we’re trying to study, the susceptibility tensor will take on a variety of different forms. For example, if the material has inversion symmetry, then the susceptibility tensor will be identically zero – if, instead, it has threefold rotational symmetry, it might take on a form like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">chi</span> <span class="o">=</span> <span class="p">[[[</span> <span class="n">xxx</span><span class="p">,</span> <span class="o">-</span><span class="n">yyy</span><span class="p">,</span>  <span class="n">yyz</span><span class="p">],</span>
         <span class="p">[</span><span class="o">-</span><span class="n">yyy</span><span class="p">,</span> <span class="o">-</span><span class="n">xxx</span><span class="p">,</span> <span class="o">-</span><span class="n">yxz</span><span class="p">],</span>
@@ -205,9 +207,9 @@
 <p>The last tensor type we haven’t talked about, <code class="docutils literal notranslate"><span class="pre">quadrupole</span></code>, is the same idea except we’re talking about quadrupole SHG so the tensor is actually rank 4. Go ahead and load a quadrupole tensor into your python session to get a feel for how it looks.</p>
 <p>By the way, there is an ambiguity involving the direction of relevant high-symmetry axes in a given point group compared to the <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, and <code class="docutils literal notranslate"><span class="pre">z</span></code> axes implicitly defined here. Except where otherwise noted, the convention in these definitions is to follow that of Boyd’s textbook, “Nonlinear Optics.” The user is encouraged to consult this textbook for further information (author’s note: if there’s need, I would be happy to make these definitions more explicit in the documentation, I just haven’t had time. See <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>).</p>
 <p>When in doubt, you can always test that the tensor you’re using has the right symmetries by using <a class="reference internal" href="../api/shgpy.core.utilities.html#shgpy.core.utilities.transform" title="shgpy.core.utilities.transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.utilities.transform()</span></code></a> (see the next section for more details).</p>
-</div>
-<div class="section" id="manipulating-tensors">
-<h2>Manipulating tensors<a class="headerlink" href="#manipulating-tensors" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="manipulating-tensors">
+<h2>Manipulating tensors<a class="headerlink" href="#manipulating-tensors" title="Permalink to this heading">¶</a></h2>
 <p>So far we’ve learned how to load predefined tensors into ShgPy. But sometimes we want to use a tensor not exactly how it’s written in <a class="reference internal" href="../api/shgpy.tensor_definitions.html#module-shgpy.tensor_definitions" title="shgpy.tensor_definitions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.tensor_definitions</span></code></a>, but perhaps rotated by 90 degrees or inverted. In this section, we explore the basic means provided in ShgPy for doing just that.</p>
 <p>The most relevant function for transforming SHG tensors is <a class="reference internal" href="../api/shgpy.core.utilities.html#shgpy.core.utilities.transform" title="shgpy.core.utilities.transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.utilities.transform()</span></code></a>. Let’s see how this function works.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy</span> <span class="kn">import</span> <span class="n">transform</span>
@@ -263,8 +265,8 @@
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">sympy.Symbol.assumptions0</span></code> you can again inspect <code class="docutils literal notranslate"><span class="pre">real_...</span></code> and <code class="docutils literal notranslate"><span class="pre">imag_...</span></code> to prove that they are explicitly real numbers. Now your tensor is safe to start trying to fit data, as described in the next section.</p>
 <p>This ends our tutorial on tensors in ShgPy, but feel free to peruse through the relevant <a class="reference internal" href="../modules.html"><span class="doc">documentation</span></a> for more info before moving on to the <a class="reference internal" href="fitting_tutorial.html"><span class="doc">next tutorial</span></a>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -274,10 +276,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2021, Bryan Fichera.
+      &copy;2022, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

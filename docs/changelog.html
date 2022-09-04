@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Changelog &#8212; ShgPy 0.7.10 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Changelog &#8212; ShgPy 0.8.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -86,12 +88,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="documentwrapper">
@@ -100,28 +102,46 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="changelog">
-<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="v0-7-10">
-<h2>v0.7.10<a class="headerlink" href="#v0-7-10" title="Permalink to this headline">¶</a></h2>
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">¶</a></h1>
+<section id="v0-8-0">
+<h2>v0.8.0<a class="headerlink" href="#v0-8-0" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Rewrote the Fourier formula generation process. Previously <code class="docutils literal notranslate"><span class="pre">sympy</span></code> had a bug which made computing the Fourier transforms of typical SHG formulas incredibly slow. The previous workaroud was to compute the Fourier transforms of a general SHG tensor ahead of time (i.e. the “uncontracted Fourier transforms”), and then having the user generate a full Fourier formula for their specific system using a contraction of this tensor. A different workaround which I was not able to implement until now is to enumerate all the possible terms that could appear in a viable SHG formula (i.e. arbitrary products of sines and cosines), and then create a lookup table for their respective Fourier transforms for access at runtime. This is now implemented in <a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.form_to_fform" title="shgpy.core.data_handler.form_to_fform"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.form_to_fform()</span></code></a>. My initial tests suggest that, while it is still slightly slower than the previous workaround, not only is it much simpler for the user, but it also makes it trivial to compute the Fourier transforms of higher multiple SHG formulas (i.e. magnetic dipole and electric quadrupole contributions). This is now documented in the tutorials and examples.</p></li>
+<li><p>Added the ability to generate the raw cost functions or model functions from the Fourier formulas. This is useful in case the user wants to use a different wrapper around <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code> like LMFIT (which I highly recommend!).</p></li>
+<li><dl class="simple">
+<dt>Real-space formula generation is now implemented as a single function: <a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.formgen" title="shgpy.formgen.formgen"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.formgen.formgen()</span></code></a>. This function handles electric dipole, magnetic dipole, and electric quadrupole tensors through three arguments (<cite>t_eee</cite>, <cite>t_mee</cite>, and <cite>t_qee</cite>, respectively).</dt><dd><ul>
+<li><p>Note: this is the first release in which users are able to calculate the magnetic dipole contribution.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Added <cite>copy</cite> and <cite>as_pandas</cite> methods to containers</p></li>
+<li><p>Added <cite>filter</cite> method to <a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer()</span></code></a>.</p></li>
+<li><p>Added <cite>apply_arbitrary_scale</cite> method to <a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.FormContainer()</span></code></a> and <a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fFormContainer()</span></code></a>.</p></li>
+<li><p>Added multiple example files demonstrating the above.</p></li>
+</ul>
+</section>
+<section id="v0-7-10">
+<h2>v0.7.10<a class="headerlink" href="#v0-7-10" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Fixed a bug associated with the rounding of prefactors in <a class="reference internal" href="api/shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_contracted_fourier_transforms()</span></code></a> (i.e. the <cite>ndigits</cite> parameter).</p></li>
 </ul>
-</div>
-<div class="section" id="v0-7-8">
-<h2>v0.7.8<a class="headerlink" href="#v0-7-8" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="v0-7-8">
+<h2>v0.7.8<a class="headerlink" href="#v0-7-8" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Added the ability to apply Kleinman symmetry to a particular SHG tensor (i.e. enforce full permutation symmetry of the susceptibility indices). Use <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.particularize()</span></code> with the option <cite>permute_all_indices=True</cite></p></li>
 </ul>
-</div>
-<div class="section" id="v0-7-6">
-<h2>v0.7.6<a class="headerlink" href="#v0-7-6" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="v0-7-6">
+<h2>v0.7.6<a class="headerlink" href="#v0-7-6" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Added xlabel and ylabel axes to <a class="reference internal" href="api/shgpy.plotter.html#shgpy.plotter.easy_plot" title="shgpy.plotter.easy_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.plotter.easy_plot()</span></code></a></p></li>
 </ul>
-</div>
-<div class="section" id="v0-7-5">
-<h2>v0.7.5<a class="headerlink" href="#v0-7-5" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="v0-7-5">
+<h2>v0.7.5<a class="headerlink" href="#v0-7-5" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Fixed a number of tensors which were incorrectly defined due to typos in Boyd. The affected tensors were</dt><dd><ul>
@@ -134,9 +154,9 @@
 </dl>
 </li>
 </ul>
-</div>
-<div class="section" id="v0-7-0">
-<h2>v0.7.0<a class="headerlink" href="#v0-7-0" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="v0-7-0">
+<h2>v0.7.0<a class="headerlink" href="#v0-7-0" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Officially transitioned to supporting only tensors for which all the involved symbols are purely real, as defined by <code class="docutils literal notranslate"><span class="pre">sympy</span></code> assumptions. This got rid of a lot of redundancy in function definitions, such as <code class="docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_contracted_fourier_transforms</span></code> versus <code class="docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_contracted_fourier_transforms_complex</span></code>, <code class="docutils literal notranslate"><span class="pre">shgpy.formgen.formgen_dipole_quadrupole_real</span></code> and <code class="docutils literal notranslate"><span class="pre">shgpy.formgen.formgen_dipole_quadrupole_complex</span></code>, ect. In all cases, these functions have been replaced by a single function, e.g. <code class="docutils literal notranslate"><span class="pre">shgpy.formgen.formgen_dipole_quadrupole</span></code>, and you will receive a <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code> if you try to use any of the replaced definitions.</p></li>
 <li><p>To aid in explicitly defining the reality of SHG tensors, added <code class="docutils literal notranslate"><span class="pre">shgpy.make_tensor_real</span></code> to complement <code class="docutils literal notranslate"><span class="pre">shgpy.make_tensor_complex</span></code>.</p></li>
@@ -144,9 +164,9 @@
 <li><p>Added the ability to generate a cost function independently with <a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.gen_cost_func" title="shgpy.fformfit.gen_cost_func"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.gen_cost_func()</span></code></a> and use it in one of the fitting routines by the <code class="docutils literal notranslate"><span class="pre">load_cost_func_filename</span></code> argument.</p></li>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">shgpy.fformfit.dual_annealing_fit</span></code> and <code class="docutils literal notranslate"><span class="pre">shgpy.fformfit.dual_annealing_fit_with_bounds</span></code>.</p></li>
 </ul>
-</div>
-<div class="section" id="v0-6-1">
-<h2>v0.6.1<a class="headerlink" href="#v0-6-1" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="v0-6-1">
+<h2>v0.6.1<a class="headerlink" href="#v0-6-1" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Added the ability to optionally send arguments to the <code class="docutils literal notranslate"><span class="pre">scipy.optimize.basinhopping</span></code> function. This is useful e.g. for debugging – use</p></li>
 </ul>
@@ -154,21 +174,21 @@
 </pre></div>
 </div>
 <p>to send <code class="docutils literal notranslate"><span class="pre">disp=True</span></code> to <code class="docutils literal notranslate"><span class="pre">scipy.optimize.basinhopping</span></code>, which initializes verbose output.</p>
-</div>
-<div class="section" id="v0-5-1">
-<h2>v0.5.1<a class="headerlink" href="#v0-5-1" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="v0-5-1">
+<h2>v0.5.1<a class="headerlink" href="#v0-5-1" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Fixed a bug related to the change in v0.5.0 in which <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.load_fform()</span></code> wasn’t compatible with the new pickling scheme.</p></li>
 </ul>
-</div>
-<div class="section" id="v0-5-0">
-<h2>v0.5.0<a class="headerlink" href="#v0-5-0" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="v0-5-0">
+<h2>v0.5.0<a class="headerlink" href="#v0-5-0" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>In <code class="docutils literal notranslate"><span class="pre">.p</span></code> file handling, switched from pickling pure <code class="docutils literal notranslate"><span class="pre">sympy</span></code> expressions in <a class="reference internal" href="api/shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformgen</span></code></a> to pickling string represetations of those expressions generated using <code class="docutils literal notranslate"><span class="pre">sympy.srepr</span></code>. This is a workaround to a <code class="docutils literal notranslate"><span class="pre">sympy</span></code> / <code class="docutils literal notranslate"><span class="pre">pickle</span></code> bug in which unpickling <code class="docutils literal notranslate"><span class="pre">sympy</span></code> expressions will cause <code class="docutils literal notranslate"><span class="pre">sympy</span></code> to conflate objects like <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x')</span></code> with <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x',</span> <span class="pre">real=True)</span></code>.</p></li>
 <li><p>To use v0.5.0, you will have to remake your <code class="docutils literal notranslate"><span class="pre">.p</span></code> files.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -178,10 +198,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2021, Bryan Fichera.
+      &copy;2022, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

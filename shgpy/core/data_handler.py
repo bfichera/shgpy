@@ -1,5 +1,6 @@
 import numpy as np
 import sympy as sp
+import pandas as pd
 import csv
 import pickle
 from scipy.interpolate import interp1d
@@ -9,6 +10,7 @@ import itertools
 from copy import deepcopy
 from .. import shg_symbols as S
 from warnings import warn
+from ._fourier_transform import _fourier_transform
 
 _logger = logging.getLogger(__name__)
 
@@ -52,13 +54,23 @@ class DataContainer:
         self._data_dict = deepcopy(dict(iterable))
         self._phase_shift = 0
         self._offset = 0
+        self._coerced = False
         if input_angle_units == 'degrees':
             self._convert_data_dict_to_radians()
         if normal_to_oblique:
             self._coerce_to_oblique_incidence()
+            self._coerced = True
         self._remove_duplicates()
         self._modulate_data_dict()
         self._sort_data_dict()
+
+    def copy(self):
+        """Return a copy of the DataContainer."""
+        dat = DataContainer(self._data_dict, normal_to_oblique=self.coerced)
+        dat._scale = self._scale
+        dat._phase_shift = self._phase_shift,
+        dat._offset = self._offset
+        return dat
 
     def _check_angle_units(self, angle_units):
         if angle_units not in ['radians', 'degrees']:
@@ -127,6 +139,24 @@ class DataContainer:
 
     def _get_data_dict_degrees(self):
         return {k:np.array([np.rad2deg(v[0]), np.copy(v[1])]) for k,v in self._data_dict.items()}
+
+    def filter(self, filter, *args, **kwargs):
+        """Apply a filter to the y-axis data.
+
+        Parameters
+        ----------
+        filter : function
+            The function to apply to the y-axis data. Must have the signature
+            ``filter(ydata, *args, **kwargs)``.
+        args : list-like
+            Arguments to pass to `filter`.
+        kwargs : dict
+            Keywork arguments to pass to `filter`.
+
+        """
+        for pc, (xdata, ydata) in self._data_dict.items():
+            new_ydata = filter(ydata, *args, **kwargs)
+            self._data_dict[pc] = np.array([xdata, new_ydata])
 
     def scale_data(self, scale_factor):
         """Scale the data by a constant factor."""
@@ -289,6 +319,58 @@ class DataContainer:
         elif requested_angle_units == 'degrees':
             return list(self._get_data_dict_degrees().values())
 
+    def __repr__(self):
+        return repr(self.as_pandas('radians'))
+
+    def as_pandas(self, requested_angle_units, index='multi'):
+        """Get data as a pandas DataFrame.
+        
+        Parameters
+        ----------
+        requested_angle_units : {'radians', 'degrees'}
+            Units requested for `xdata`
+        index : {'multi', 'none'}, optional
+            If `'multi'`, the returned ``pandas.DataFrame`` object has a
+            MultiIndex structure. If `'none'`, no index is supplied to
+            ``pandas.DataFrame``. Default is `'multi'`
+
+        """
+        a1 = self.get_keys()
+        a2 = self.get_values(requested_angle_units)[0][0]
+        if index == 'multi':
+            index = pd.MultiIndex.from_product(
+                (
+                    a1,
+                    a2,
+                ),
+                names=('POLARIZATION', 'ANGLE'),
+            )
+            raw_data_as_1d = np.array(
+                [
+                    self.get_pc(k, requested_angle_units)[1].flatten()
+                    for k in self.get_keys()
+                ],
+            ).flatten()
+            df = pd.DataFrame(
+                raw_data_as_1d,
+                index=index,
+            )
+            df.columns = ['VALUE']
+        elif index == 'none':
+            df = pd.DataFrame()
+            for pc in self.get_keys():
+                xdata, ydata = self.get_pc(pc, requested_angle_units)
+                df = pd.concat(
+                    [
+                        df,
+                        pd.DataFrame(
+                            {'ANGLE': xdata, 'VALUE': ydata, 'POLARIZATION': pc},
+                        ),
+                    ],
+                )
+                    
+        return df
+
     def get_items(self, requested_angle_units):
         """Get a list of `(pc, data)` pairs.
 
@@ -364,6 +446,13 @@ class fDataContainer:
         self._scale = 1
         self._phase_shift = 0
 
+    def copy(self):
+        """Return a copy of the fDataContainer."""
+        fdat = fDataContainer(self._fdata_dict, M=self._M)
+        fdat._scale = self._scale
+        fdat._phase_shift = self._phase_shift,
+        return fdat
+
     def _check_defining_iterable(self, iterable):
         def raise_error():
             raise ValueError('Invalid Data input')
@@ -378,6 +467,57 @@ class fDataContainer:
     def _check_angle_units(self, angle_units):
         if angle_units not in ['radians', 'degrees']:
             raise ValueError('angle_units input must be one of \'radians\' or \'degrees\'.')
+
+    def __repr__(self):
+        return repr(self.as_pandas())
+
+    def as_pandas(self, index='multi'):
+        """Get data as a pandas DataFrame.
+        
+        Parameters
+        ----------
+        index : {'multi', 'none'}, optional
+            If `'multi'`, the returned ``pandas.DataFrame`` object has a
+            MultiIndex structure. If `'none'`, no index is supplied to
+            ``pandas.DataFrame``. Default is `'multi'`
+
+        """
+        M = self.get_M()
+        if index == 'multi':
+            a1 = self.get_keys()
+            a2 = np.arange(-M, M+1)
+            index = pd.MultiIndex.from_product(
+                (
+                    a1,
+                    a2,
+                ),
+                names=('POLARIZATION', 'N'),
+            )
+            raw_data_as_1d = np.array(
+                [
+                    self.get_pc(k)
+                    for k in self.get_keys()
+                ],
+            ).flatten()
+            df = pd.DataFrame(
+                raw_data_as_1d,
+                index=index,
+            )
+            df.columns = ['VALUE']
+        elif index == 'none':
+            df = pd.DataFrame()
+            for pc in self.get_keys():
+                fdata = self.get_pc(pc)
+                ndata = np.arange(-M, M+1)
+                df = pd.concat(
+                    [
+                        df,
+                        pd.DataFrame(
+                            {'N': ndata, 'VALUE': fdata, 'POLARIZATION': pc},
+                        ),
+                    ],
+                )
+        return df
 
     def get_keys(self):
         """Get the polarization combinations for this data.
@@ -562,6 +702,11 @@ class fFormContainer:
         self._fform_dict = self._copy_iterable(iterable)
         self._sympify()
 
+    def copy(self):
+        """Return a copy of the fFormContainer."""
+        fform = fFormContainer(self._fform_dict, M=self._M)
+        return fform
+
     def _copy_iterable(self, iterable):
         _fform_dict = {
             k:np.array([s for s in v])
@@ -605,7 +750,7 @@ class fFormContainer:
         ----------
         subs_array : array_like of array_like of sympy.Expr
             An array of pairs of values. For example, to substitute the expression
-            `2*xyz` for the variable `xxx`, use ``subs_array = ((xxx, 2*xyz))``.
+            `2*xyz` for the variable `xxx`, use ``subs_array = ((xxx, 2*xyz),)``.
         """
         subs_fform_dict = {}
         for k,v in self.get_items():
@@ -638,6 +783,57 @@ class fFormContainer:
 
         Each Fourier formula array has `2*M+1` elements."""
         return self._M
+
+    def __repr__(self):
+        return repr(self.as_pandas())
+
+    def as_pandas(self, index='multi'):
+        """Get data as a pandas DataFrame.
+        
+        Parameters
+        ----------
+        index : {'multi', 'none'}, optional
+            If `'multi'`, the returned ``pandas.DataFrame`` object has a
+            MultiIndex structure. If `'none'`, no index is supplied to
+            ``pandas.DataFrame``. Default is `'multi'`
+
+        """
+        M = self.get_M()
+        if index == 'multi':
+            a1 = self.get_keys()
+            a2 = np.arange(-M, M+1)
+            index = pd.MultiIndex.from_product(
+                (
+                    a1,
+                    a2,
+                ),
+                names=('POLARIZATION', 'N'),
+            )
+            raw_data_as_1d = np.array(
+                [
+                    self.get_pc(k)
+                    for k in self.get_keys()
+                ],
+            ).flatten()
+            df = pd.DataFrame(
+                raw_data_as_1d,
+                index=index,
+            )
+            df.columns = ['EXPRESSION']
+        elif index == 'none':
+            df = pd.DataFrame()
+            for pc in self.get_keys():
+                edata = self.get_pc(pc)
+                ndata = np.arange(-M, M+1)
+                df = pd.concat(
+                    [
+                        df,
+                        pd.DataFrame(
+                            {'N': ndata, 'EXPRESSION': edata, 'POLARIZATION': pc},
+                        ),
+                    ],
+                )
+        return df
 
     def get_pc(self, pc):
         """Get the Fourier formula for single polarization combination.
@@ -691,6 +887,10 @@ class fFormContainer:
         """
         return list(self._fform_dict.items())
 
+    def apply_arbitrary_scale(self, scale_var):
+        for k, v in self._fform_dict.items():
+            self._fform_dict[k] = scale_var*v
+
 
 class FormContainer:
     """Contains an SHG formula in `phi`-space.
@@ -716,6 +916,11 @@ class FormContainer:
         self._check_defining_iterable(iterable)
         self._form_dict = self._copy_iterable(iterable)
         self._sympify()
+
+    def copy(self):
+        """Return a copy of the FormContainer."""
+        form = FormContainer(self._form_dict)
+        return form
 
     def _copy_iterable(self, iterable):
         _form_dict = {
@@ -787,6 +992,51 @@ class FormContainer:
         for k,v in self.get_items():
             self._form_dict[k] = sp.expand(v)
 
+    def __repr__(self):
+        return repr(self.as_pandas())
+
+    def as_pandas(self, index='multi'):
+        """Get data as a pandas DataFrame.
+        
+        Parameters
+        ----------
+        index : {'multi', 'none'}, optional
+            If `'multi'`, the returned ``pandas.DataFrame`` object has a
+            MultiIndex structure. If `'none'`, no index is supplied to
+            ``pandas.DataFrame``. Default is `'multi'`
+
+        """
+        if index == 'multi':
+            a1 = self.get_keys()
+            index = pd.Index(
+                    a1,
+                    name='POLARIZATION',
+            )
+            raw_data_as_1d = np.array(
+                [
+                    self.get_pc(k)
+                    for k in self.get_keys()
+                ],
+            ).flatten()
+            df = pd.DataFrame(
+                raw_data_as_1d,
+                index=index,
+            )
+            df.columns = ['EXPRESSION']
+        elif index == 'none':
+            df = pd.DataFrame()
+            for pc in self.get_keys():
+                e = self.get_pc(pc)
+                df = pd.concat(
+                    [
+                        df,
+                        pd.DataFrame(
+                            {'EXPRESSION': [e], 'POLARIZATION': pc},
+                        ),
+                    ],
+                )
+        return df
+
     def get_keys(self):
         """Get the polarization combinations for this formula.
 
@@ -836,6 +1086,10 @@ class FormContainer:
             Formula expression for polarization combination `pc`. 
         """
         return self._form_dict[pc]
+
+    def apply_arbitrary_scale(self, scale_var):
+        for k, v in self._form_dict.items():
+            self._form_dict[k] = scale_var*v
 
 
 def n2i(n, M=16):
@@ -1050,15 +1304,11 @@ def form_to_fform(form, M=16):
 
     """
     iterable = {}
-    for k,v in form.get_items():
+    for k, v in form.get_items():
         iterable[k] = np.zeros((2*M+1,), dtype=object)
-        _logger.info(f'Currently computing {k}.')
         for m in np.arange(-M, M+1):
-            _logger.debug(f'Currently computing m={m}.')
-            expr = sp.expand_trig(v*(sp.cos(-m*S.phi)+1j*sp.sin(-m*S.phi))).expand()
-            expr_re = _no_I_component(expr)
-            expr_im = _I_component(expr)
-            iterable[k][n2i(m, M)] = 1/2/sp.pi*sp.integrate(expr_re, (S.phi, 0, 2*sp.pi)) + 1/2/sp.pi*sp.I*sp.integrate(expr_im, (S.phi, 0, 2*sp.pi))
+            _logger.debug(f'Computing fourier transform for pc={k}, m={m}')
+            iterable[k][n2i(m, M)] = _fourier_transform(v, m, M)
     return fFormContainer(iterable, M=M)
 
 
@@ -1149,7 +1399,7 @@ def merge_containers(containers, mapping):
         return new_type(iterable)
 
 
-def read_csv_file(filename, delimiter=','):
+def read_csv(filename, delimiter=','):
     """Read a csv file.
 
     Parameters
@@ -1261,8 +1511,8 @@ def load_data_and_dark_subtract(data_filenames_dict, data_angle_units, dark_file
     """
     if set(data_filenames_dict.keys()) != set(dark_filenames_dict.keys()):
         raise ValueError('filename dicts have different keys.')
-    dat1 = DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, data_angle_units, normal_to_oblique=normal_to_oblique)
-    dat2 = DataContainer({k:read_csv_file(v) for k,v in dark_filenames_dict.items()}, dark_angle_units, normal_to_oblique=normal_to_oblique)
+    dat1 = DataContainer({k:read_csv(v) for k,v in data_filenames_dict.items()}, data_angle_units, normal_to_oblique=normal_to_oblique)
+    dat2 = DataContainer({k:read_csv(v) for k,v in dark_filenames_dict.items()}, dark_angle_units, normal_to_oblique=normal_to_oblique)
     return dat_subtract(dat1, dat2)
     
 
@@ -1283,7 +1533,7 @@ def load_data(data_filenames_dict, angle_units, normal_to_oblique=False):
     dat : DataContainer
     
     """
-    return DataContainer({k:read_csv_file(v) for k,v in data_filenames_dict.items()}, angle_units, normal_to_oblique=normal_to_oblique)
+    return DataContainer({k:read_csv(v) for k,v in data_filenames_dict.items()}, angle_units, normal_to_oblique=normal_to_oblique)
 
 
 def dat_to_fdat(dat, interp_kind='cubic', M=16):
@@ -1400,3 +1650,21 @@ def load_fform(fform_filename):
         for k,v in str_fform_dict.items()
     }
     return fFormContainer(_fform_dict)
+
+
+def save_fform(fform, fform_filename):
+    """Save an instance of fFormContainer to fform_filename.
+
+    Parameters
+    ----------
+    fform : fFormContainer
+        Instance of `fFormContainer`
+    fform_filename : str or file object
+
+    """
+    str_fform_dict = {
+        k:np.array([sp.srepr(s) for s in v])
+        for k,v in fform._fform_dict.items()    
+    }
+    with open(fform_filename, 'wb') as fh:
+        pickle.dump(str_fform_dict, fh)

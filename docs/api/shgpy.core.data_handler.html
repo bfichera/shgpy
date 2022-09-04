@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>shgpy.core.data_handler module &#8212; ShgPy 0.7.10 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>shgpy.core.data_handler module &#8212; ShgPy 0.8.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -98,12 +100,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="documentwrapper">
@@ -112,15 +114,15 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-shgpy.core.data_handler">
-<span id="shgpy-core-data-handler-module"></span><h1>shgpy.core.data_handler module<a class="headerlink" href="#module-shgpy.core.data_handler" title="Permalink to this headline">¶</a></h1>
+  <section id="module-shgpy.core.data_handler">
+<span id="shgpy-core-data-handler-module"></span><h1>shgpy.core.data_handler module<a class="headerlink" href="#module-shgpy.core.data_handler" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt id="shgpy.core.data_handler.DataContainer">
-<em class="property">class </em><code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">DataContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iterable</span></em>, <em class="sig-param"><span class="n">input_angle_units</span></em>, <em class="sig-param"><span class="n">normal_to_oblique</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">DataContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_angle_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_to_oblique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains SHG data in <cite>phi</cite>-space.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>iterable</strong><span class="classifier">dict or array_like</span></dt><dd><p>dict which defines the data. Should be in form
 <cite>{‘PP’:array([xdata, ydata]), ‘PS’:…}</cite>. Also accepts <cite>array_like</cite>
@@ -147,18 +149,61 @@ allows one to keep track of whatever manipulations (scaling, offsetting) have
 been applied to the data, as well as other attributes like the units with
 which the data was defined.</p>
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_items">
-<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_items" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.as_pandas">
+<span class="sig-name descname"><span class="pre">as_pandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requested_angle_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multi'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.as_pandas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data as a pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>requested_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units requested for <cite>xdata</cite></p>
+</dd>
+<dt><strong>index</strong><span class="classifier">{‘multi’, ‘none’}, optional</span></dt><dd><p>If <cite>‘multi’</cite>, the returned <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> object has a
+MultiIndex structure. If <cite>‘none’</cite>, no index is supplied to
+<code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. Default is <cite>‘multi’</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of the DataContainer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a filter to the y-axis data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filter</strong><span class="classifier">function</span></dt><dd><p>The function to apply to the y-axis data. Must have the signature
+<code class="docutils literal notranslate"><span class="pre">filter(ydata,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code>.</p>
+</dd>
+<dt><strong>args</strong><span class="classifier">list-like</span></dt><dd><p>Arguments to pass to <cite>filter</cite>.</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">dict</span></dt><dd><p>Keywork arguments to pass to <cite>filter</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_items">
+<span class="sig-name descname"><span class="pre">get_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requested_angle_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of <cite>(pc, data)</cite> pairs.</p>
 <p>Equivalent to <cite>dict.items()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>requested_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units requested for <cite>xdata</cite>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>data</strong><span class="classifier">list of (pc, ndarray) tuple</span></dt><dd><p>List of data for each polarization combination, each
 in the form <cite>(pc, array([xdata, ydata]))</cite></p>
@@ -169,12 +214,12 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_keys">
-<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_keys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_keys">
+<span class="sig-name descname"><span class="pre">get_keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the polarization combinations for this data.</p>
 <p>Equivalent to <cite>dict.keys()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pcs</strong><span class="classifier">list of str</span></dt><dd></dd>
 </dl>
@@ -183,11 +228,11 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_maxval">
-<code class="sig-name descname">get_maxval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_maxval" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_maxval">
+<span class="sig-name descname"><span class="pre">get_maxval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_maxval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum value of the data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>mac_pc</strong><span class="classifier">str</span></dt><dd><p>The polarization combination for which the maximum occurred</p>
 </dd>
@@ -199,11 +244,11 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_minval">
-<code class="sig-name descname">get_minval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_minval" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_minval">
+<span class="sig-name descname"><span class="pre">get_minval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_minval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the minimum value of the data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>min_pc</strong><span class="classifier">str</span></dt><dd><p>The polarization combination for which the minimum occurred.</p>
 </dd>
@@ -215,17 +260,17 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_offset">
-<code class="sig-name descname">get_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_offset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_offset">
+<span class="sig-name descname"><span class="pre">get_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_offset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the degree to which the data has been offset</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_pc">
-<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em>, <em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_pc">
+<span class="sig-name descname"><span class="pre">get_pc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requested_angle_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get data for single polarization combination.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pc</strong><span class="classifier">str</span></dt><dd><p>Polarization combination of interest.</p>
 </dd>
@@ -233,7 +278,7 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>data</strong><span class="classifier">ndarray</span></dt><dd><p>Data for polarization combination <cite>pc</cite> in the form
 <cite>array([xdata, ydata])</cite>.</p>
@@ -244,17 +289,17 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_pc_maxval">
-<code class="sig-name descname">get_pc_maxval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc_maxval" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_pc_maxval">
+<span class="sig-name descname"><span class="pre">get_pc_maxval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc_maxval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum value of a particular polarization combination.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pc</strong><span class="classifier">str</span></dt><dd><p>The polarization combination of interest.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>maximum_value</strong><span class="classifier">float</span></dt><dd></dd>
 </dl>
@@ -263,17 +308,17 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_pc_minval">
-<code class="sig-name descname">get_pc_minval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc_minval" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_pc_minval">
+<span class="sig-name descname"><span class="pre">get_pc_minval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_pc_minval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the minimum value of a particular polarization combination.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pc</strong><span class="classifier">str</span></dt><dd><p>The polarization combination of interest.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>minimum_value</strong><span class="classifier">float</span></dt><dd></dd>
 </dl>
@@ -282,16 +327,16 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_phase_shift">
-<code class="sig-name descname">get_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_phase_shift" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_phase_shift">
+<span class="sig-name descname"><span class="pre">get_phase_shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requested_angle_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_phase_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the extent to which this data has been phase shifted from the original.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>requested_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>phase_shift</strong><span class="classifier">float</span></dt><dd></dd>
 </dl>
@@ -300,24 +345,24 @@ in the form <cite>(pc, array([xdata, ydata]))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_scale">
-<code class="sig-name descname">get_scale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_scale" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_scale">
+<span class="sig-name descname"><span class="pre">get_scale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the extent to which this data has been scaled from the original.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.get_values">
-<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_values" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.get_values">
+<span class="sig-name descname"><span class="pre">get_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requested_angle_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.get_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of data (without polarization combination reference)</p>
 <p>Equivalent to <cite>dict.values()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>requested_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units requested for <cite>xdata</cite>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>data</strong><span class="classifier">list of ndarray</span></dt><dd><p>Data for each polarization combination
 in the form <cite>array([xdata, ydata])</cite></p>
@@ -328,17 +373,17 @@ in the form <cite>array([xdata, ydata])</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.normalize_data">
-<code class="sig-name descname">normalize_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">desired_maximum</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.normalize_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.normalize_data">
+<span class="sig-name descname"><span class="pre">normalize_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desired_maximum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.normalize_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize the data to a desired maximum.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.phase_shift_data">
-<code class="sig-name descname">phase_shift_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.phase_shift_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.phase_shift_data">
+<span class="sig-name descname"><span class="pre">phase_shift_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.phase_shift_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase shift the data by a constant amount.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>angle</strong><span class="classifier">float</span></dt><dd></dd>
 <dt><strong>angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of argument <cite>angle</cite>.</p>
@@ -349,26 +394,26 @@ in the form <cite>array([xdata, ydata])</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.scale_data">
-<code class="sig-name descname">scale_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale_factor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.scale_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.scale_data">
+<span class="sig-name descname"><span class="pre">scale_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.scale_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scale the data by a constant factor.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.DataContainer.subtract_min">
-<code class="sig-name descname">subtract_min</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.subtract_min" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.DataContainer.subtract_min">
+<span class="sig-name descname"><span class="pre">subtract_min</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.DataContainer.subtract_min" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subtract the minimum from the data.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="shgpy.core.data_handler.FormContainer">
-<em class="property">class </em><code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">FormContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iterable</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">FormContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains an SHG formula in <cite>phi</cite>-space.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>iterable</strong><span class="classifier">dict or array_like</span></dt><dd><p>dict which defines the formula. Should be in form
 <cite>{‘PP’:sympy.Expr, ‘PS’:…, …}</cite>. Also accepts <cite>array_like</cite>
@@ -385,11 +430,16 @@ manipulating such a formula. It basically acts as a dictionary of
 <cite>{pc:formula}</cite> pairs, where <cite>pc</cite> labels the polarization combination
 and <cite>formula</cite> is an instance of the sympy.Expr class.</p>
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.apply_phase_shift">
-<code class="sig-name descname">apply_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phase_shift</span></em>, <em class="sig-param"><span class="n">var_to_shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.apply_phase_shift" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.apply_arbitrary_scale">
+<span class="sig-name descname"><span class="pre">apply_arbitrary_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_var</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.apply_arbitrary_scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.apply_phase_shift">
+<span class="sig-name descname"><span class="pre">apply_phase_shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_shift</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_to_shift</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.apply_phase_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase shift the formula.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>phase_shift</strong><span class="classifier">sympy.Expr</span></dt><dd><p>Amount to shift by</p>
 </dd>
@@ -403,24 +453,46 @@ and <cite>formula</cite> is an instance of the sympy.Expr class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.expand">
-<code class="sig-name descname">expand</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.expand" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.as_pandas">
+<span class="sig-name descname"><span class="pre">as_pandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multi'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.as_pandas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data as a pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>index</strong><span class="classifier">{‘multi’, ‘none’}, optional</span></dt><dd><p>If <cite>‘multi’</cite>, the returned <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> object has a
+MultiIndex structure. If <cite>‘none’</cite>, no index is supplied to
+<code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. Default is <cite>‘multi’</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of the FormContainer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.expand">
+<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.expand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the <cite>sympy.expand</cite> method to every polarization combination.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.get_free_symbols">
-<code class="sig-name descname">get_free_symbols</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_free_symbols" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.get_free_symbols">
+<span class="sig-name descname"><span class="pre">get_free_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_free_symbols" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a sorted list of the free symbols in the Fourier formula.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.get_items">
-<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_items" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.get_items">
+<span class="sig-name descname"><span class="pre">get_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of <cite>(pc, formula)</cite> pairs.</p>
 <p>Equivalent to <cite>dict.items()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>items</strong><span class="classifier">list of (str, sympy.Expr) tuple</span></dt><dd><p>List of data for each polarization combination, each
 in the form <cite>(pc, formula)</cite></p>
@@ -431,12 +503,12 @@ in the form <cite>(pc, formula)</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.get_keys">
-<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_keys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.get_keys">
+<span class="sig-name descname"><span class="pre">get_keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the polarization combinations for this formula.</p>
 <p>Equivalent to <cite>dict.keys()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pcs</strong><span class="classifier">list of str</span></dt><dd></dd>
 </dl>
@@ -445,17 +517,17 @@ in the form <cite>(pc, formula)</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.get_pc">
-<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.get_pc">
+<span class="sig-name descname"><span class="pre">get_pc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the formula for single polarization combination.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pc</strong><span class="classifier">str</span></dt><dd><p>Polarization combination of interest.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>formula</strong><span class="classifier">sympy.Expr</span></dt><dd><p>Formula expression for polarization combination <cite>pc</cite>.</p>
 </dd>
@@ -465,12 +537,12 @@ in the form <cite>(pc, formula)</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.get_values">
-<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_values" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.get_values">
+<span class="sig-name descname"><span class="pre">get_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.get_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of the formulas (without polarization combination reference)</p>
 <p>Equivalent to <cite>dict.values()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>values</strong><span class="classifier">list of sympy.Expr</span></dt><dd></dd>
 </dl>
@@ -479,17 +551,17 @@ in the form <cite>(pc, formula)</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.simplify">
-<code class="sig-name descname">simplify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.simplify" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.simplify">
+<span class="sig-name descname"><span class="pre">simplify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.simplify" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the <cite>sympy.simplify</cite> method to every polarization combination.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.FormContainer.subs">
-<code class="sig-name descname">subs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">subs_array</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.subs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.FormContainer.subs">
+<span class="sig-name descname"><span class="pre">subs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subs_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.FormContainer.subs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitute for some variables in the Fourier formula.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>subs_array</strong><span class="classifier">array_like of array_like of sympy.Expr</span></dt><dd><p>An array of pairs of values. For example, to substitute the expression
 <cite>2*psi</cite> for the variable <cite>phi</cite>, use <code class="docutils literal notranslate"><span class="pre">subs_array</span> <span class="pre">=</span> <span class="pre">((phi,</span> <span class="pre">2*psi))</span></code>.</p>
@@ -502,11 +574,11 @@ in the form <cite>(pc, formula)</cite></p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.dat_add">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">dat_add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dat1</span></em>, <em class="sig-param"><span class="n">dat2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.dat_add" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.dat_add">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">dat_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dat1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dat2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.dat_add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add two <cite>DataContainer</cite> instances.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dat1</strong><span class="classifier">DataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a></p>
 </dd>
@@ -514,7 +586,7 @@ in the form <cite>(pc, formula)</cite></p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dat_result</strong><span class="classifier">DataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a> containing
 the contents of <cite>dat1+dat2</cite>.</p>
@@ -525,11 +597,11 @@ the contents of <cite>dat1+dat2</cite>.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.dat_subtract">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">dat_subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dat1</span></em>, <em class="sig-param"><span class="n">dat2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.dat_subtract" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.dat_subtract">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">dat_subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dat1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dat2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.dat_subtract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subtract two <cite>DataContainer</cite> instances.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dat1</strong><span class="classifier">DataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a></p>
 </dd>
@@ -537,7 +609,7 @@ the contents of <cite>dat1+dat2</cite>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dat_result</strong><span class="classifier">DataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a> containing
 the contents of <cite>dat1-dat2</cite>.</p>
@@ -548,11 +620,11 @@ the contents of <cite>dat1-dat2</cite>.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.dat_to_fdat">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">dat_to_fdat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dat</span></em>, <em class="sig-param"><span class="n">interp_kind</span><span class="o">=</span><span class="default_value">'cubic'</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.dat_to_fdat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.dat_to_fdat">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">dat_to_fdat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interp_kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.dat_to_fdat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert instance of <cite>DataContainer</cite> to instance of <cite>fDataContainer</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>dat</strong><span class="classifier">DataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a></p>
 </dd>
@@ -568,7 +640,7 @@ interpolator to use. Default is ‘cubic’.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fdat</strong><span class="classifier">fDataContainer</span></dt><dd><p>Instance of <cite>fDataContainer</cite></p>
 </dd>
@@ -585,12 +657,12 @@ transform to be well-defined.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="shgpy.core.data_handler.fDataContainer">
-<em class="property">class </em><code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">fDataContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iterable</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">fDataContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains SHG data in Fourier space.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>iterable</strong><span class="classifier">dict or array_like</span></dt><dd><p>dict which defines the data. Should be in form
 <cite>{‘PP’:ndarray(…), ‘PS’:…, …}</cite>. Also accepts <cite>array_like</cite>
@@ -609,19 +681,41 @@ basically acts as a dictionary holding pairs <cite>(pc, fdata)</cite>, where
 is an ndarray of length <cite>2*M+1</cite>. The <cite>nth</cite> element here denotes the
 <cite>(n-M)th</cite> fourier component of the data to be fitted.</p>
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_M">
-<code class="sig-name descname">get_M</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_M" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.as_pandas">
+<span class="sig-name descname"><span class="pre">as_pandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multi'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.as_pandas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data as a pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>index</strong><span class="classifier">{‘multi’, ‘none’}, optional</span></dt><dd><p>If <cite>‘multi’</cite>, the returned <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> object has a
+MultiIndex structure. If <cite>‘none’</cite>, no index is supplied to
+<code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. Default is <cite>‘multi’</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of the fDataContainer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_M">
+<span class="sig-name descname"><span class="pre">get_M</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_M" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of Fourier frequencies.</p>
 <p>Each <cite>fdata</cite> array has <cite>2*M+1</cite> elements.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_items">
-<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_items" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_items">
+<span class="sig-name descname"><span class="pre">get_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of <cite>(pc, fdata)</cite> pairs.</p>
 <p>Equivalent to <cite>dict.items()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fdata</strong><span class="classifier">list of (pc, ndarray) tuple</span></dt><dd><p>List of data for each polarization combination, each
 in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
@@ -632,12 +726,12 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_keys">
-<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_keys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_keys">
+<span class="sig-name descname"><span class="pre">get_keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the polarization combinations for this data.</p>
 <p>Equivalent to <cite>dict.keys()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pcs</strong><span class="classifier">list of str</span></dt><dd></dd>
 </dl>
@@ -646,11 +740,11 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_maxval">
-<code class="sig-name descname">get_maxval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_maxval" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_maxval">
+<span class="sig-name descname"><span class="pre">get_maxval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_maxval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum value of the data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>mac_pc</strong><span class="classifier">str</span></dt><dd><p>The polarization combination for which the maximum occurred</p>
 </dd>
@@ -666,17 +760,17 @@ the magnitudes of the different elements.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_pc">
-<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_pc">
+<span class="sig-name descname"><span class="pre">get_pc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_pc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get fdata for single polarization combination.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pc</strong><span class="classifier">str</span></dt><dd><p>Polarization combination of interest.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fdata</strong><span class="classifier">ndarray</span></dt><dd><p>Data for polarization combination <cite>pc</cite> with shape <cite>2*M+1</cite>.</p>
 </dd>
@@ -686,17 +780,17 @@ the magnitudes of the different elements.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_pc_maxval">
-<code class="sig-name descname">get_pc_maxval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_pc_maxval" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_pc_maxval">
+<span class="sig-name descname"><span class="pre">get_pc_maxval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_pc_maxval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum value of a particular polarization combination.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pc</strong><span class="classifier">str</span></dt><dd><p>The polarization combination of interest.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>maximum_value</strong><span class="classifier">float</span></dt><dd><p>Returns maximum of magnitudes of fourier components
 (see <a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_maxval" title="shgpy.core.data_handler.fDataContainer.get_maxval"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_maxval()</span></code></a>)</p>
@@ -707,16 +801,16 @@ the magnitudes of the different elements.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_phase_shift">
-<code class="sig-name descname">get_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">requested_angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_phase_shift" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_phase_shift">
+<span class="sig-name descname"><span class="pre">get_phase_shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requested_angle_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_phase_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the extent to which this data has been phase shifted from the original.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>requested_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>phase_shift</strong><span class="classifier">float</span></dt><dd></dd>
 </dl>
@@ -725,18 +819,18 @@ the magnitudes of the different elements.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_scale">
-<code class="sig-name descname">get_scale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_scale" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_scale">
+<span class="sig-name descname"><span class="pre">get_scale</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the extent to which this data has been scaled from the original.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.get_values">
-<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_values" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.get_values">
+<span class="sig-name descname"><span class="pre">get_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.get_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of data (without polarization combination reference)</p>
 <p>Equivalent to <cite>dict.values()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fdata</strong><span class="classifier">list of ndarray</span></dt><dd><p>Data for each polarization combination
 in the form <cite>array(shape=(2*M+1,))</cite></p>
@@ -747,17 +841,17 @@ in the form <cite>array(shape=(2*M+1,))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.normalize_fdata">
-<code class="sig-name descname">normalize_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">desired_maximum</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.normalize_fdata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.normalize_fdata">
+<span class="sig-name descname"><span class="pre">normalize_fdata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desired_maximum</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.normalize_fdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize the data to a desired maximum.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.phase_shift_fdata">
-<code class="sig-name descname">phase_shift_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">angle_units</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.phase_shift_fdata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.phase_shift_fdata">
+<span class="sig-name descname"><span class="pre">phase_shift_fdata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_units</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.phase_shift_fdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase shift the data by a constant amount.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>angle</strong><span class="classifier">float</span></dt><dd></dd>
 <dt><strong>angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of argument <cite>angle</cite>.</p>
@@ -768,20 +862,20 @@ in the form <cite>array(shape=(2*M+1,))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fDataContainer.scale_fdata">
-<code class="sig-name descname">scale_fdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale_factor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.scale_fdata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fDataContainer.scale_fdata">
+<span class="sig-name descname"><span class="pre">scale_fdata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fDataContainer.scale_fdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize the fdata by a given amount.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="shgpy.core.data_handler.fFormContainer">
-<em class="property">class </em><code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">fFormContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">iterable</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">fFormContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Contains an SHG formula in Fourier space.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>iterable</strong><span class="classifier">dict or array_like</span></dt><dd><p>dict which defines the Fourier formula. Should be in form
 <cite>{‘PP’:ndarray(…), ‘PS’:…, …}</cite>. Also accepts <cite>array_like</cite>
@@ -800,11 +894,16 @@ basically acts as a dictionary of <cite>{pc:fformula}</cite> pairs, where
 <cite>ndarray</cite> of length <cite>2*M+1</cite>. Here, the <cite>nth</cite> element of <cite>fformula</cite>
 contains a formula for the <cite>(n-M)th</cite> Fourier coefficient.</p>
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fFormContainer.apply_phase_shift">
-<code class="sig-name descname">apply_phase_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phase_shift</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.apply_phase_shift" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.apply_arbitrary_scale">
+<span class="sig-name descname"><span class="pre">apply_arbitrary_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_var</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.apply_arbitrary_scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.apply_phase_shift">
+<span class="sig-name descname"><span class="pre">apply_phase_shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_shift</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.apply_phase_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase shift the Fourier formula.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>phase_shift</strong><span class="classifier">sympy.Expr</span></dt><dd></dd>
 </dl>
@@ -816,25 +915,47 @@ Fourier formula by <code class="docutils literal notranslate"><span class="pre">
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fFormContainer.get_M">
-<code class="sig-name descname">get_M</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_M" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.as_pandas">
+<span class="sig-name descname"><span class="pre">as_pandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multi'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.as_pandas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get data as a pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>index</strong><span class="classifier">{‘multi’, ‘none’}, optional</span></dt><dd><p>If <cite>‘multi’</cite>, the returned <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> object has a
+MultiIndex structure. If <cite>‘none’</cite>, no index is supplied to
+<code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. Default is <cite>‘multi’</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of the fFormContainer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.get_M">
+<span class="sig-name descname"><span class="pre">get_M</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_M" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of Fourier frequencies.</p>
 <p>Each Fourier formula array has <cite>2*M+1</cite> elements.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fFormContainer.get_free_symbols">
-<code class="sig-name descname">get_free_symbols</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_free_symbols" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.get_free_symbols">
+<span class="sig-name descname"><span class="pre">get_free_symbols</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_free_symbols" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a sorted list of the free symbols in the Fourier formula.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fFormContainer.get_items">
-<code class="sig-name descname">get_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_items" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.get_items">
+<span class="sig-name descname"><span class="pre">get_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of <cite>(pc, fformula)</cite> pairs.</p>
 <p>Equivalent to <cite>dict.items()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>items</strong><span class="classifier">list of (str, ndarray) tuple</span></dt><dd><p>List of data for each polarization combination, each
 in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
@@ -845,12 +966,12 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fFormContainer.get_keys">
-<code class="sig-name descname">get_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_keys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.get_keys">
+<span class="sig-name descname"><span class="pre">get_keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the polarization combinations for this Fourier formula.</p>
 <p>Equivalent to <cite>dict.keys()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pcs</strong><span class="classifier">list of str</span></dt><dd></dd>
 </dl>
@@ -859,17 +980,17 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fFormContainer.get_pc">
-<code class="sig-name descname">get_pc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.get_pc">
+<span class="sig-name descname"><span class="pre">get_pc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_pc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Fourier formula for single polarization combination.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>pc</strong><span class="classifier">str</span></dt><dd><p>Polarization combination of interest.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fformula</strong><span class="classifier">ndarray</span></dt><dd><p>Fourier formula array for polarization combination <cite>pc</cite>.</p>
 </dd>
@@ -879,12 +1000,12 @@ in the form <cite>(pc, array(shape=(2*M+1,)))</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fFormContainer.get_values">
-<code class="sig-name descname">get_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_values" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.get_values">
+<span class="sig-name descname"><span class="pre">get_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.get_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of the Fourier formulas (without polarization combination reference)</p>
 <p>Equivalent to <cite>dict.values()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>values</strong><span class="classifier">list of ndarray</span></dt><dd><p>Data for each polarization combination
 in the form <cite>array([xdata, ydata])</cite></p>
@@ -895,14 +1016,14 @@ in the form <cite>array([xdata, ydata])</cite></p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="shgpy.core.data_handler.fFormContainer.subs">
-<code class="sig-name descname">subs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">subs_array</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.subs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fFormContainer.subs">
+<span class="sig-name descname"><span class="pre">subs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subs_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fFormContainer.subs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitute for some variables in the Fourier formula.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>subs_array</strong><span class="classifier">array_like of array_like of sympy.Expr</span></dt><dd><p>An array of pairs of values. For example, to substitute the expression
-<cite>2*xyz</cite> for the variable <cite>xxx</cite>, use <code class="docutils literal notranslate"><span class="pre">subs_array</span> <span class="pre">=</span> <span class="pre">((xxx,</span> <span class="pre">2*xyz))</span></code>.</p>
+<cite>2*xyz</cite> for the variable <cite>xxx</cite>, use <code class="docutils literal notranslate"><span class="pre">subs_array</span> <span class="pre">=</span> <span class="pre">((xxx,</span> <span class="pre">2*xyz),)</span></code>.</p>
 </dd>
 </dl>
 </dd>
@@ -912,11 +1033,11 @@ in the form <cite>array([xdata, ydata])</cite></p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.fdat_to_dat">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">fdat_to_dat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fdat</span></em>, <em class="sig-param"><span class="n">num_points</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fdat_to_dat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fdat_to_dat">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">fdat_to_dat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fdat_to_dat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert instance of <cite>fDataContainer</cite> to instance of <cite>DataContainer</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fdat</strong><span class="classifier">fDataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.fDataContainer" title="shgpy.core.data_handler.fDataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fDataContainer</span></code></a></p>
 </dd>
@@ -924,7 +1045,7 @@ in the form <cite>array([xdata, ydata])</cite></p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dat</strong><span class="classifier">DataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a></p>
 </dd>
@@ -937,11 +1058,11 @@ class and performing an inverse Fourier transform.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.fform_to_dat">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">fform_to_dat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">subs_dict</span></em>, <em class="sig-param"><span class="n">num_points</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fform_to_dat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fform_to_dat">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">fform_to_dat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subs_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fform_to_dat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert instance of <cite>fFormContainer</cite> to instance of <cite>DataContainer</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fform</strong><span class="classifier">fFormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fFormContainer</span></code></a></p>
 </dd>
@@ -951,7 +1072,7 @@ class and performing an inverse Fourier transform.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dat</strong><span class="classifier">DataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a></p>
 </dd>
@@ -966,11 +1087,11 @@ to `subs_dict</cite>. Then it creates a <cite>DataContainer</cite> instance with
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.fform_to_fdat">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">fform_to_fdat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em>, <em class="sig-param"><span class="n">subs_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fform_to_fdat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fform_to_fdat">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">fform_to_fdat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subs_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fform_to_fdat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert instance of <cite>fFormContainer</cite> to instance of <cite>fDataContainer</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fform</strong><span class="classifier">fFormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fFormContainer</span></code></a></p>
 </dd>
@@ -978,7 +1099,7 @@ to `subs_dict</cite>. Then it creates a <cite>DataContainer</cite> instance with
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fdat</strong><span class="classifier">fDataContainer</span></dt><dd><p>Instance of <cite>fDataContainer</cite></p>
 </dd>
@@ -992,17 +1113,17 @@ to `subs_dict</cite>.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.fform_to_form">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">fform_to_form</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fform_to_form" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.fform_to_form">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">fform_to_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fform</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.fform_to_form" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert instance of <cite>fFormContainer</cite> to instance of <cite>FormContainer</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fform</strong><span class="classifier">fFormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fFormContainer</span></code></a></p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>form</strong><span class="classifier">FormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FormContainer</span></code></a></p>
 </dd>
@@ -1015,11 +1136,11 @@ class and performing a Fourier transform.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.form_to_dat">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">form_to_dat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">form</span></em>, <em class="sig-param"><span class="n">subs_dict</span></em>, <em class="sig-param"><span class="n">num_points</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.form_to_dat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.form_to_dat">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">form_to_dat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subs_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.form_to_dat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert instance of <cite>FormContainer</cite> to instance of <cite>DataContainer</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>form</strong><span class="classifier">FormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FormContainer</span></code></a></p>
 </dd>
@@ -1029,7 +1150,7 @@ class and performing a Fourier transform.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dat</strong><span class="classifier">DataContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataContainer</span></code></a></p>
 </dd>
@@ -1044,11 +1165,11 @@ to `subs_dict</cite>. Then it creates a <cite>DataContainer</cite> instance with
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.form_to_fdat">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">form_to_fdat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">form</span></em>, <em class="sig-param"><span class="n">subs_dict</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.form_to_fdat" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.form_to_fdat">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">form_to_fdat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subs_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.form_to_fdat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert instance of <cite>FormContainer</cite> to instance of <cite>fDataContainer</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fform</strong><span class="classifier">FormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FormContainer</span></code></a></p>
 </dd>
@@ -1056,7 +1177,7 @@ to `subs_dict</cite>. Then it creates a <cite>DataContainer</cite> instance with
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fdat</strong><span class="classifier">fDataContainer</span></dt><dd><p>Instance of <cite>fDataContainer</cite></p>
 </dd>
@@ -1071,11 +1192,11 @@ substituting for all the relevant <cite>sympy.Symbol`s according to
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.form_to_fform">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">form_to_fform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">form</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.form_to_fform" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.form_to_fform">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">form_to_fform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.form_to_fform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert instance of <cite>FormContainer</cite> to instance of <cite>fFormContainer</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>form</strong><span class="classifier">FormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">FormContainer</span></code></a></p>
 </dd>
@@ -1083,7 +1204,7 @@ substituting for all the relevant <cite>sympy.Symbol`s according to
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fform</strong><span class="classifier">fFormContainer</span></dt><dd><p>Instance of <a class="reference internal" href="#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">fFormContainer</span></code></a></p>
 </dd>
@@ -1096,13 +1217,13 @@ class and performing a Fourier transform.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.load_data">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">angle_units</span></em>, <em class="sig-param"><span class="n">normal_to_oblique</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.load_data">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_filenames_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_to_oblique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load RA-SHG data from a dict of filenames.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>data_filenames_dict</strong><span class="classifier">dict of (str</span></dt><dd><p>dict of form (polarization combination : filename).</p>
+<dt><strong>data_filenames_dict</strong><span class="classifier">dict of (str</span><span class="classifier">str or file object)</span></dt><dd><p>dict of form (polarization combination : filename).</p>
 </dd>
 <dt><strong>data_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite></p>
 </dd>
@@ -1110,7 +1231,7 @@ class and performing a Fourier transform.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dat</strong><span class="classifier">DataContainer</span></dt><dd></dd>
 </dl>
@@ -1119,17 +1240,17 @@ class and performing a Fourier transform.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.load_data_and_dark_subtract">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data_and_dark_subtract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">data_angle_units</span></em>, <em class="sig-param"><span class="n">dark_filenames_dict</span></em>, <em class="sig-param"><span class="n">dark_angle_units</span></em>, <em class="sig-param"><span class="n">normal_to_oblique</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data_and_dark_subtract" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.load_data_and_dark_subtract">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">load_data_and_dark_subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_filenames_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_angle_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_filenames_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_angle_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_to_oblique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data_and_dark_subtract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load RA-SHG data from a dict of filenames and dark subtract.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>data_filenames_dict</strong><span class="classifier">dict of (str</span></dt><dd><p>dict of form (polarization combination : filename).</p>
+<dt><strong>data_filenames_dict</strong><span class="classifier">dict of (str</span><span class="classifier">str or file object)</span></dt><dd><p>dict of form (polarization combination : filename).</p>
 </dd>
 <dt><strong>data_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite></p>
 </dd>
-<dt><strong>dark_filenames_dict</strong><span class="classifier">dict of (str</span></dt><dd><p>dict of form (polarization combination : filename).</p>
+<dt><strong>dark_filenames_dict</strong><span class="classifier">dict of (str</span><span class="classifier">str or file object)</span></dt><dd><p>dict of form (polarization combination : filename).</p>
 </dd>
 <dt><strong>dark_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite> for the dark.</p>
 </dd>
@@ -1137,7 +1258,7 @@ class and performing a Fourier transform.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dat</strong><span class="classifier">DataContainer</span></dt><dd></dd>
 </dl>
@@ -1146,17 +1267,17 @@ class and performing a Fourier transform.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.load_data_and_fourier_transform">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_data_and_fourier_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_filenames_dict</span></em>, <em class="sig-param"><span class="n">data_angle_units</span></em>, <em class="sig-param"><span class="n">dark_filenames_dict</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dark_angle_units</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interp_kind</span><span class="o">=</span><span class="default_value">'cubic'</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em>, <em class="sig-param"><span class="n">min_subtract</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">normal_to_oblique</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data_and_fourier_transform" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.load_data_and_fourier_transform">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">load_data_and_fourier_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_filenames_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_angle_units</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_filenames_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_angle_units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interp_kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_subtract</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_to_oblique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_data_and_fourier_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load RA-SHG data from a dict of filenames and Fourier transform</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>data_filenames_dict</strong><span class="classifier">dict of (str</span></dt><dd><p>dict of form (polarization combination : filename).</p>
+<dt><strong>data_filenames_dict</strong><span class="classifier">dict of (str</span><span class="classifier">str or file object)</span></dt><dd><p>dict of form (polarization combination : filename).</p>
 </dd>
 <dt><strong>data_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite></p>
 </dd>
-<dt><strong>dark_filenames_dict</strong><span class="classifier">dict of (str</span></dt><dd><p>dict of form (polarization combination : filename).</p>
+<dt><strong>dark_filenames_dict</strong><span class="classifier">dict of (str</span><span class="classifier">str or file object)</span></dt><dd><p>dict of form (polarization combination : filename).</p>
 </dd>
 <dt><strong>dark_angle_units</strong><span class="classifier">{‘radians’, ‘degrees’}</span></dt><dd><p>Units of <cite>xdata</cite> for the dark.</p>
 </dd>
@@ -1178,7 +1299,7 @@ Default is False.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dat</strong><span class="classifier">DataContainer</span></dt><dd></dd>
 <dt><strong>fdat</strong><span class="classifier">fDataContainer</span></dt><dd></dd>
@@ -1188,15 +1309,15 @@ Default is False.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.load_fform">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">load_fform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fform_filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_fform" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.load_fform">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">load_fform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fform_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.load_fform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creat instance of fFormContainer from a fform_filename.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fform_filename</span></code> s are generated using the utilities provided
 in the <a class="reference internal" href="shgpy.fformgen.html#module-shgpy.fformgen" title="shgpy.fformgen"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fformgen</span></code></a> module. Those utilities output
 a pickled fFormContainer-like object which can be loaded into
 a true fFormContainer instance using this function.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>fform_filename</strong><span class="classifier">str or file object</span></dt><dd></dd>
 </dl>
@@ -1205,11 +1326,11 @@ a true fFormContainer instance using this function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.merge_containers">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">merge_containers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">containers</span></em>, <em class="sig-param"><span class="n">mapping</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.merge_containers" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.merge_containers">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">merge_containers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">containers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.merge_containers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge two contains with new keys according to <cite>mapping</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>containers</strong><span class="classifier">list of Container_like</span></dt><dd><p>List of Containers (DataContainer, fDataContainer,
 FormContainer, or fFormContainer). Must be the same type.</p>
@@ -1219,7 +1340,7 @@ of a Container in <cite>containers</cite> to <cite>str</cite>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>container</strong><span class="classifier">Container_like</span></dt><dd><p>Container object of type <code class="docutils literal notranslate"><span class="pre">type(containers[0])</span></code> with items
 ((k1, v1), (k2, v2), …), where ki are the mapped keys of
@@ -1246,25 +1367,25 @@ the containers and vi are the corresponding values.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.n2i">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">n2i</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">M</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.n2i" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.n2i">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">n2i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.n2i" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert between Fourier index and array index</p>
 <p>Returns the index (0-<cite>2*M+1</cite>) in a Fourier array corresponding to the <cite>nth</cite> Fourier component</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.data_handler.read_csv_file">
-<code class="sig-prename descclassname">shgpy.core.data_handler.</code><code class="sig-name descname">read_csv_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">delimiter</span><span class="o">=</span><span class="default_value">','</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.read_csv_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.data_handler.read_csv">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">read_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.read_csv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a csv file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>filename</strong><span class="classifier">str or file object</span></dt><dd></dd>
 <dt><strong>delimiter</strong><span class="classifier">str</span></dt><dd><p>Defaults to <code class="docutils literal notranslate"><span class="pre">','</span></code>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>data</strong><span class="classifier">ndarray</span></dt><dd><p>Data from csv file of the form <cite>array([xdata, ydata])</cite>.</p>
 </dd>
@@ -1273,7 +1394,22 @@ the containers and vi are the corresponding values.</p>
 </dl>
 </dd></dl>
 
-</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="shgpy.core.data_handler.save_fform">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.data_handler.</span></span><span class="sig-name descname"><span class="pre">save_fform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fform_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.data_handler.save_fform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save an instance of fFormContainer to fform_filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fform</strong><span class="classifier">fFormContainer</span></dt><dd><p>Instance of <cite>fFormContainer</cite></p>
+</dd>
+<dt><strong>fform_filename</strong><span class="classifier">str or file object</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 
 
           </div>
@@ -1283,10 +1419,10 @@ the containers and vi are the corresponding values.</p>
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2021, Bryan Fichera.
+      &copy;2022, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

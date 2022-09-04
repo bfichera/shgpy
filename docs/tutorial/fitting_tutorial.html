@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fitting tutorial &#8212; ShgPy 0.7.10 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Fitting tutorial &#8212; ShgPy 0.8.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -93,12 +95,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="documentwrapper">
@@ -107,20 +109,74 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="fitting-tutorial">
-<h1>Fitting tutorial<a class="headerlink" href="#fitting-tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+  <section id="fitting-tutorial">
+<h1>Fitting tutorial<a class="headerlink" href="#fitting-tutorial" title="Permalink to this heading">¶</a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">¶</a></h2>
 <p>Before going through this tutorial, make sure you’ve <a class="reference internal" href="../index.html"><span class="doc">installed shgpy</span></a> and read through <a class="reference internal" href="tensor_tutorial.html"><span class="doc">the last tutorial</span></a>.</p>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>In <a class="reference internal" href="data_access_tutorial.html"><span class="doc">the first tutorial</span></a>, we learned how to load RA-SHG data into ShgPy using <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data" title="shgpy.core.data_handler.load_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data()</span></code></a> and the <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a> class. In <a class="reference internal" href="tensor_tutorial.html"><span class="doc">the last tutorial</span></a>, we learned about how tensors for different point groups were defined in ShgPy and how to manipulate them. Now, we’re going to put these concepts together and learn how to fit RA-SHG data.</p>
+</section>
+<section id="fourier-formula-generation-the-easy-way">
+<h2>Fourier formula generation (the easy way)<a class="headerlink" href="#fourier-formula-generation-the-easy-way" title="Permalink to this heading">¶</a></h2>
+<p>In real space, the SHG formula can be computed from a given tensor using the well-known expression:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">P_i</span> <span class="o">=</span> <span class="n">chi_ijk</span> <span class="n">E_j</span> <span class="n">E_k</span><span class="p">,</span>
+</pre></div>
 </div>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>In <a class="reference internal" href="data_access_tutorial.html"><span class="doc">the first tutorial</span></a>, we learned how to load RA-SHG data into ShgPy using <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data" title="shgpy.core.data_handler.load_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data()</span></code></a> and the <cite>shgpy.core.data_handler.DataContainer</cite> class. In <a class="reference internal" href="tensor_tutorial.html"><span class="doc">the last tutorial</span></a>, we learned about how tensors for different point groups were defined in ShgPy and how to manipulate them. Now, we’re going to put these concepts together and learn how to fit RA-SHG data.</p>
+<p>where the electric fields depend on <cite>phi</cite> like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">E_i</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">=</span> <span class="n">R_ij</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="n">E_j</span><span class="o">.</span>
+</pre></div>
 </div>
-<div class="section" id="fourier-formula-generation">
-<h2>Fourier formula generation<a class="headerlink" href="#fourier-formula-generation" title="Permalink to this headline">¶</a></h2>
+<p>Generally speaking, we usually project the incoming and outgoing light onto all combinations of parallel (“P”) and perpendicular (“S”) to the plane of incidence, so that at the end of the day we need to compute 4 separate expressions (one for each of the four different combinations “PP”, “PS”, “SP”, and “SS”). These expression are calculated by running <a class="reference internal" href="../api/shgpy.formgen.html#shgpy.formgen.formgen" title="shgpy.formgen.formgen"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.formgen.formgen()</span></code></a>, as described below and in <code class="docutils literal notranslate"><span class="pre">examples/gen_fform_from_form.py</span></code>.</p>
+<p>Let us consider the case of trying to fit the GaAs data available in <code class="docutils literal notranslate"><span class="pre">examples/Data</span></code> to the tensor <code class="docutils literal notranslate"><span class="pre">shgpy.tensor_definitions.dipole['T_d']</span></code> oriented along the (110) direction. First, we define the fitting tensor</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.tensor_definitions</span> <span class="kn">import</span> <span class="n">dipole</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t_dipole</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">particularize</span><span class="p">(</span><span class="n">dipole</span><span class="p">[</span><span class="s1">&#39;T_d&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">rotation_matrix_from_two_vectors</span><span class="p">(</span>
+<span class="go">    np.array([1, 1, 0]),</span>
+<span class="go">    np.array([0, 0, 1]),</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t_dipole</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">t_dipole</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t_dipole</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">make_tensor_real</span><span class="p">(</span><span class="n">t_dipole</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Defining</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">AOI</span> <span class="o">=</span> <span class="mf">0.1745</span> <span class="c1"># 10 degrees, in radians</span>
+</pre></div>
+</div>
+<p>we now run</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.formgen</span> <span class="kn">import</span> <span class="n">formgen</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="o">=</span> <span class="n">formgen</span><span class="p">(</span><span class="n">AOI</span><span class="p">,</span> <span class="n">t_eee</span><span class="o">=</span><span class="n">t_dipole</span><span class="p">,</span> <span class="n">t_mee</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_qee</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If we wanted to also compute a magnetic dipole or electric quadrupole contribution, we would only need to pass the corresponding tensors into the <code class="docutils literal notranslate"><span class="pre">t_mee</span></code> or <code class="docutils literal notranslate"><span class="pre">t_qee</span></code> arguments of <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.fformgen()</span></code>.</p>
+<p>Looking at the result:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">form</span>
+<span class="go">    POLARIZATION</span>
+<span class="go">    PP            1.02630490104953*zyx**2*sin(phi)**6 + 2.052609...</span>
+<span class="go">    PS            0.117577963371275*zyx**2*sin(phi)**6 - 1.17577...</span>
+<span class="go">    SP            0.121232196306961*zyx**2*sin(phi)**6 + 1.21232...</span>
+<span class="go">    SS            1.125*zyx**2*sin(phi)**6 - 2.25*zyx**2*sin(phi...</span>
+</pre></div>
+</div>
+<p>The return value <code class="docutils literal notranslate"><span class="pre">form</span></code> is an instance of the class <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.FormContainer</span></code></a>; we won’t go into the details now, but there are various convenience routines native to this class which can be used to inspect and manipulate these expressions. Most of these are documented in the API documentation.</p>
+<p>The next step in our fitting routine is to compute the Fourier transforms of these four expressions. In previous iterations of <code class="docutils literal notranslate"><span class="pre">shgpy</span></code>, this was a bit of an arduous process, requiring one to perform a set of precomputations (there is a bug in <code class="docutils literal notranslate"><span class="pre">sympy</span></code> that makes it impossible to compute them on the fly). However, as of <code class="docutils literal notranslate"><span class="pre">v0.8.0</span></code>, a new workaroud was developed in which all of the precomputation could be shipped in the package download. Thus computing the Fourier transform of <code class="docutils literal notranslate"><span class="pre">form</span></code> now requires only a single line:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fform</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">form_to_fform</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The return value here, <code class="docutils literal notranslate"><span class="pre">fform</span></code>, is an instance of the <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer" title="shgpy.core.data_handler.fFormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fFormContainer</span></code></a> class. Like the <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.FormContainer</span></code></a> class, this class contains a number of helper routines which can be used to inspect and manipulate the Fourier expressions contained in <code class="docutils literal notranslate"><span class="pre">fform</span></code>. For our purposes, it is sufficient to know that <code class="docutils literal notranslate"><span class="pre">fform</span></code> simply contains the Fourier transforms of the expressions contained in <code class="docutils literal notranslate"><span class="pre">form</span></code>, and that these Fourier transforms are exactly the inputs we need to go into the fitting procedure I will describe below.</p>
+<p>By the way, for simple tensors running <code class="docutils literal notranslate"><span class="pre">shgpy.fform_to_form</span></code> should take around a second or two and can thus be reliably executed at runtime. However, if you want to cache the result, you can use the helper routines <code class="docutils literal notranslate"><span class="pre">shgpy.save_fform</span></code> and <code class="docutils literal notranslate"><span class="pre">shgpy.load_fform</span></code>, e.g.:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shgpy</span><span class="o">.</span><span class="n">save_fform</span><span class="p">(</span><span class="n">fform</span><span class="p">,</span> <span class="s1">&#39;T_d-None-None(110)-particularized.p&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="fourier-formula-generation-the-hard-way">
+<h2>Fourier formula generation (the hard way)<a class="headerlink" href="#fourier-formula-generation-the-hard-way" title="Permalink to this heading">¶</a></h2>
+<p>As alluded to above, a previous version of <code class="docutils literal notranslate"><span class="pre">shgpy</span></code> involved a lengthy workaround to a symbolic integration bug in <code class="docutils literal notranslate"><span class="pre">sympy</span></code> which required the user to precompute and cache a number of expressions in order to avoid unreasonable computation times. However, a new workaroud has been developed in <code class="docutils literal notranslate"><span class="pre">v0.8.0</span></code> which is much simpler and there is basically no reason to use the legacy workaround if you are a new user. If you started using <code class="docutils literal notranslate"><span class="pre">shgpy</span></code> before <code class="docutils literal notranslate"><span class="pre">v0.8.0</span></code> and currently have the legacy workaround in deployment, there’s no problem with using it from here out and I don’t plan to deprecate it in the near future (note, however, that computing the magnetic dipole contribution is only available in <code class="docutils literal notranslate"><span class="pre">v0.8.0</span></code> with the new workaround). The following section is available as a reference for those early users who prefer to use the old <code class="docutils literal notranslate"><span class="pre">fformgen</span></code> procedure.</p>
 <p>As alluded to previously, the central idea behind fitting in ShgPy is to fit in Fourier space. This provides a drastic simplification to the cost function. However, the problem is that computing a Fourier transform symbolically is difficult, and we have resort to some tricks to compute it efficiently (or at least, ahead of time).</p>
-<p>What do I mean by the last part? To begin, let’s think about what the function is that we’re trying to compute. Ultimately, we want to compute an intensity as a function of the azimuthal angle <code class="docutils literal notranslate"><span class="pre">phi</span></code> in the experiment. This is given by the square of the nonlinear polarization, i.e.:</p>
+<p>What do I mean by the last part? To begin, let’s think about what the function is that we’re trying to compute. Ultimately, we want to compute an intensity as a function of the azimuthal angle <code class="docutils literal notranslate"><span class="pre">phi</span></code> in the experiment. As above, this is given by the square of the nonlinear polarization, i.e.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">I</span> <span class="o">=</span> <span class="o">|</span><span class="n">P_i</span><span class="o">|**</span><span class="mi">2</span> <span class="o">=</span> <span class="o">|</span><span class="n">chi_ijk</span> <span class="n">E_j</span> <span class="n">E_k</span><span class="o">|**</span><span class="mi">2</span>
 </pre></div>
 </div>
@@ -191,10 +247,10 @@
 </div>
 <p>On my machine, this takes about five to ten minutes, depending on the complexity of the susceptibility tensors. When it completes, the function will save a pickled Fourier formula object to the location specified by <code class="docutils literal notranslate"><span class="pre">save_filename</span></code>.</p>
 <p>What we’ve just done is by far the most difficult step (both conceptually and computationally) in ShgPy, but it is easily worth it. By spending 10-15 minutes of computation time now, we have dramatically simplified the routines that we are about to run in the next section of this tutorial.</p>
-</div>
-<div class="section" id="the-final-step-fitting-your-first-ra-shg-data">
-<h2>The final step: fitting your first RA-SHG data<a class="headerlink" href="#the-final-step-fitting-your-first-ra-shg-data" title="Permalink to this headline">¶</a></h2>
-<p>All that’s left now is to load the Fourier formula just generated (at <code class="docutils literal notranslate"><span class="pre">'T_d-None-None(110)-particularized.p'</span></code>) into ShgPy, load the data that we want to fit, and then fun one of the functions in <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a>.</p>
+</section>
+<section id="the-final-step-fitting-your-first-ra-shg-data">
+<h2>The final step: fitting your first RA-SHG data<a class="headerlink" href="#the-final-step-fitting-your-first-ra-shg-data" title="Permalink to this heading">¶</a></h2>
+<p>All that’s left now is to load the Fourier formula just generated (at <code class="docutils literal notranslate"><span class="pre">'T_d-None-None(110)-particularized.p'</span></code>) into ShgPy, load the data that we want to fit, and then run one of the functions in <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a>.</p>
 <p>Before we begin, let’s recall from <a class="reference internal" href="data_access_tutorial.html"><span class="doc">the first tutorial</span></a> how we loaded RA-SHG data into ShgPy. In that tutorial, we loaded the data into an instance of the special class <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a>, and noted that other datatypes would be loaded into similar objects when it came to actually doing the fitting.</p>
 <p>Let’s review these other datatypes now. First, we consider the class <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer" title="shgpy.core.data_handler.fDataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fDataContainer</span></code></a>, which, in brief, simply contains the Fourier transform of the sort of data which would go into a <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a> instance. Like <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a>, it also includes methods for scaling and phase-shifting the data contained in it.</p>
 <p>To create an instance of <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer" title="shgpy.core.data_handler.fDataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fDataContainer</span></code></a>, one can load a dataset into a <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a> instance and then convert it using <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.dat_to_fdat" title="shgpy.core.data_handler.dat_to_fdat"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.dat_to_fdat()</span></code></a>, or use the function <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data_and_fourier_transform" title="shgpy.core.data_handler.load_data_and_fourier_transform"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.load_data_and_fourier_transform()</span></code></a>, which does both at the same time:</p>
@@ -213,7 +269,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fform</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">load_fform</span><span class="p">(</span><span class="n">fform_filename</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This would be a good time to read the documentation provided in <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a> to familiarize oneself with these functions. (You will find that there is a fourth object, <a class="reference internal" href="../api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer" title="shgpy.core.data_handler.FormContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.FormContainer</span></code></a>, which is designed to contain <code class="docutils literal notranslate"><span class="pre">phi</span></code>-space formulas; see also <a class="reference internal" href="../api/shgpy.formgen.html#module-shgpy.formgen" title="shgpy.formgen"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.formgen</span></code></a> and the documentation therein for more details.)</p>
+<p>(By the way, this would be a good time to read the documentation provided in <a class="reference internal" href="../api/shgpy.core.data_handler.html#module-shgpy.core.data_handler" title="shgpy.core.data_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.core.data_handler</span></code></a> to familiarize oneself with these functions).</p>
 <p>There is one more fitting parameter which is not captured by <a class="reference internal" href="../api/shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_contracted_fourier_transforms()</span></code></a>, which is the relative phase shift between the data and the fitting formula. So let’s phase shift the formula by an arbitrary angle.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shgpy.shg_symbols</span> <span class="kn">import</span> <span class="n">psi</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fform</span><span class="o">.</span><span class="n">apply_phase_shift</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
@@ -237,14 +293,14 @@
 </div>
 <p>In addition to <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.least_squares_fit" title="shgpy.fformfit.least_squares_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.least_squares_fit()</span></code></a>, there are a couple of other routines available for fitting RA-SHG data. The most useful one for most problems is actually <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.basinhopping_fit" title="shgpy.fformfit.basinhopping_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.basinhopping_fit()</span></code></a> (and its cousins, see the <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> reference), which is based on the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html#scipy.optimize.basinhopping">scipy.optimize.basinhopping</a> function provided by SciPy. It is specifically designed to treat problems with many local minima and degrees of freedom. In the future, further fitting routines will be added, if there is interest (see <a class="reference internal" href="../contribute.html"><span class="doc">how to contribute</span></a>).</p>
 <p>A variant of the basinhopping algorithm which is also included in <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> is <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.dual_annealing_fit()</span></code>. See the API documentation for more information.</p>
-<p>Before concluding this tutorial, let me add one more comment about one important capability of this software. Once the fitting routine has finished generating the appropriate energy cost expression using <code class="docutils literal notranslate"><span class="pre">fform</span></code> and <code class="docutils literal notranslate"><span class="pre">fdat</span></code>, it turns it into C code using <code class="docutils literal notranslate"><span class="pre">sympy.utilities.codegen</span></code> and compiles a shared object file, which it runs using <code class="docutils literal notranslate"><span class="pre">ctypes</span></code> during the fitting process. This drastically reduces computation time for complicated fitting functions, for which I’ve found <code class="docutils literal notranslate"><span class="pre">sympy.lambdify</span></code> to be extremely slow. As a result, if you want to save the generated shared object file and then load it for the next simulation, you can use the <code class="docutils literal notranslate"><span class="pre">save_cost_func_filename</span></code> and <code class="docutils literal notranslate"><span class="pre">load_cost_func_filename</span></code> options (and those related to them) in the fitting routines of <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a>.</p>
-<p>If you’d like to generate the cost function without running the fitting routine directly afterwards (as opposed to running them in series, which, for backwards-compatibility, is what the aforementioned <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> routines do), use <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.gen_cost_func" title="shgpy.fformfit.gen_cost_func"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.gen_cost_func()</span></code></a>.</p>
-</div>
-<div class="section" id="conclusion">
-<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>Before concluding this tutorial, let me add one more comment about one important capability of this software. Once the fitting routine has finished generating the appropriate energy cost expression using <code class="docutils literal notranslate"><span class="pre">fform</span></code> and <code class="docutils literal notranslate"><span class="pre">fdat</span></code>, it turns it into C code using <code class="docutils literal notranslate"><span class="pre">sympy.utilities.codegen</span></code> and compiles a shared object file, which it runs using <code class="docutils literal notranslate"><span class="pre">ctypes</span></code> during the fitting process. This drastically reduces computation time for complicated fitting functions, for which I’ve found <code class="docutils literal notranslate"><span class="pre">sympy.lambdify</span></code> to be extremely slow. As a result, if you want to save the generated shared object file and then load it for the next simulation, you can use the <code class="docutils literal notranslate"><span class="pre">save_cost_func_filename</span></code> and <code class="docutils literal notranslate"><span class="pre">load_cost_func_filename</span></code> options (and those related to them) in the fitting routines of <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a>. If you’d like to generate the cost function without running the fitting routine directly afterwards (as opposed to running them in series, which, for backwards-compatibility, is what the aforementioned <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> routines do), use <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.gen_cost_func" title="shgpy.fformfit.gen_cost_func"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.gen_cost_func()</span></code></a>.</p>
+<p>Furthermore, if you have a cost function generated by <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.gen_cost_func" title="shgpy.fformfit.gen_cost_func"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.gen_cost_func()</span></code></a>, you can then use the extensive set of routines in <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code> (or even a different <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code> wrapper, like LMFIT) to write your own specialized fitting procedure. These days, when I do RA-SHG fitting in my own research, I almost never use the wrapper functions in <a class="reference internal" href="../api/shgpy.fformfit.html#module-shgpy.fformfit" title="shgpy.fformfit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">shgpy.fformfit</span></code></a> like <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.basinhopping_fit" title="shgpy.fformfit.basinhopping_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.basinhopping_fit()</span></code></a>; rather, I generate a cost function with <a class="reference internal" href="../api/shgpy.fformfit.html#shgpy.fformfit.gen_cost_func" title="shgpy.fformfit.gen_cost_func"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.gen_cost_func()</span></code></a> (or, for even more control, a model function using <code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformfit.get_model_func()</span></code>), and then use LMFIT to minimize that cost function. Setting up LMFIT for this purpose is beyond the scope of this tutorial, but basic examples can be found in <code class="docutils literal notranslate"><span class="pre">examples/fit_model_func_example.py</span></code> and <code class="docutils literal notranslate"><span class="pre">examples/fit_cost_func_example.py</span></code>.</p>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">¶</a></h2>
 <p>This concludes the ShgPy tutorials. For more information, I recommend looking through the <a class="reference internal" href="../modules.html"><span class="doc">API</span></a>; there are a lot of important functions there which we haven’t covered here but may be useful for your application. And, as always, if you have questions please feel free to <a class="reference internal" href="../contact.html"><span class="doc">contact me</span></a>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -254,10 +310,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2021, Bryan Fichera.
+      &copy;2022, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

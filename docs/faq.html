@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FAQs &#8212; ShgPy 0.7.10 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>FAQs &#8212; ShgPy 0.8.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -86,12 +88,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="documentwrapper">
@@ -100,13 +102,13 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="faqs">
-<h1>FAQs<a class="headerlink" href="#faqs" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="what-if-my-angle-of-incidence-is-0">
-<h2>What if my angle of incidence is 0?<a class="headerlink" href="#what-if-my-angle-of-incidence-is-0" title="Permalink to this headline">¶</a></h2>
+  <section id="faqs">
+<h1>FAQs<a class="headerlink" href="#faqs" title="Permalink to this heading">¶</a></h1>
+<section id="what-if-my-angle-of-incidence-is-0">
+<h2>What if my angle of incidence is 0?<a class="headerlink" href="#what-if-my-angle-of-incidence-is-0" title="Permalink to this heading">¶</a></h2>
 <p>If your angle of incidence is 0 degrees, then you probably only have two data files (“parallel” and “perpendicular”), rather than the typical four data files (“PP”, “PS”, “SP”, and “SS”) which are used in the examples and tutorials. There are two ways to go about this.</p>
-<div class="section" id="from-the-formula-side">
-<h3>From the formula side<a class="headerlink" href="#from-the-formula-side" title="Permalink to this headline">¶</a></h3>
+<section id="from-the-formula-side">
+<h3>From the formula side<a class="headerlink" href="#from-the-formula-side" title="Permalink to this heading">¶</a></h3>
 <p>This is the easier method. After having loaded your SHG data like normal (i.e. not coercing your data to oblique incidence):</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data_filenames_dict</span> <span class="o">=</span> <span class="p">{</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;PP&#39;</span><span class="p">:</span><span class="s1">&#39;dataPP.csv&#39;</span><span class="p">,</span>
@@ -125,9 +127,9 @@
 </pre></div>
 </div>
 <p>now just use <code class="docutils literal notranslate"><span class="pre">partial_fform</span></code> to fit the data like you would normally, as in the <a class="reference internal" href="tutorial/fitting_tutorial.html"><span class="doc">fitting tutorial</span></a>.</p>
-</div>
-<div class="section" id="from-the-data-side">
-<h3>From the data side<a class="headerlink" href="#from-the-data-side" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="from-the-data-side">
+<h3>From the data side<a class="headerlink" href="#from-the-data-side" title="Permalink to this heading">¶</a></h3>
 <p>From the data side, you can always artificially rotate your parallel and perpendicular datasets by 90 degrees, and call those the missing polarization combinations. This is achieved by adding the <code class="docutils literal notranslate"><span class="pre">normal_to_oblique=True</span></code> flag in whatever function you are using to load your data. Ultimately, this causes the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> method of <a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer" title="shgpy.core.data_handler.DataContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">shgpy.core.data_handler.DataContainer</span></code></a> to rotate your data appropriately and spit out a <cite>DataContainer</cite> with four polarization combinations – <code class="docutils literal notranslate"><span class="pre">'PP'</span></code>, <code class="docutils literal notranslate"><span class="pre">'PS'</span></code>, <code class="docutils literal notranslate"><span class="pre">'SP'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'SS'</span></code>. From there you can use the rest of <code class="docutils literal notranslate"><span class="pre">shgpy</span></code> as normal.</p>
 <p>Note that in order for this mapping to be well-defined, you need to specify exactly <em>which</em> polarizer you rotated to go from parallel to perpendicular. This is indicated by the keys in your <code class="docutils literal notranslate"><span class="pre">data_filenames_dict</span></code>; for example, if you input</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data_filenames_dict</span> <span class="o">=</span> <span class="p">{</span>
@@ -145,18 +147,18 @@
 </div>
 <p>this indicates that the outgoing polarizer was rotated.</p>
 <p>Remember of course to set <code class="docutils literal notranslate"><span class="pre">aoi=0</span></code> when you generate the unconctrated Fourier transforms (see the <a class="reference internal" href="tutorial/fitting_tutorial.html"><span class="doc">fitting tutorial</span></a>).</p>
-</div>
-</div>
-<div class="section" id="how-do-i-view-my-fitting-formula">
-<h2>How do I view my fitting formula?<a class="headerlink" href="#how-do-i-view-my-fitting-formula" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="how-do-i-view-my-fitting-formula">
+<h2>How do I view my fitting formula?<a class="headerlink" href="#how-do-i-view-my-fitting-formula" title="Permalink to this heading">¶</a></h2>
 <p>Once you’ve generated your fitting formula using <a class="reference internal" href="api/shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.fformgen.generate_contracted_fourier_transforms()</span></code></a>, sometimes you want to literally visualize the formula that you’re fitting to. In that case, you can use <a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.get_pc" title="shgpy.core.data_handler.fFormContainer.get_pc"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.fFormContainer.get_pc()</span></code></a> to view the formula in Fourier space, or use</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="o">=</span> <span class="n">shgpy</span><span class="o">.</span><span class="n">fform_to_form</span><span class="p">(</span><span class="n">fform</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>to convert it to a <code class="docutils literal notranslate"><span class="pre">phi</span></code>-space formula and then <a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.get_pc" title="shgpy.core.data_handler.FormContainer.get_pc"><code class="xref py py-func docutils literal notranslate"><span class="pre">shgpy.core.data_handler.FormContainer.get_pc()</span></code></a> to view it.</p>
 <p>See the example file at <code class="docutils literal notranslate"><span class="pre">examples/look_at_fformula_example.py</span></code>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -166,10 +168,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2021, Bryan Fichera.
+      &copy;2022, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

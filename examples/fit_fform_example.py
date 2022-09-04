@@ -17,7 +17,7 @@ data_filenames_dict = {
 }
 dat, fdat = shgpy.load_data_and_fourier_transform(data_filenames_dict, 'degrees')
 
-fform_filename = 'fform/T_d-S_2-S_2(110)-particularized.p'
+fform_filename = 'fform/T_d-S_2-S_2(110)-particularized-byform.p'
 
 fform = shgpy.load_fform(fform_filename)
 fform.apply_phase_shift(S.psi)
