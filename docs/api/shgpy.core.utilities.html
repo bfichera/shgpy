@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>shgpy.core.utilities module &#8212; ShgPy 0.7.10 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -98,12 +100,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="documentwrapper">
@@ -112,11 +114,11 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-shgpy.core.utilities">
-<span id="shgpy-core-utilities-module"></span><h1>shgpy.core.utilities module<a class="headerlink" href="#module-shgpy.core.utilities" title="Permalink to this headline">¶</a></h1>
+  <section id="module-shgpy.core.utilities">
+<span id="shgpy-core-utilities-module"></span><h1>shgpy.core.utilities module<a class="headerlink" href="#module-shgpy.core.utilities" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
-<dt id="shgpy.core.utilities.make_tensor_complex">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">make_tensor_complex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">('real_', 'imag_')</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="o">=</span><span class="default_value">('', '')</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.make_tensor_complex" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.make_tensor_complex">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">make_tensor_complex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('real_',</span> <span class="pre">'imag_')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('',</span> <span class="pre">'')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.make_tensor_complex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitute e.g. <code class="docutils literal notranslate"><span class="pre">x</span></code> in sympy expression with <code class="docutils literal notranslate"><span class="pre">real_x+1j*imag_x</span></code>.</p>
 <p>In sympy, variables initalized by <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">sympy.symbols('x')</span></code> are by
 default assumed to be complex. In order to make this more explicit
@@ -124,7 +126,7 @@ default assumed to be complex. In order to make this more explicit
 <a class="reference internal" href="shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_contracted_fourier_transforms()</span></code></a>),
 we replace <code class="docutils literal notranslate"><span class="pre">x</span></code> by <code class="docutils literal notranslate"><span class="pre">real_x</span> <span class="pre">+</span> <span class="pre">1j*imag_x</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
 <dt><strong>prefix</strong><span class="classifier">tuple of str, optional</span></dt><dd><p>The prefixes of the newly-created real and imaginary variables.
@@ -135,7 +137,7 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">('',</s
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>complex_tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
 </dl>
@@ -144,8 +146,8 @@ Defaults to <code class="docutils literal notranslate"><span class="pre">('',</s
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.make_tensor_real">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">make_tensor_real</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.make_tensor_real" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.make_tensor_real">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">make_tensor_real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.make_tensor_real" title="Permalink to this definition">¶</a></dt>
 <dd><p>Substitute e.g. <code class="docutils literal notranslate"><span class="pre">x</span></code> in sympy expression with its real counterpart.</p>
 <p>In sympy, variables initalized by <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">sympy.symbols('x')</span></code> are by
 default assumed to be complex. In order to make this more explicit
@@ -153,12 +155,12 @@ default assumed to be complex. In order to make this more explicit
 <a class="reference internal" href="shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms" title="shgpy.fformgen.generate_contracted_fourier_transforms"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_contracted_fourier_transforms()</span></code></a>),
 we replace <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x')</span></code> by <code class="docutils literal notranslate"><span class="pre">sympy.Symbol('x',</span> <span class="pre">real=True)</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>real_tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
 </dl>
@@ -167,21 +169,21 @@ we replace <code class="docutils literal notranslate"><span class="pre">sympy.Sy
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.map_to_real">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">map_to_real</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sym</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.map_to_real" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.map_to_real">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">map_to_real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sym</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.map_to_real" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map a sympy.Symbol to its real counterpart.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.particularize">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">particularize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">permute_all_indices</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.particularize" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.particularize">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">particularize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permute_all_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.particularize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Particularize <cite>tensor</cite> (e.g. enforce <code class="docutils literal notranslate"><span class="pre">chi_ijk</span> <span class="pre">=</span> <span class="pre">chi_ikj</span></code>).</p>
 <p>Because (e.g.) <code class="docutils literal notranslate"><span class="pre">P_i</span> <span class="pre">=</span> <span class="pre">chi_ijk</span> <span class="pre">E_j</span> <span class="pre">E_k</span></code>, <code class="docutils literal notranslate"><span class="pre">chi_ijk</span></code> needs to be symmetric
 in its last two indices. This symmetry is not documented in SHG tables,
 so it needs to be implemented manually. Functions using the <code class="docutils literal notranslate"><span class="pre">solve</span></code>
 function of sympy.solvers.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tensor</strong><span class="classifier">ndarray</span></dt><dd><p>Tensor to be particularized.</p>
 </dd>
@@ -192,7 +194,7 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>particularized_tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
 </dl>
@@ -201,11 +203,11 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.rotation_matrix3">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">rotation_matrix3</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.rotation_matrix3" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.rotation_matrix3">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.rotation_matrix3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the 3x3 matrix which rotates by <cite>t</cite> about <cite>n</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n</strong><span class="classifier">ndarray</span></dt><dd><p>Axis of rotation (ndim = 3).</p>
 </dd>
@@ -213,7 +215,7 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>rotation_matrix3</strong><span class="classifier">ndarray of float</span></dt><dd></dd>
 </dl>
@@ -222,11 +224,11 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.rotation_matrix3symb">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">rotation_matrix3symb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">ndigits</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.rotation_matrix3symb" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.rotation_matrix3symb">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix3symb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndigits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.rotation_matrix3symb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Duplicate of <a class="reference internal" href="#shgpy.core.utilities.rotation_matrix3" title="shgpy.core.utilities.rotation_matrix3"><code class="xref py py-func docutils literal notranslate"><span class="pre">rotation_matrix3()</span></code></a>, but accepts sympy.Symbol angle argument.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n</strong><span class="classifier">ndarray</span></dt><dd><p>Axis of rotation (ndim = 3).</p>
 </dd>
@@ -234,7 +236,7 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>rotation_matrix3symb</strong><span class="classifier">ndarray of sympy.Expr</span></dt><dd></dd>
 </dl>
@@ -243,11 +245,11 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.rotation_matrix_from_two_vectors">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">rotation_matrix_from_two_vectors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v_initial</span></em>, <em class="sig-param"><span class="n">v_final</span></em>, <em class="sig-param"><span class="n">accuracy</span><span class="o">=</span><span class="default_value">0.01</span></em>, <em class="sig-param"><span class="n">ndigits</span><span class="o">=</span><span class="default_value">16</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.rotation_matrix_from_two_vectors" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.rotation_matrix_from_two_vectors">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix_from_two_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v_initial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_final</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accuracy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndigits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.rotation_matrix_from_two_vectors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return rotation matrix which takes <cite>v_initial</cite> -&gt; <cite>v_final</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>v_initial</strong><span class="classifier">ndarray</span></dt><dd></dd>
 <dt><strong>v_final</strong><span class="classifier">ndarray</span></dt><dd></dd>
@@ -257,7 +259,7 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>rotation_matrix3</strong><span class="classifier">ndarray of float</span></dt><dd></dd>
 </dl>
@@ -266,11 +268,11 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.tensor_contract">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">tensor_contract</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">index_pairs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.tensor_contract" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.tensor_contract">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">tensor_contract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_pairs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.tensor_contract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contract a tensor against to pairs of indices.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
 <dt><strong>index_pairs</strong><span class="classifier">array_like of array_like of int</span></dt><dd><p>List of pairs of indices, e.g. <code class="docutils literal notranslate"><span class="pre">[[1,</span> <span class="pre">3],</span> <span class="pre">[2,</span> <span class="pre">4]]</span></code>.</p>
@@ -281,24 +283,24 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.tensor_product">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">tensor_product</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">tensors</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.tensor_product" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.tensor_product">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">tensor_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tensors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.tensor_product" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tensor product of multiple tensors.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.transform">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tensor</span></em>, <em class="sig-param"><span class="n">operation</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.transform" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.transform">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform a tensor by a given operation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
 <dt><strong>operation</strong><span class="classifier">ndarray</span></dt><dd><p>Operation to transform <cite>tensor</cite> by. Should be rank 2.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>transformed_tensor</strong><span class="classifier">ndarray</span></dt><dd></dd>
 </dl>
@@ -307,12 +309,12 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
 </dd></dl>
 
 <dl class="py function">
-<dt id="shgpy.core.utilities.union">
-<code class="sig-prename descclassname">shgpy.core.utilities.</code><code class="sig-name descname">union</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">arrays</span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.union" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="shgpy.core.utilities.union">
+<span class="sig-prename descclassname"><span class="pre">shgpy.core.utilities.</span></span><span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">arrays</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shgpy.core.utilities.union" title="Permalink to this definition">¶</a></dt>
 <dd><p>Union of multiple arrays.</p>
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -322,10 +324,10 @@ materials where Kleinman symmetry is preserved. Default is <cite>False</cite>.</
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2021, Bryan Fichera.
+      &copy;2022, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

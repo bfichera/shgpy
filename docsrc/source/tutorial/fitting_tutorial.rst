@@ -22,7 +22,7 @@ where the electric fields depend on `phi` like::
 
     E_i(phi) = R_ij(phi) E_j.
 
-Generally speaking, we usually project the incoming and outgoing light onto all combinations of parallel ("P") and perpendicular ("S") to the plane of incidence, so that at the end of the day we need to compute 4 separate expressions (one for each of the four different combinations "PP", "PS", "SP", and "SS"). These expression are calculated by running :func:`shgpy.formgen.formgen`, as described below.
+Generally speaking, we usually project the incoming and outgoing light onto all combinations of parallel ("P") and perpendicular ("S") to the plane of incidence, so that at the end of the day we need to compute 4 separate expressions (one for each of the four different combinations "PP", "PS", "SP", and "SS"). These expression are calculated by running :func:`shgpy.formgen.formgen`, as described below and in ``examples/gen_fform_from_form.py``.
 
 Let us consider the case of trying to fit the GaAs data available in ``examples/Data`` to the tensor ``shgpy.tensor_definitions.dipole['T_d']`` oriented along the (110) direction. First, we define the fitting tensor
 

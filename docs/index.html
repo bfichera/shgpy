@@ -1,16 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>Welcome to ShgPy! &#8212; ShgPy 0.7.10 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -84,12 +86,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="documentwrapper">
@@ -98,28 +100,28 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-shgpy">
-<h1>Welcome to ShgPy!<a class="headerlink" href="#welcome-to-shgpy" title="Permalink to this headline">¶</a></h1>
+  <section id="welcome-to-shgpy">
+<h1>Welcome to ShgPy!<a class="headerlink" href="#welcome-to-shgpy" title="Permalink to this heading">¶</a></h1>
 <a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3873755"><img alt="https://zenodo.org/badge/DOI/10.5281/zenodo.3873755.svg" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3873755.svg" /></a>
-<div class="section" id="what-is-shgpy">
-<h2>What is ShgPy?<a class="headerlink" href="#what-is-shgpy" title="Permalink to this headline">¶</a></h2>
+<section id="what-is-shgpy">
+<h2>What is ShgPy?<a class="headerlink" href="#what-is-shgpy" title="Permalink to this heading">¶</a></h2>
 <p>ShgPy is a simple toolkit for analyzing rotational-anisotropy second harmonic generation (RA-SHG) data. It depends mainly on three packages, <a class="reference external" href="https://numpy.org/">NumPy</a>, <a class="reference external" href="https://www.scipy.org/">SciPy</a>, and <a class="reference external" href="https://www.sympy.org/en/index.html">SymPy</a> – as well as (optionally) <a class="reference external" href="https://matplotlib.org/">Matplolib</a> for some basic plotting capability – to simulate, manipulate, and fit RA-SHG data in a (hopefully!) intuitive way.</p>
 <p>Fitting RA-SHG data involves solving a complex global minimization problem with many degrees of freedom. Moreover, the fitting functions naively involve a degree of complexity due to the trigonometric nature of the problem. This software therefore takes a dual approach to fitting RA-SHG data – first of all, all of the fits are done in Fourier space, which significantly reduces the complexity of the fitting formulas, and second of all, ShgPy makes heavy use of the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">scipy.optimize.basinhopping</a> algorithm, which is particularly useful for these types of global optimization problems. In some ways, ShgPy is just a wrapper around <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#optimization-and-root-finding-scipy-optimize">scipy.optimize</a>.</p>
-</div>
-<div class="section" id="what-shgpy-is-not">
-<h2>What ShgPy is not<a class="headerlink" href="#what-shgpy-is-not" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="what-shgpy-is-not">
+<h2>What ShgPy is not<a class="headerlink" href="#what-shgpy-is-not" title="Permalink to this heading">¶</a></h2>
 <p>Right now, ShgPy is narrowly suited for a particular RA-SHG geometry (i.e. <a class="reference external" href="https://arxiv.org/abs/1909.12850">this one</a>). Other implementations of RA-SHG (e.g. where the angle of incidence can vary, etc.) are not currently supported. However, this software is always evolving and support may come in the future if there’s enough interest (see <a class="reference internal" href="contribute.html"><span class="doc">how to contribute</span></a>).</p>
-</div>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
 <p>Installation of ShgPy is easy! Just install the <code class="docutils literal notranslate"><span class="pre">shgpy</span></code> package:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install shgpy
 </pre></div>
 </div>
 <p>You’ll also need to install <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy</span></code>, <code class="docutils literal notranslate"><span class="pre">sympy</span></code>, and, optionally, <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>; refer to the corresponding documentation for more information about these packages. Additionally, you’ll need a working installation of <code class="docutils literal notranslate"><span class="pre">gcc</span></code>.</p>
-</div>
-<div class="section" id="getting-started">
-<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h2>
 <p>After installing ShgPy, familiarize yourself with the basic routines by reading the <a class="reference internal" href="tutorial/tutorials.html"><span class="doc">tutorials</span></a> and <a class="reference internal" href="faq.html"><span class="doc">FAQs</span></a>.</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -136,9 +138,9 @@
 </div>
 <div class="toctree-wrapper compound">
 </div>
-</div>
-<div class="section" id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
 <p>For further details, consult the auto-generated API documentation:</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -157,15 +159,15 @@
 </div>
 <div class="toctree-wrapper compound">
 </div>
-</div>
-<div class="section" id="how-to-contribute">
-<h2>How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="how-to-contribute">
+<h2>How to contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this heading">¶</a></h2>
 <p>See <a class="reference internal" href="contribute.html"><span class="doc">how to contribute</span></a>.</p>
 <div class="toctree-wrapper compound">
 </div>
-</div>
-<div class="section" id="cite-this-software">
-<h2>Cite this software<a class="headerlink" href="#cite-this-software" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="cite-this-software">
+<h2>Cite this software<a class="headerlink" href="#cite-this-software" title="Permalink to this heading">¶</a></h2>
 <p>If you use ShgPy in your project, please <a class="reference internal" href="contact.html"><span class="doc">let me know</span></a>! I’m interested to see who is using this software and in what form.</p>
 <p>To cite this software in a publication, use</p>
 <ul class="simple">
@@ -177,26 +179,26 @@
     <span class="n">title</span> <span class="o">=</span> <span class="p">{</span><span class="n">Shg</span><span class="p">{</span><span class="n">P</span><span class="p">}</span><span class="n">y</span><span class="p">},</span>
     <span class="n">year</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2020</span><span class="p">},</span>
     <span class="n">howpublished</span> <span class="o">=</span> <span class="p">{</span>\<span class="n">url</span><span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">bfichera</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">shgpy</span><span class="o">/</span><span class="p">}},</span>
-    <span class="n">doi</span> <span class="o">=</span> <span class="p">{</span><span class="mf">10.5281</span><span class="o">/</span><span class="n">zenodo</span><span class="o">.</span><span class="mi">3873755</span><span class="p">}</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="p">{</span><span class="mf">10.5281</span><span class="o">/</span><span class="n">zenodo</span><span class="mf">.3873755</span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="contact-me">
-<h2>Contact me<a class="headerlink" href="#contact-me" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="contact-me">
+<h2>Contact me<a class="headerlink" href="#contact-me" title="Permalink to this heading">¶</a></h2>
 <p>Other questions or concerns? Please <a class="reference internal" href="contact.html"><span class="doc">contact me</span></a>!</p>
 <div class="toctree-wrapper compound">
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -206,10 +208,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2021, Bryan Fichera.
+      &copy;2022, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
