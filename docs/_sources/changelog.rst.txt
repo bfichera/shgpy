@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.8.1
+------
+- Added multiprocessing compatibility to model and cost function generation.
+
 v0.8.0
 ------
 - Rewrote the Fourier formula generation process. Previously ``sympy`` had a bug which made computing the Fourier transforms of typical SHG formulas incredibly slow. The previous workaroud was to compute the Fourier transforms of a general SHG tensor ahead of time (i.e. the "uncontracted Fourier transforms"), and then having the user generate a full Fourier formula for their specific system using a contraction of this tensor. A different workaround which I was not able to implement until now is to enumerate all the possible terms that could appear in a viable SHG formula (i.e. arbitrary products of sines and cosines), and then create a lookup table for their respective Fourier transforms for access at runtime. This is now implemented in :func:`shgpy.core.data_handler.form_to_fform`. My initial tests suggest that, while it is still slightly slower than the previous workaround, not only is it much simpler for the user, but it also makes it trivial to compute the Fourier transforms of higher multiple SHG formulas (i.e. magnetic dipole and electric quadrupole contributions). This is now documented in the tutorials and examples.
