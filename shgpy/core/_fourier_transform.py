@@ -74,7 +74,7 @@ def _fourier_transform(expr, n, M=16):
             return 0
         relevant_codes = {}
         for code in _lookup_table.keys():
-            relevant_codes[code] = _lookup_table[code][n2i(n, M)]
+            relevant_codes[code] = _lookup_table[code][n2i(n, M=16)]
         mapping = {
             sp.cos(S.phi)**code[0]*sp.sin(S.phi)**code[1]:ftval
             for code, ftval in relevant_codes.items()
@@ -99,7 +99,7 @@ def _fourier_transform(expr, n, M=16):
         assert len(keyterms) == 1
         keyterm = keyterms[0]
         code = _get_code(keyterm)
-        ftval = _lookup_table[code][n+16]
+        ftval = _lookup_table[code][n2i(n, M=16)]
         if ftval != 0:
             ans = expr / keyterm * ftval
         else:
