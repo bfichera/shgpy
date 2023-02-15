@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>shgpy.core.data_handler module &#8212; ShgPy 0.8.0 documentation</title>
+    <title>shgpy.core.data_handler module &#8212; ShgPy 0.8.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="shgpy.core.utilities module" href="shgpy.core.utilities.html" />
@@ -64,7 +65,94 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">shgpy.core.data_handler module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">shgpy.core.data_handler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer"><code class="docutils literal notranslate"><span class="pre">DataContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.as_pandas"><code class="docutils literal notranslate"><span class="pre">DataContainer.as_pandas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.copy"><code class="docutils literal notranslate"><span class="pre">DataContainer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.filter"><code class="docutils literal notranslate"><span class="pre">DataContainer.filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_items"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_keys"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_maxval"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_maxval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_minval"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_minval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_offset"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_pc"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_pc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_pc_maxval"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_pc_maxval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_pc_minval"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_pc_minval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_phase_shift"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_phase_shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_scale"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.get_values"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.normalize_data"><code class="docutils literal notranslate"><span class="pre">DataContainer.normalize_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.phase_shift_data"><code class="docutils literal notranslate"><span class="pre">DataContainer.phase_shift_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.scale_data"><code class="docutils literal notranslate"><span class="pre">DataContainer.scale_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.DataContainer.subtract_min"><code class="docutils literal notranslate"><span class="pre">DataContainer.subtract_min()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer"><code class="docutils literal notranslate"><span class="pre">FormContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.apply_arbitrary_scale"><code class="docutils literal notranslate"><span class="pre">FormContainer.apply_arbitrary_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.apply_phase_shift"><code class="docutils literal notranslate"><span class="pre">FormContainer.apply_phase_shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.as_pandas"><code class="docutils literal notranslate"><span class="pre">FormContainer.as_pandas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.copy"><code class="docutils literal notranslate"><span class="pre">FormContainer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.expand"><code class="docutils literal notranslate"><span class="pre">FormContainer.expand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.get_free_symbols"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_free_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.get_items"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.get_keys"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.get_pc"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_pc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.get_values"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.simplify"><code class="docutils literal notranslate"><span class="pre">FormContainer.simplify()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.FormContainer.subs"><code class="docutils literal notranslate"><span class="pre">FormContainer.subs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.dat_add"><code class="docutils literal notranslate"><span class="pre">dat_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.dat_subtract"><code class="docutils literal notranslate"><span class="pre">dat_subtract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.dat_to_fdat"><code class="docutils literal notranslate"><span class="pre">dat_to_fdat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer"><code class="docutils literal notranslate"><span class="pre">fDataContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.as_pandas"><code class="docutils literal notranslate"><span class="pre">fDataContainer.as_pandas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.copy"><code class="docutils literal notranslate"><span class="pre">fDataContainer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_M"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_M()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_items"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_keys"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_maxval"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_maxval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_pc"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_pc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_pc_maxval"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_pc_maxval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_phase_shift"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_phase_shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_scale"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.get_values"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.normalize_fdata"><code class="docutils literal notranslate"><span class="pre">fDataContainer.normalize_fdata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.phase_shift_fdata"><code class="docutils literal notranslate"><span class="pre">fDataContainer.phase_shift_fdata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fDataContainer.scale_fdata"><code class="docutils literal notranslate"><span class="pre">fDataContainer.scale_fdata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer"><code class="docutils literal notranslate"><span class="pre">fFormContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.apply_arbitrary_scale"><code class="docutils literal notranslate"><span class="pre">fFormContainer.apply_arbitrary_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.apply_phase_shift"><code class="docutils literal notranslate"><span class="pre">fFormContainer.apply_phase_shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.as_pandas"><code class="docutils literal notranslate"><span class="pre">fFormContainer.as_pandas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.copy"><code class="docutils literal notranslate"><span class="pre">fFormContainer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.get_M"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_M()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.get_free_symbols"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_free_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.get_items"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.get_keys"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.get_pc"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_pc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.get_values"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shgpy.core.data_handler.fFormContainer.subs"><code class="docutils literal notranslate"><span class="pre">fFormContainer.subs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.fdat_to_dat"><code class="docutils literal notranslate"><span class="pre">fdat_to_dat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.fform_to_dat"><code class="docutils literal notranslate"><span class="pre">fform_to_dat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.fform_to_fdat"><code class="docutils literal notranslate"><span class="pre">fform_to_fdat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.fform_to_form"><code class="docutils literal notranslate"><span class="pre">fform_to_form()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.form_to_dat"><code class="docutils literal notranslate"><span class="pre">form_to_dat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.form_to_fdat"><code class="docutils literal notranslate"><span class="pre">form_to_fdat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.form_to_fform"><code class="docutils literal notranslate"><span class="pre">form_to_fform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.load_data_and_dark_subtract"><code class="docutils literal notranslate"><span class="pre">load_data_and_dark_subtract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.load_data_and_fourier_transform"><code class="docutils literal notranslate"><span class="pre">load_data_and_fourier_transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.load_fform"><code class="docutils literal notranslate"><span class="pre">load_fform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.merge_containers"><code class="docutils literal notranslate"><span class="pre">merge_containers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.n2i"><code class="docutils literal notranslate"><span class="pre">n2i()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.read_csv"><code class="docutils literal notranslate"><span class="pre">read_csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shgpy.core.data_handler.save_fform"><code class="docutils literal notranslate"><span class="pre">save_fform()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="shgpy.core.utilities.html">shgpy.core.utilities module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shgpy.fformfit.html">shgpy.fformfit module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shgpy.fformgen.html">shgpy.fformgen module</a></li>
@@ -1419,11 +1507,11 @@ the containers and vi are the corresponding values.</p>
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2022, Bryan Fichera.
+      &copy;2023, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="../_sources/api/shgpy.core.data_handler.rst.txt"

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Welcome to ShgPy! &#8212; ShgPy 0.8.0 documentation</title>
+    <title>Welcome to ShgPy! &#8212; ShgPy 0.8.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorials" href="tutorial/tutorials.html" />
@@ -145,13 +146,289 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/shgpy.core.data_handler.html">shgpy.core.data_handler module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/shgpy.core.utilities.html">shgpy.core.utilities module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/shgpy.fformfit.html">shgpy.fformfit module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/shgpy.fformgen.html">shgpy.fformgen module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/shgpy.formgen.html">shgpy.formgen module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/shgpy.plotter.html">shgpy.plotter module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/shgpy.shg_symbols.html">shgpy.shg_symbols module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/shgpy.core.data_handler.html">shgpy.core.data_handler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer"><code class="docutils literal notranslate"><span class="pre">DataContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.as_pandas"><code class="docutils literal notranslate"><span class="pre">DataContainer.as_pandas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.copy"><code class="docutils literal notranslate"><span class="pre">DataContainer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.filter"><code class="docutils literal notranslate"><span class="pre">DataContainer.filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_items"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_keys"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_maxval"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_maxval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_minval"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_minval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_offset"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_pc"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_pc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_pc_maxval"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_pc_maxval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_pc_minval"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_pc_minval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_phase_shift"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_phase_shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_scale"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.get_values"><code class="docutils literal notranslate"><span class="pre">DataContainer.get_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.normalize_data"><code class="docutils literal notranslate"><span class="pre">DataContainer.normalize_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.phase_shift_data"><code class="docutils literal notranslate"><span class="pre">DataContainer.phase_shift_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.scale_data"><code class="docutils literal notranslate"><span class="pre">DataContainer.scale_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.DataContainer.subtract_min"><code class="docutils literal notranslate"><span class="pre">DataContainer.subtract_min()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer"><code class="docutils literal notranslate"><span class="pre">FormContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.apply_arbitrary_scale"><code class="docutils literal notranslate"><span class="pre">FormContainer.apply_arbitrary_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.apply_phase_shift"><code class="docutils literal notranslate"><span class="pre">FormContainer.apply_phase_shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.as_pandas"><code class="docutils literal notranslate"><span class="pre">FormContainer.as_pandas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.copy"><code class="docutils literal notranslate"><span class="pre">FormContainer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.expand"><code class="docutils literal notranslate"><span class="pre">FormContainer.expand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.get_free_symbols"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_free_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.get_items"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.get_keys"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.get_pc"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_pc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.get_values"><code class="docutils literal notranslate"><span class="pre">FormContainer.get_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.simplify"><code class="docutils literal notranslate"><span class="pre">FormContainer.simplify()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.FormContainer.subs"><code class="docutils literal notranslate"><span class="pre">FormContainer.subs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.dat_add"><code class="docutils literal notranslate"><span class="pre">dat_add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.dat_subtract"><code class="docutils literal notranslate"><span class="pre">dat_subtract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.dat_to_fdat"><code class="docutils literal notranslate"><span class="pre">dat_to_fdat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer"><code class="docutils literal notranslate"><span class="pre">fDataContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.as_pandas"><code class="docutils literal notranslate"><span class="pre">fDataContainer.as_pandas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.copy"><code class="docutils literal notranslate"><span class="pre">fDataContainer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_M"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_M()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_items"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_keys"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_maxval"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_maxval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_pc"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_pc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_pc_maxval"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_pc_maxval()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_phase_shift"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_phase_shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_scale"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.get_values"><code class="docutils literal notranslate"><span class="pre">fDataContainer.get_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.normalize_fdata"><code class="docutils literal notranslate"><span class="pre">fDataContainer.normalize_fdata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.phase_shift_fdata"><code class="docutils literal notranslate"><span class="pre">fDataContainer.phase_shift_fdata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fDataContainer.scale_fdata"><code class="docutils literal notranslate"><span class="pre">fDataContainer.scale_fdata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer"><code class="docutils literal notranslate"><span class="pre">fFormContainer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.apply_arbitrary_scale"><code class="docutils literal notranslate"><span class="pre">fFormContainer.apply_arbitrary_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.apply_phase_shift"><code class="docutils literal notranslate"><span class="pre">fFormContainer.apply_phase_shift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.as_pandas"><code class="docutils literal notranslate"><span class="pre">fFormContainer.as_pandas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.copy"><code class="docutils literal notranslate"><span class="pre">fFormContainer.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.get_M"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_M()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.get_free_symbols"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_free_symbols()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.get_items"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.get_keys"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.get_pc"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_pc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.get_values"><code class="docutils literal notranslate"><span class="pre">fFormContainer.get_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fFormContainer.subs"><code class="docutils literal notranslate"><span class="pre">fFormContainer.subs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fdat_to_dat"><code class="docutils literal notranslate"><span class="pre">fdat_to_dat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fform_to_dat"><code class="docutils literal notranslate"><span class="pre">fform_to_dat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fform_to_fdat"><code class="docutils literal notranslate"><span class="pre">fform_to_fdat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.fform_to_form"><code class="docutils literal notranslate"><span class="pre">fform_to_form()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.form_to_dat"><code class="docutils literal notranslate"><span class="pre">form_to_dat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.form_to_fdat"><code class="docutils literal notranslate"><span class="pre">form_to_fdat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.form_to_fform"><code class="docutils literal notranslate"><span class="pre">form_to_fform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data_and_dark_subtract"><code class="docutils literal notranslate"><span class="pre">load_data_and_dark_subtract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_data_and_fourier_transform"><code class="docutils literal notranslate"><span class="pre">load_data_and_fourier_transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.load_fform"><code class="docutils literal notranslate"><span class="pre">load_fform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.merge_containers"><code class="docutils literal notranslate"><span class="pre">merge_containers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.n2i"><code class="docutils literal notranslate"><span class="pre">n2i()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.read_csv"><code class="docutils literal notranslate"><span class="pre">read_csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.data_handler.html#shgpy.core.data_handler.save_fform"><code class="docutils literal notranslate"><span class="pre">save_fform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/shgpy.core.utilities.html">shgpy.core.utilities module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.make_tensor_complex"><code class="docutils literal notranslate"><span class="pre">make_tensor_complex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.make_tensor_real"><code class="docutils literal notranslate"><span class="pre">make_tensor_real()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.map_to_real"><code class="docutils literal notranslate"><span class="pre">map_to_real()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.particularize"><code class="docutils literal notranslate"><span class="pre">particularize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.rotation_matrix3"><code class="docutils literal notranslate"><span class="pre">rotation_matrix3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.rotation_matrix3symb"><code class="docutils literal notranslate"><span class="pre">rotation_matrix3symb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.rotation_matrix_from_two_vectors"><code class="docutils literal notranslate"><span class="pre">rotation_matrix_from_two_vectors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.tensor_contract"><code class="docutils literal notranslate"><span class="pre">tensor_contract()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.tensor_product"><code class="docutils literal notranslate"><span class="pre">tensor_product()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.transform"><code class="docutils literal notranslate"><span class="pre">transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.core.utilities.html#shgpy.core.utilities.union"><code class="docutils literal notranslate"><span class="pre">union()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/shgpy.fformfit.html">shgpy.fformfit module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.basinhopping_fit"><code class="docutils literal notranslate"><span class="pre">basinhopping_fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.basinhopping_fit_jac"><code class="docutils literal notranslate"><span class="pre">basinhopping_fit_jac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.basinhopping_fit_jac_with_bounds"><code class="docutils literal notranslate"><span class="pre">basinhopping_fit_jac_with_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.basinhopping_fit_with_bounds"><code class="docutils literal notranslate"><span class="pre">basinhopping_fit_with_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.dual_annealing_fit_with_bounds"><code class="docutils literal notranslate"><span class="pre">dual_annealing_fit_with_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.gen_cost_func"><code class="docutils literal notranslate"><span class="pre">gen_cost_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.gen_model_func"><code class="docutils literal notranslate"><span class="pre">gen_model_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.least_squares_fit"><code class="docutils literal notranslate"><span class="pre">least_squares_fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.least_squares_fit_with_bounds"><code class="docutils literal notranslate"><span class="pre">least_squares_fit_with_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.load_func"><code class="docutils literal notranslate"><span class="pre">load_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformfit.html#shgpy.fformfit.load_model_func"><code class="docutils literal notranslate"><span class="pre">load_model_func()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/shgpy.fformgen.html">shgpy.fformgen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms"><code class="docutils literal notranslate"><span class="pre">generate_contracted_fourier_transforms()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformgen.html#shgpy.fformgen.generate_contracted_fourier_transforms_complex"><code class="docutils literal notranslate"><span class="pre">generate_contracted_fourier_transforms_complex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms"><code class="docutils literal notranslate"><span class="pre">generate_uncontracted_fourier_transforms()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.fformgen.html#shgpy.fformgen.generate_uncontracted_fourier_transforms_symb"><code class="docutils literal notranslate"><span class="pre">generate_uncontracted_fourier_transforms_symb()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/shgpy.formgen.html">shgpy.formgen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.formgen"><code class="docutils literal notranslate"><span class="pre">formgen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.formgen_dipole_quadrupole"><code class="docutils literal notranslate"><span class="pre">formgen_dipole_quadrupole()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.formgen_just_dipole"><code class="docutils literal notranslate"><span class="pre">formgen_just_dipole()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.gen_P_dipole_quadrupole"><code class="docutils literal notranslate"><span class="pre">gen_P_dipole_quadrupole()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.gen_P_just_dipole"><code class="docutils literal notranslate"><span class="pre">gen_P_just_dipole()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.gen_S"><code class="docutils literal notranslate"><span class="pre">gen_S()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.gen_levi_civita"><code class="docutils literal notranslate"><span class="pre">gen_levi_civita()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.formgen.html#shgpy.formgen.make_form_from_P_and_Q"><code class="docutils literal notranslate"><span class="pre">make_form_from_P_and_Q()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/shgpy.plotter.html">shgpy.plotter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.plotter.html#shgpy.plotter.easy_plot"><code class="docutils literal notranslate"><span class="pre">easy_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.plotter.html#shgpy.plotter.easy_polar_plot"><code class="docutils literal notranslate"><span class="pre">easy_polar_plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/shgpy.shg_symbols.html">shgpy.shg_symbols module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.Fx"><code class="docutils literal notranslate"><span class="pre">Fx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.Fy"><code class="docutils literal notranslate"><span class="pre">Fy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.Fz"><code class="docutils literal notranslate"><span class="pre">Fz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.phi"><code class="docutils literal notranslate"><span class="pre">phi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.psi"><code class="docutils literal notranslate"><span class="pre">psi</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxxx"><code class="docutils literal notranslate"><span class="pre">sxxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxxy"><code class="docutils literal notranslate"><span class="pre">sxxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxxz"><code class="docutils literal notranslate"><span class="pre">sxxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxyx"><code class="docutils literal notranslate"><span class="pre">sxyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxyy"><code class="docutils literal notranslate"><span class="pre">sxyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxyz"><code class="docutils literal notranslate"><span class="pre">sxyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxzx"><code class="docutils literal notranslate"><span class="pre">sxzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxzy"><code class="docutils literal notranslate"><span class="pre">sxzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.sxzz"><code class="docutils literal notranslate"><span class="pre">sxzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syxx"><code class="docutils literal notranslate"><span class="pre">syxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syxy"><code class="docutils literal notranslate"><span class="pre">syxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syxz"><code class="docutils literal notranslate"><span class="pre">syxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syyx"><code class="docutils literal notranslate"><span class="pre">syyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syyy"><code class="docutils literal notranslate"><span class="pre">syyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syyz"><code class="docutils literal notranslate"><span class="pre">syyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syzx"><code class="docutils literal notranslate"><span class="pre">syzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syzy"><code class="docutils literal notranslate"><span class="pre">syzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.syzz"><code class="docutils literal notranslate"><span class="pre">syzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szxx"><code class="docutils literal notranslate"><span class="pre">szxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szxy"><code class="docutils literal notranslate"><span class="pre">szxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szxz"><code class="docutils literal notranslate"><span class="pre">szxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szyx"><code class="docutils literal notranslate"><span class="pre">szyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szyy"><code class="docutils literal notranslate"><span class="pre">szyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szyz"><code class="docutils literal notranslate"><span class="pre">szyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szzx"><code class="docutils literal notranslate"><span class="pre">szzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szzy"><code class="docutils literal notranslate"><span class="pre">szzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.szzz"><code class="docutils literal notranslate"><span class="pre">szzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.theta"><code class="docutils literal notranslate"><span class="pre">theta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxx"><code class="docutils literal notranslate"><span class="pre">xxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxxx"><code class="docutils literal notranslate"><span class="pre">xxxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxxy"><code class="docutils literal notranslate"><span class="pre">xxxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxxz"><code class="docutils literal notranslate"><span class="pre">xxxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxy"><code class="docutils literal notranslate"><span class="pre">xxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxyx"><code class="docutils literal notranslate"><span class="pre">xxyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxyy"><code class="docutils literal notranslate"><span class="pre">xxyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxyz"><code class="docutils literal notranslate"><span class="pre">xxyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxz"><code class="docutils literal notranslate"><span class="pre">xxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxzx"><code class="docutils literal notranslate"><span class="pre">xxzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxzy"><code class="docutils literal notranslate"><span class="pre">xxzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xxzz"><code class="docutils literal notranslate"><span class="pre">xxzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyx"><code class="docutils literal notranslate"><span class="pre">xyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyxx"><code class="docutils literal notranslate"><span class="pre">xyxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyxy"><code class="docutils literal notranslate"><span class="pre">xyxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyxz"><code class="docutils literal notranslate"><span class="pre">xyxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyy"><code class="docutils literal notranslate"><span class="pre">xyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyyx"><code class="docutils literal notranslate"><span class="pre">xyyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyyy"><code class="docutils literal notranslate"><span class="pre">xyyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyyz"><code class="docutils literal notranslate"><span class="pre">xyyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyz"><code class="docutils literal notranslate"><span class="pre">xyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyzx"><code class="docutils literal notranslate"><span class="pre">xyzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyzy"><code class="docutils literal notranslate"><span class="pre">xyzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xyzz"><code class="docutils literal notranslate"><span class="pre">xyzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzx"><code class="docutils literal notranslate"><span class="pre">xzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzxx"><code class="docutils literal notranslate"><span class="pre">xzxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzxy"><code class="docutils literal notranslate"><span class="pre">xzxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzxz"><code class="docutils literal notranslate"><span class="pre">xzxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzy"><code class="docutils literal notranslate"><span class="pre">xzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzyx"><code class="docutils literal notranslate"><span class="pre">xzyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzyy"><code class="docutils literal notranslate"><span class="pre">xzyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzyz"><code class="docutils literal notranslate"><span class="pre">xzyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzz"><code class="docutils literal notranslate"><span class="pre">xzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzzx"><code class="docutils literal notranslate"><span class="pre">xzzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzzy"><code class="docutils literal notranslate"><span class="pre">xzzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.xzzz"><code class="docutils literal notranslate"><span class="pre">xzzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxx"><code class="docutils literal notranslate"><span class="pre">yxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxxx"><code class="docutils literal notranslate"><span class="pre">yxxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxxy"><code class="docutils literal notranslate"><span class="pre">yxxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxxz"><code class="docutils literal notranslate"><span class="pre">yxxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxy"><code class="docutils literal notranslate"><span class="pre">yxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxyx"><code class="docutils literal notranslate"><span class="pre">yxyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxyy"><code class="docutils literal notranslate"><span class="pre">yxyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxyz"><code class="docutils literal notranslate"><span class="pre">yxyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxz"><code class="docutils literal notranslate"><span class="pre">yxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxzx"><code class="docutils literal notranslate"><span class="pre">yxzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxzy"><code class="docutils literal notranslate"><span class="pre">yxzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yxzz"><code class="docutils literal notranslate"><span class="pre">yxzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyx"><code class="docutils literal notranslate"><span class="pre">yyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyxx"><code class="docutils literal notranslate"><span class="pre">yyxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyxy"><code class="docutils literal notranslate"><span class="pre">yyxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyxz"><code class="docutils literal notranslate"><span class="pre">yyxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyy"><code class="docutils literal notranslate"><span class="pre">yyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyyx"><code class="docutils literal notranslate"><span class="pre">yyyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyyy"><code class="docutils literal notranslate"><span class="pre">yyyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyyz"><code class="docutils literal notranslate"><span class="pre">yyyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyz"><code class="docutils literal notranslate"><span class="pre">yyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyzx"><code class="docutils literal notranslate"><span class="pre">yyzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyzy"><code class="docutils literal notranslate"><span class="pre">yyzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yyzz"><code class="docutils literal notranslate"><span class="pre">yyzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzx"><code class="docutils literal notranslate"><span class="pre">yzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzxx"><code class="docutils literal notranslate"><span class="pre">yzxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzxy"><code class="docutils literal notranslate"><span class="pre">yzxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzxz"><code class="docutils literal notranslate"><span class="pre">yzxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzy"><code class="docutils literal notranslate"><span class="pre">yzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzyx"><code class="docutils literal notranslate"><span class="pre">yzyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzyy"><code class="docutils literal notranslate"><span class="pre">yzyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzyz"><code class="docutils literal notranslate"><span class="pre">yzyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzz"><code class="docutils literal notranslate"><span class="pre">yzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzzx"><code class="docutils literal notranslate"><span class="pre">yzzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzzy"><code class="docutils literal notranslate"><span class="pre">yzzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.yzzz"><code class="docutils literal notranslate"><span class="pre">yzzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxx"><code class="docutils literal notranslate"><span class="pre">zxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxxx"><code class="docutils literal notranslate"><span class="pre">zxxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxxy"><code class="docutils literal notranslate"><span class="pre">zxxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxxz"><code class="docutils literal notranslate"><span class="pre">zxxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxy"><code class="docutils literal notranslate"><span class="pre">zxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxyx"><code class="docutils literal notranslate"><span class="pre">zxyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxyy"><code class="docutils literal notranslate"><span class="pre">zxyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxyz"><code class="docutils literal notranslate"><span class="pre">zxyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxz"><code class="docutils literal notranslate"><span class="pre">zxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxzx"><code class="docutils literal notranslate"><span class="pre">zxzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxzy"><code class="docutils literal notranslate"><span class="pre">zxzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zxzz"><code class="docutils literal notranslate"><span class="pre">zxzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyx"><code class="docutils literal notranslate"><span class="pre">zyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyxx"><code class="docutils literal notranslate"><span class="pre">zyxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyxy"><code class="docutils literal notranslate"><span class="pre">zyxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyxz"><code class="docutils literal notranslate"><span class="pre">zyxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyy"><code class="docutils literal notranslate"><span class="pre">zyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyyx"><code class="docutils literal notranslate"><span class="pre">zyyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyyy"><code class="docutils literal notranslate"><span class="pre">zyyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyyz"><code class="docutils literal notranslate"><span class="pre">zyyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyz"><code class="docutils literal notranslate"><span class="pre">zyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyzx"><code class="docutils literal notranslate"><span class="pre">zyzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyzy"><code class="docutils literal notranslate"><span class="pre">zyzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zyzz"><code class="docutils literal notranslate"><span class="pre">zyzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzx"><code class="docutils literal notranslate"><span class="pre">zzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzxx"><code class="docutils literal notranslate"><span class="pre">zzxx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzxy"><code class="docutils literal notranslate"><span class="pre">zzxy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzxz"><code class="docutils literal notranslate"><span class="pre">zzxz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzy"><code class="docutils literal notranslate"><span class="pre">zzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzyx"><code class="docutils literal notranslate"><span class="pre">zzyx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzyy"><code class="docutils literal notranslate"><span class="pre">zzyy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzyz"><code class="docutils literal notranslate"><span class="pre">zzyz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzz"><code class="docutils literal notranslate"><span class="pre">zzz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzzx"><code class="docutils literal notranslate"><span class="pre">zzzx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzzy"><code class="docutils literal notranslate"><span class="pre">zzzy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/shgpy.shg_symbols.html#shgpy.shg_symbols.zzzz"><code class="docutils literal notranslate"><span class="pre">zzzz</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="api/shgpy.tensor_definitions.html">shgpy.tensor_definitions module</a></li>
 </ul>
 </li>
@@ -208,11 +485,11 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2022, Bryan Fichera.
+      &copy;2023, Bryan Fichera.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/index.rst.txt"
