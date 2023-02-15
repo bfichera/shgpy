@@ -1217,7 +1217,7 @@ def fform_to_form(fform):
 def _formula_from_fexpr(t, M=16):
     expr = 0
     for m in np.arange(-M, M+1):
-        expr += t[n2i(m)]*(sp.cos(m*S.phi)+1j*sp.sin(m*S.phi))
+        expr += t[n2i(m, M)]*(sp.cos(m*S.phi)+1j*sp.sin(m*S.phi))
     return expr
 
 
