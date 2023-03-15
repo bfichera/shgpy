@@ -436,6 +436,8 @@ def load_func(load_cost_func_filename):
 
 def _load_func(load_cost_func_filename):
     start = time.time()
+    if isinstance(load_cost_func_filename, Path):
+        load_cost_func_filename = str(load_cost_func_filename.absolute())
     c_lib = ctypes.CDLL(load_cost_func_filename)
     c_lib.autofunc.restype = ctypes.c_double
     _logger.debug(f'Importing shared library took'
