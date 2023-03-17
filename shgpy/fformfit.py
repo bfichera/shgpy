@@ -33,6 +33,14 @@ from math import ceil
 _logger = logging.getLogger(__name__)
 
 
+def _rmtree_warn(*args, **kwargs):
+    if 'onerror' not in kwargs:
+        def onerror(function, path, excinfo):
+            warn(f'{function} of {path} failed.')
+        kwargs['onerror'] = onerror
+    return shutil.rmtree(*args, **kwargs)
+
+
 def _split(a, num_per):
     ans = []
     for n in range(ceil(len(a)/num_per)):
@@ -148,7 +156,7 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc', m
 
     if save_folder is not None:
         if Path(save_folder).exists():
-            shutil.rmtree(save_folder)
+            _rmtree_warn(save_folder)
         Path.mkdir(Path(save_folder))
 
     cost_func_dict = {}
@@ -210,7 +218,7 @@ def _fixed_autowrap_model(fform, save_folder, free_symbols=None, method='gcc', m
                         shutil.copy(so_path, Path(save_folder))
 
                     cost_func_dict[k][m][component].append(_load_func(so_path))
-                    shutil.rmtree(write_directory)
+                    _rmtree_warn(write_directory)
 
     return cost_func_dict
 
@@ -343,7 +351,7 @@ def _fixed_autowrap(energy_expr, prefix, save_filename=None, method='gcc'):
 
     cost_func = _load_func(so_path)
 
-    shutil.rmtree(write_directory)
+    _rmtree_warn(write_directory)
 
     return cost_func
 
@@ -413,7 +421,7 @@ double autofunc(double *xs){
 
     cost_func = _load_func(so_path)
 
-    shutil.rmtree(write_directory)
+    _rmtree_warn(write_directory)
 
     return cost_func
 
