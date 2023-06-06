@@ -1,6 +1,10 @@
 Changelog
 =========
 
+v0.8.5
+------
+- Fixed a bug in quadrupole formula generation, see `this issue on github <https://github.com/bfichera/shgpy/issues/1>`. Users should rerun any code involving quadrupole SHG following v0.8.0.
+
 v0.8.1
 ------
 - Added multiprocessing compatibility to model and cost function generation.
