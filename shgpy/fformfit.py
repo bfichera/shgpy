@@ -33,6 +33,14 @@ from math import ceil
 _logger = logging.getLogger(__name__)
 
 
+def _rmtree_warn(*args, **kwargs):
+    if 'onerror' not in kwargs:
+        def onerror(function, path, excinfo):
+            warn(f'{function} of {path} failed.')
+        kwargs['onerror'] = onerror
+    return shutil.rmtree(*args, **kwargs)
+
+
 def _split(a, num_per):
     ans = []
     for n in range(ceil(len(a)/num_per)):
@@ -155,7 +163,7 @@ def _fixed_autowrap_model(
 
     if save_folder is not None:
         if Path(save_folder).exists():
-            shutil.rmtree(save_folder)
+            _rmtree_warn(save_folder)
         Path.mkdir(Path(save_folder))
 
     cost_func_dict = {}
@@ -219,7 +227,7 @@ def _fixed_autowrap_model(
                     cost_func_dict[k][m][component].append(
                         _load_func(so_path, multiprocessing=multiprocessing),
                     )
-                    shutil.rmtree(write_directory)
+                    _rmtree_warn(write_directory)
 
     return cost_func_dict
 
@@ -369,7 +377,7 @@ def _fixed_autowrap(
 
     cost_func = _load_func(so_path, multiprocessing=multiprocessing)
 
-    shutil.rmtree(write_directory)
+    _rmtree_warn(write_directory)
 
     return cost_func
 
@@ -440,7 +448,7 @@ double autofunc(double *xs){
 
     cost_func = _load_func(so_path, multiprocessing=multiprocessing)
 
-    shutil.rmtree(write_directory)
+    _rmtree_warn(write_directory)
 
     return cost_func
 
@@ -479,6 +487,8 @@ def _load_func(load_cost_func_filename, multiprocessing=False):
         return cost_func
 
     start = time.time()
+    if isinstance(load_cost_func_filename, Path):
+        load_cost_func_filename = str(load_cost_func_filename.absolute())
     c_lib = ctypes.PyDLL(load_cost_func_filename)
     c_lib.autofunc.restype = ctypes.c_double
     _logger.debug(f'Importing shared library took'
