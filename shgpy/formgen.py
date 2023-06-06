@@ -282,8 +282,8 @@ def gen_S(theta, t_eee=None, t_mee=None, t_qee=None):
     if t_qee is not None:
         _assert_real_params(t_qee)
         rt_qee = tensor_contract(
-            tensor_product(R, R, R, t_qee),
-            [[1, 6], [3, 7], [5, 8]],
+            tensor_product(R, R, R, R, t_qee),
+            [[1, 8], [3, 9], [5, 10],[7,11]],
         )
         rt_qee = _ex(rt_qee)
         Qs = tensor_contract(
